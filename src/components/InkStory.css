@@ -1,0 +1,121 @@
+/* InkStory.css - Styles for the Ink story display */
+
+.ink-story-container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #000;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px 20px 20px;  /* Extra top padding for resource bar */
+  position: relative;
+}
+
+/* Dark overlay on top of background image */
+.ink-story-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);  /* 70% dark overlay - adjust as needed */
+  pointer-events: none;  /* Allow clicks to pass through */
+}
+
+.story-content {
+  max-width: 800px;
+  width: 100%;
+  position: relative;  /* Ensures content appears above the dark overlay */
+  z-index: 1;
+}
+
+.story-text {
+  margin-bottom: 40px;
+  font-size: 18pt;
+  line-height: 1.8;
+  text-align: center;
+}
+
+.story-text p {
+  margin-bottom: 20px;
+  color: #ddd;
+}
+
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.choice-btn {
+  padding: 15px 30px;
+  font-size: 14pt;
+  background: rgba(185, 124, 44, 0.2);
+  border: 2px solid #b97c2c;
+  border-radius: 8px;
+  color: #b97c2c;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.choice-btn:hover {
+  background: rgba(185, 124, 44, 0.4);
+  border-color: #ff9933;
+  color: #ff9933;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(185, 124, 44, 0.3);
+}
+
+.choice-btn:active {
+  transform: translateY(0);
+}
+
+/* ============================================
+   RESOURCE BAR
+   ============================================ */
+
+.resource-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 15px 30px;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.temperature {
+  font-size: 18px;
+  font-weight: bold;
+  color: #5cb8ff;  /* Cold blue color */
+}
+
+.resources {
+  display: flex;
+  gap: 15px;
+}
+
+.resource-item {
+  font-size: 24px;
+  opacity: 0.3;  /* Dimmed when not collected */
+  filter: grayscale(100%);
+  transition: all 0.3s ease;
+}
+
+.resource-item.collected {
+  opacity: 1;  /* Bright when collected */
+  filter: grayscale(0%);
+}
