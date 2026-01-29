@@ -1,0 +1,272 @@
+/* PhoneKeypad.css - Styles for the phone dialing interface */
+
+.phone-keypad-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.phone-keypad {
+  background: linear-gradient(145deg, #1a1a1a, #2d2d2d);
+  border-radius: 24px;
+  padding: 24px;
+  width: 320px;
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(255, 51, 51, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.phone-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.phone-title {
+  color: #ff3333;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.phone-cancel {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 5px 10px;
+  transition: color 0.2s ease;
+}
+
+.phone-cancel:hover {
+  color: #ff3333;
+}
+
+.phone-display {
+  background: #0a0a0a;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.dialed-number {
+  font-size: 32px;
+  font-weight: 300;
+  color: #fff;
+  letter-spacing: 4px;
+  font-family: 'Courier New', monospace;
+}
+
+.dialed-number:empty::before,
+.dialed-number:not(:empty) {
+  min-height: 40px;
+  display: block;
+}
+
+.phone-display .dialed-number:first-child:last-child:empty::before {
+  content: 'Enter number';
+  color: #444;
+  font-size: 18px;
+  letter-spacing: 1px;
+}
+
+.keypad-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.keypad-digit {
+  background: linear-gradient(145deg, #2a2a2a, #1f1f1f);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  font-size: 28px;
+  font-weight: 400;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  justify-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.keypad-digit:hover {
+  background: linear-gradient(145deg, #3a3a3a, #2a2a2a);
+  transform: scale(1.05);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.keypad-digit:active {
+  transform: scale(0.95);
+  background: linear-gradient(145deg, #1f1f1f, #2a2a2a);
+}
+
+.phone-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.action-btn {
+  padding: 15px 30px;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.clear-btn {
+  background: linear-gradient(145deg, #333, #222);
+  color: #fff;
+  flex: 1;
+}
+
+.clear-btn:hover {
+  background: linear-gradient(145deg, #444, #333);
+}
+
+.call-btn {
+  background: linear-gradient(145deg, #2d8f2d, #1f6b1f);
+  color: #fff;
+  flex: 2;
+  box-shadow: 0 4px 15px rgba(45, 143, 45, 0.3);
+}
+
+.call-btn:hover:not(:disabled) {
+  background: linear-gradient(145deg, #3aa33a, #2d8f2d);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(45, 143, 45, 0.4);
+}
+
+.call-btn:disabled {
+  background: linear-gradient(145deg, #333, #222);
+  color: #555;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.call-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* Call Result Overlay */
+.call-result-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+  animation: fadeIn 0.3s ease;
+}
+
+.call-result {
+  background: linear-gradient(145deg, #1a1a1a, #2d2d2d);
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 500px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.call-result.success {
+  border-color: rgba(45, 143, 45, 0.5);
+  box-shadow: 0 0 40px rgba(45, 143, 45, 0.2);
+}
+
+.call-result.wrong {
+  border-color: rgba(255, 165, 0, 0.5);
+  box-shadow: 0 0 40px rgba(255, 165, 0, 0.2);
+}
+
+.call-result.critical {
+  border-color: rgba(255, 51, 51, 0.5);
+  box-shadow: 0 0 40px rgba(255, 51, 51, 0.2);
+}
+
+.call-result-icon {
+  font-size: 60px;
+  margin-bottom: 20px;
+}
+
+.call-result h3 {
+  color: #fff;
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+.call-result p {
+  color: #aaa;
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+.call-result .continue-btn {
+  background: linear-gradient(145deg, #b97c2c, #8a5d21);
+  border: none;
+  color: #fff;
+  padding: 15px 40px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.2s ease;
+}
+
+.call-result .continue-btn:hover {
+  background: linear-gradient(145deg, #d4923a, #b97c2c);
+  transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 400px) {
+  .phone-keypad {
+    width: 280px;
+    padding: 16px;
+  }
+
+  .keypad-digit {
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+  }
+
+  .dialed-number {
+    font-size: 26px;
+  }
+}

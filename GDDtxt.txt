@@ -1,0 +1,131 @@
+72 Hours - Simplified Game Design
+Core Concept
+A text-based survival experience where information you gather early becomes useful later. Players who pay attention (or write things down) have easier decisions. Players who don't still complete the game, but feel the consequence of not remembering.
+The hook: The game rewards attention and preparation - mirroring real life.
+
+Unique Mechanic: Information Has Weight
+Throughout the game, you encounter useful information naturally - phone numbers, advice, tips. The game never forces you to write anything. But later, when you need that information, the game asks YOU - not a character, not a menu - YOU.
+Example:
+Early in game:
+"There's a sticker on the fuse box: 'Power outages: call 1343'"
+Later in game:
+"You need to report the outage. What number do you call?"
+[Text input] or [I don't remember - show me]
+If player types 1343: "The line connects. You did well to remember."
+If player admits they forgot: "The number was 1343. Worth writing down for next time."
+No punishment. Just natural consequence and gentle reinforcement.
+
+Structure: Three Phases
+Total playtime: 12-15 minutes
+
+PHASE 1: BEFORE (2-3 minutes)
+Setup: Evening. Storm warning on TV. You have limited time before bed.
+Mechanic: You have time for 4 preparation actions (out of 8 available). You cannot do everything.
+Available actions (all from booklet):
+
+Check the torch has batteries
+Fill bottles with tap water
+Check the wood stove works
+Bring extra firewood inside
+Check you have mother's medication supply
+Find the battery-powered radio
+Write down emergency numbers from the fridge magnet
+Check the manual release on the front gate
+
+Information moment #1:
+When checking emergency numbers, the game shows:
+
+112 - Emergencies
+1247 - Crisis information
+1343 - Power outages
+
+"These might be worth remembering."
+Game continues. No pause. No pressure.
+End of Phase 1: You go to sleep. Storm arrives.
+
+PHASE 2: CRISIS (7-9 minutes)
+The power goes out at 3:47 AM.
+Four key moments, each with simple choices:
+
+Moment 1: Darkness
+"You wake to complete darkness. The power is out."
+If prepared torch:
+"You reach for the torch. Click. Light fills the room."
+If didn't prepare torch:
+"You fumble for your phone. The screen shows 47% battery. You use it as a light."
+→ Players who prepared have more phone battery for later.
+You check on mother. She's cold but calm. Her medication is on the nightstand.
+"'Store between 15-25°C,'" she reads. "We should keep the house warm."
+
+Moment 2: Information
+"You need to know how long this will last."
+Choice:
+A) Check your phone for updates (costs battery)
+B) Use the radio (only if prepared)
+C) Wait and see
+If phone: You learn the outage may last 24-48 hours. Battery drops.
+If radio: "The hourly news reports widespread outages. Restoration estimated 24-48 hours for rural areas." Battery preserved.
+Information moment #2:
+The radio mentions: "For outage information, call 1343. For crisis assistance, call 1247."
+Same numbers as before. Reinforcement for those who noticed. New info for those who didn't prepare the fridge magnet action.
+
+Moment 3: Warmth
+"The house is getting cold. Your breath fogs slightly."
+If prepared wood stove + firewood:
+"You light the wood stove. Within an hour, warmth spreads through the room."
+If only one or neither:
+"You bundle blankets around your mother. It helps, but it's not enough."
+The booklet advice appears naturally:
+"'Keep everyone in one room,' your mother says. 'Body heat. We did this when I was young.'"
+This is from booklet page 13: "Keep everyone in the family in the same room, because every person gives off warmth."
+
+Moment 4: The Long Wait
+"Hours pass. You're managing, but you need help."
+Information test #1:
+"You should call to report the outage and get information. What's the number?"
+[Text input field]
+[I don't remember]
+If correct (1343): "You dial. The automated system confirms your outage is logged. Estimated restoration: tomorrow morning."
+If wrong or forgot: "The number is 1343 - the electricity hotline. Worth remembering." Then the call proceeds.
+
+PHASE 3: RESOLUTION (2-3 minutes)
+Morning comes. Still no power.
+Mother's condition: Based on warmth decisions.
+If warm: "Your mother slept well. 'Not so bad,' she says."
+If cold: "Your mother shivers. 'I'm fine,' she says, but you're worried."
+
+Final decision point:
+"It's been 18 hours. The house is [cold/manageable]. You need to decide what to do."
+Choice:
+A) Wait for power to return
+B) Call for assistance
+C) Go somewhere warmer (only if prepared gate)
+If B - Information test #2:
+"What number do you call for crisis assistance?"
+[Text input]
+[I don't remember]
+Correct answer: 1247
+"You call 1247. They confirm help is being coordinated for your area. You feel less alone."
+
+Power returns.
+"The lights flicker. Once. Twice. Then hold."
+"Your mother smiles. 'See? We managed.'"
+
+ENDING SCREEN
+Based on how player did:
+Prepared well + remembered info:
+"You were ready. The crisis was uncomfortable but manageable. Your mother stayed safe."
+Struggled but survived:
+"You got through it, but it was harder than it needed to be. Next time, you'll be more prepared."
+
+Final information card:
+"What you learned:"
+In an emergencyNumberEmergencies112Crisis information1247Power outages1343Family doctor1220
+"Prepare for at least 7 days of self-sufficiency."
+"More information: olevalmis.ee"
+"If you haven't already - write these numbers down. Keep them somewhere safe."
+[End]
+
+Information Flow Summary
+When ShownInformationWhen TestedPhase 1 (fridge magnet)112, 1247, 1343Phase 2 & 3Phase 2 (radio)1247, 1343 (reinforcement)Phase 3Phase 2 (mother)Keep everyone in one roomNot tested, just adviceEnd screenAll numbers + olevalmis.eeN/A - takeaway
+Players see the important numbers twice before being tested. Those who wrote them down feel smart. Those who didn't learn through gentle failure.
