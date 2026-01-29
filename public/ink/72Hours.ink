@@ -17,6 +17,11 @@ VAR has_radio = false
 VAR has_emergency_numbers = false
 VAR has_gate_release = false
 
+// Phone call outcome tracking
+VAR call_outcome = ""
+VAR dialed_number = ""
+VAR heard_broadcast = false
+
 
 // === STORY START ===
 # AUDIOLOOP: ../Sound/wind.wav
@@ -124,8 +129,11 @@ You mentally go through what needs to be done...
 
   + {not has_radio} [📻 Find the battery-powered radio]
       ~ has_radio = true
+      ~ has_emergency_numbers = true
+      ~ heard_broadcast = true
       ~ action_slots_used++
-      You dig through the closet and find the old radio. You test it. Static, then a station. It works.
+      You dig through the closet and find the old radio. You test it. Static, then a station comes through...
+      # RADIO_BROADCAST
       -> next_action
 
   + {not has_emergency_numbers} [📝 Write down emergency numbers]
@@ -203,5 +211,137 @@ You wake up.
 It is not working!
 
 The power is out.
+
+* [Check on grandmother]
+    -> check_grandmother
+
+=== check_grandmother ===
+#CLEAR
+
+You make your way through the dark house.
+
+{has_torch:
+    Your torch lights the way. You find grandmother quickly.
+- else:
+    You use your phone's flashlight. The battery indicator drops to 47%.
+}
+
+Grandmother is awake, confused by the darkness.
+
+"What's happening?" she asks, her voice weak.
+
+* [Reassure her]
+    -> grandmother_condition
+
+=== grandmother_condition ===
+#CLEAR
+
+Hours pass. The storm rages outside.
+
+{has_stove && has_firewood:
+    The wood stove keeps the house warm. Grandmother rests comfortably.
+- else:
+    Without heat, the temperature inside drops steadily. You bundle grandmother in blankets.
+}
+
+{has_water:
+    You give her water with her medication.
+- else:
+    You realize you have nothing to drink. The taps don't work without the electric pump.
+}
+
+By morning, grandmother's condition has worsened. She's weak, dehydrated, and needs medical attention.
+
+The power is still out. You need to call for help.
+
+* [Get your phone]
+    -> call_for_help
+
+=== call_for_help ===
+#CLEAR
+# PHONE_KEYPAD: grandmother_emergency
+
+You pick up your phone. The battery shows 23%.
+
+Grandmother needs help. Not a life-threatening emergency, but she needs medical attention and you can't drive out - the roads are blocked.
+
+{heard_broadcast:
+    You remember the radio broadcast mentioned different numbers for different situations...
+- else:
+    You never heard the emergency numbers. You'll have to guess or try to remember what they might be...
+}
+
+What number do you dial?
+
+* [Continue]
+    -> call_result
+
+=== call_result ===
+#CLEAR
+
+{call_outcome == "help_success":
+    -> ending_good
+}
+{call_outcome == "help_delayed":
+    -> ending_delayed
+}
+{call_outcome == "wrong_number":
+    -> call_for_help
+}
+{call_outcome == "no_help":
+    -> ending_bad
+}
+
+-> ending_bad
+
+=== ending_good ===
+#CLEAR
+
+Within the hour, a rescue coordination vehicle arrives.
+
+The paramedics check on grandmother. "She'll be fine," they say. "You did the right thing calling the right number."
+
+As they help her to the vehicle, you feel a sense of relief.
+
+You were prepared. You paid attention. And when it mattered, you knew exactly what to do.
+
+<b>THE END</b>
+
+<i>You successfully navigated the crisis by preparing well and remembering the correct emergency number: 1247 for rescue coordination.</i>
+
+-> END
+
+=== ending_delayed ===
+#CLEAR
+
+Help arrives, but it took longer than it should have.
+
+The paramedics check on grandmother. "She's dehydrated and her blood pressure is concerning," they say. "We need to take her in."
+
+Calling 112 for a non-life-threatening emergency tied up critical resources and delayed your call being processed.
+
+<b>THE END</b>
+
+<i>Remember: 112 is for life-threatening emergencies only. For rescue coordination and non-emergency assistance, call 1247.</i>
+
+-> END
+
+=== ending_bad ===
+#CLEAR
+
+You wait. Hours pass.
+
+Eventually, a neighbor with a working car checks on you and takes grandmother to the hospital.
+
+She recovers, but it was close.
+
+If only you had known the right number to call...
+
+<b>THE END</b>
+
+<i>In an emergency, knowing the right numbers can save lives:
+• 112 - Life-threatening emergencies
+• 1247 - Rescue coordination
+• 1343 - Power outage reporting</i>
 
 -> END

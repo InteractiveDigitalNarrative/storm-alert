@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef } from 'react';
 import './InkStory.css';
+import PhoneKeypad from './PhoneKeypad';
+import CallResult from './CallResult';
 
 function InkStory() {
   // ============================================
@@ -19,6 +21,15 @@ function InkStory() {
 
   // Track current background image
   const [background, setBackground] = useState(null);
+
+  // Phone keypad state
+  const [showKeypad, setShowKeypad] = useState(false);
+  const [keypadScenario, setKeypadScenario] = useState(null);
+  const [callResult, setCallResult] = useState(null);
+  const [dialedNumber, setDialedNumber] = useState('');
+
+  // Radio broadcast state
+  const [showRadioBroadcast, setShowRadioBroadcast] = useState(false);
 
   // Track game variables from Ink
   const [gameVars, setGameVars] = useState({
@@ -147,6 +158,20 @@ function InkStory() {
           console.log('Setting background:', url);  // Debug log
           setBackground(url);
         }
+
+        // Check for PHONE_KEYPAD tag
+        if (tag.startsWith('PHONE_KEYPAD:')) {
+          const scenario = tag.replace('PHONE_KEYPAD:', '').trim();
+          console.log('Showing phone keypad for scenario:', scenario);
+          setKeypadScenario(scenario);
+          setShowKeypad(true);
+        }
+
+        // Check for RADIO_BROADCAST tag
+        if (tag === 'RADIO_BROADCAST') {
+          console.log('Showing radio broadcast');
+          setShowRadioBroadcast(true);
+        }
       }
     }
 
@@ -188,6 +213,54 @@ function InkStory() {
 
     // Get next part of story
     continueStory();
+  };
+
+  // ============================================
+  // PHONE KEYPAD HANDLERS
+  // ============================================
+
+  const handlePhoneCall = (number, scenario) => {
+    console.log('Dialed number:', number, 'for scenario:', scenario);
+    setDialedNumber(number);
+    setShowKeypad(false);
+    setCallResult({ number, scenario });
+  };
+
+  const handlePhoneCancel = () => {
+    setShowKeypad(false);
+    setKeypadScenario(null);
+  };
+
+  const handleCallResultContinue = (outcome) => {
+    const story = storyRef.current;
+
+    // Set the call outcome in Ink so the story can branch
+    if (story && story.variablesState) {
+      story.variablesState['call_outcome'] = outcome;
+      story.variablesState['dialed_number'] = dialedNumber;
+    }
+
+    setCallResult(null);
+    setDialedNumber('');
+
+    // Continue the story after call result
+    continueStory();
+  };
+
+  const handleCallRetry = () => {
+    setCallResult(null);
+    setDialedNumber('');
+    setShowKeypad(true);
+  };
+
+  // ============================================
+  // RADIO BROADCAST HANDLER
+  // ============================================
+
+  const handleRadioBroadcastClose = () => {
+    setShowRadioBroadcast(false);
+    // Don't call continueStory() - the story has already advanced
+    // The broadcast is just an overlay that doesn't affect story state
   };
 
   // ============================================
@@ -258,6 +331,54 @@ function InkStory() {
           </>
         )}
       </div>
+
+      {/* Phone Keypad Overlay */}
+      {showKeypad && (
+        <PhoneKeypad
+          onCall={handlePhoneCall}
+          onCancel={handlePhoneCancel}
+          scenario={keypadScenario}
+        />
+      )}
+
+      {/* Call Result Overlay */}
+      {callResult && (
+        <CallResult
+          dialedNumber={callResult.number}
+          scenario={callResult.scenario}
+          onContinue={handleCallResultContinue}
+          onRetry={handleCallRetry}
+        />
+      )}
+
+      {/* Radio Broadcast Overlay */}
+      {showRadioBroadcast && (
+        <div className="radio-broadcast-overlay">
+          <div className="radio-broadcast">
+            <div className="radio-icon">📻</div>
+            <h3>Emergency Broadcast</h3>
+            <div className="broadcast-content">
+              <p className="broadcast-static">[STATIC CRACKLE]</p>
+              <p>This is an emergency broadcast from the National Crisis Center.</p>
+              <p>A severe storm is affecting coastal regions. Power outages have been reported across multiple districts.</p>
+              <p className="broadcast-numbers">
+                <strong>If you have a life-threatening emergency, call <span className="number">1-1-2</span></strong>
+              </p>
+              <p className="broadcast-numbers">
+                <strong>For rescue coordination and non-emergency assistance, call <span className="number">1-2-4-7</span></strong>
+              </p>
+              <p className="broadcast-numbers">
+                <strong>To report a power outage, call <span className="number">1-3-4-3</span></strong>
+              </p>
+              <p>Stay indoors. Conserve phone battery. Check on elderly neighbors if safe to do so.</p>
+              <p className="broadcast-static">[STATIC CRACKLE]</p>
+            </div>
+            <button className="broadcast-close-btn" onClick={handleRadioBroadcastClose}>
+              Continue
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

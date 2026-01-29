@@ -119,3 +119,109 @@
   opacity: 1;  /* Bright when collected */
   filter: grayscale(0%);
 }
+
+/* ============================================
+   RADIO BROADCAST OVERLAY
+   ============================================ */
+
+.radio-broadcast-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.radio-broadcast {
+  background: linear-gradient(145deg, #1a1a1a, #2d2d2d);
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 600px;
+  text-align: center;
+  border: 2px solid #444;
+  box-shadow:
+    0 0 60px rgba(255, 165, 0, 0.2),
+    inset 0 0 30px rgba(0, 0, 0, 0.5);
+}
+
+.radio-icon {
+  font-size: 60px;
+  margin-bottom: 15px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.radio-broadcast h3 {
+  color: #ff9933;
+  font-size: 24px;
+  margin-bottom: 25px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+
+.broadcast-content {
+  text-align: left;
+  color: #ccc;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.broadcast-content p {
+  margin-bottom: 15px;
+}
+
+.broadcast-static {
+  color: #666;
+  font-style: italic;
+  text-align: center;
+}
+
+.broadcast-numbers {
+  background: rgba(255, 153, 51, 0.1);
+  padding: 12px 15px;
+  border-left: 3px solid #ff9933;
+  margin: 15px 0;
+}
+
+.broadcast-numbers .number {
+  color: #ff3333;
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.broadcast-close-btn {
+  margin-top: 25px;
+  background: linear-gradient(145deg, #b97c2c, #8a5d21);
+  border: none;
+  color: #fff;
+  padding: 15px 50px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  transition: all 0.2s ease;
+}
+
+.broadcast-close-btn:hover {
+  background: linear-gradient(145deg, #d4923a, #b97c2c);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(185, 124, 44, 0.4);
+}
