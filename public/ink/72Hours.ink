@@ -18,6 +18,28 @@ VAR prep_light = 0
 VAR prep_info = 0
 VAR prep_medication = 0
 
+// Water containers filled
+VAR water_target = 12
+VAR water_collected = 0
+VAR water_bottles = false
+VAR water_pots = false
+VAR water_bathtub = false
+VAR water_jerrycan = false
+
+// Food items picked at grocery store
+VAR food_canned = false
+VAR food_dried = false
+VAR food_crackers = false
+VAR food_nuts = false
+VAR food_energy_bars = false
+VAR food_chocolate = false
+VAR food_longlife_bread = false
+VAR food_honey_jam = false
+VAR food_frozen = false
+VAR food_fresh_produce = false
+VAR food_milk = false
+VAR food_yogurt = false
+
 // Phone call outcome tracking
 VAR call_outcome = ""
 VAR dialed_number = ""
@@ -148,42 +170,211 @@ You're in the kitchen, looking at the tap.
 
 {
     - prep_water == 0:
-        The water is still running, but if the power goes out, the electric pump won't work.
+        The water is still running now, but if the power goes out, the electric pump won't work. You should store some water.
     - prep_water == 1:
-        You've filled a couple of bottles. Is that enough?
+        You've collected some water, but maybe not enough.
     - else:
         You've filled plenty of containers. You should be good for days.
 }
 
-+ {prep_water == 0} [Fill 2 bottles (10 min)]
-    ~ prep_water = 1
-    ~ current_time = current_time + 10
-    -> water_result_basic
++ {prep_water == 0} [Start collecting water]
+    -> water_calculation
 
-+ {prep_water < 2} [Fill many containers (25 min)]
-    ~ prep_water = 2
-    ~ current_time = current_time + 25
-    -> water_result_thorough
++ {prep_water > 0} [Collect more water]
+    -> water_containers
 
 + [← Back]
     -> preparation_hub
 
-=== water_result_basic ===
+// ============================================
+// WATER CALCULATION QUIZ
+// ============================================
+=== water_calculation ===
 # CLEAR
 
-You fill two large bottles. Quick and easy.
+Before you start filling containers, you need to figure out how much water you'll need.
 
-The water sloshes as you set them aside. It's something, but will it be enough for days?
+The rule is: <b>2 liters per person per day</b>
 
-+ [← Back to preparation]
-    -> preparation_hub
+You live here with grandmother. That's 2 people.
+The storm could last up to 3 days.
 
-=== water_result_thorough ===
+How much water do you need in total?
+
++ [6 liters]
+    -> water_calc_wrong_low
+
++ [12 liters]
+    -> water_calc_correct
+
++ [18 liters]
+    -> water_calc_wrong_high
+
++ [24 liters]
+    -> water_calc_wrong_high
+
+=== water_calc_wrong_low ===
 # CLEAR
 
-You find every container you can - bottles, pots, even the bathtub.
+<b>Not quite...</b>
 
-Heavy work, but now you have water for days. Your arms ache, but it's worth it.
+6 liters would only last 1.5 days for 2 people.
+
+Remember: 2L × 2 people × 3 days = <b>12 liters minimum</b>
+
++ [Try again]
+    -> water_calculation
+
+=== water_calc_wrong_high ===
+# CLEAR
+
+<b>That's more than the minimum!</b>
+
+The calculation is: 2L × 2 people × 3 days = <b>12 liters</b>
+
+Having extra water isn't bad, but 12 liters is the minimum you need. Let's aim for at least that.
+
++ [Continue]
+    -> water_containers_intro
+
+=== water_calc_correct ===
+# CLEAR
+
+<b>Correct!</b>
+
+2L × 2 people × 3 days = <b>12 liters</b>
+
+That's the minimum you need for drinking. More is always better if you have time.
+
++ [Continue]
+    -> water_containers_intro
+
+// ============================================
+// WATER CONTAINERS
+// ============================================
+=== water_containers_intro ===
+# CLEAR
+
+Now you need to find containers to fill.
+
+You look around the house. Where can you store water?
+
++ [Start filling containers]
+    -> water_containers
+
+=== water_containers ===
+# CLEAR
+
+<b>Water collected: {water_collected}L / {water_target}L target</b>
+
+{water_collected >= water_target:
+    You've reached your target!
+}
+
+{water_bottles: ✓ Water bottles (4L)}
+{water_pots: ✓ Cooking pots (6L)}
+{water_jerrycan: ✓ Jerry can from storage (10L)}
+{water_bathtub: ✓ Bathtub (50L)}
+
+Where do you want to fill water?
+
++ {not water_bottles} [Kitchen: Fill water bottles (4L) - 5 min]
+    ~ water_bottles = true
+    ~ water_collected = water_collected + 4
+    ~ current_time = current_time + 5
+    -> water_container_result_bottles
+
++ {not water_pots} [Kitchen: Fill cooking pots (6L) - 8 min]
+    ~ water_pots = true
+    ~ water_collected = water_collected + 6
+    ~ current_time = current_time + 8
+    -> water_container_result_pots
+
++ {not water_jerrycan} [Storage: Find and fill jerry can (10L) - 12 min]
+    ~ water_jerrycan = true
+    ~ water_collected = water_collected + 10
+    ~ current_time = current_time + 12
+    -> water_container_result_jerrycan
+
++ {not water_bathtub} [Bathroom: Fill the bathtub (50L) - 15 min]
+    ~ water_bathtub = true
+    ~ water_collected = water_collected + 50
+    ~ current_time = current_time + 15
+    -> water_container_result_bathtub
+
++ [Done collecting water]
+    -> water_complete
+
+=== water_container_result_bottles ===
+# CLEAR
+
+You gather all the water bottles and empty containers you can find in the kitchen.
+
+<b>+4 liters</b>
+
+These are easy to carry and pour from. Good for drinking water.
+
++ [Continue]
+    -> water_containers
+
+=== water_container_result_pots ===
+# CLEAR
+
+You fill the large cooking pots and cover them with lids.
+
+<b>+6 liters</b>
+
+Not ideal for drinking directly, but good for storing extra water.
+
++ [Continue]
+    -> water_containers
+
+=== water_container_result_jerrycan ===
+# CLEAR
+
+You find an old plastic jerry can in the storage room. You rinse it out and fill it up.
+
+<b>+10 liters</b>
+
+Heavy when full, but holds a lot of water!
+
++ [Continue]
+    -> water_containers
+
+=== water_container_result_bathtub ===
+# CLEAR
+
+You plug the bathtub drain and let it fill.
+
+<b>+50 liters</b>
+
+This won't be drinking water, but it's useful for flushing toilets and washing. In an emergency, every drop counts.
+
++ [Continue]
+    -> water_containers
+
+=== water_complete ===
+# CLEAR
+
+{
+    - water_collected >= water_target:
+        ~ prep_water = 2
+        <b>Well done!</b>
+
+        You've collected {water_collected} liters - more than enough for 3 days.
+    - water_collected > 0:
+        ~ prep_water = 1
+        <b>You've collected {water_collected} liters.</b>
+
+        That's less than the {water_target}L recommended, but it's something.
+    - else:
+        You didn't collect any water. That could be a problem...
+}
+
+<b>Remember:</b>
+• 2 liters per person per day minimum
+• Fill containers BEFORE the power goes out
+• Bathtub water is good for washing, not drinking
 
 + [← Back to preparation]
     -> preparation_hub
@@ -195,46 +386,213 @@ Heavy work, but now you have water for days. Your arms ache, but it's worth it.
 === category_food ===
 # CLEAR
 
-You're in the kitchen, checking the pantry.
+You think about food supplies.
 
 {
     - prep_food == 0:
-        If the power goes out, the fridge won't work. You need food that doesn't require cooking or refrigeration.
+        If the power goes out, the fridge won't work and you can't cook. You need food that's ready to eat.
     - prep_food == 1:
-        You've gathered some basics - bread, crackers, fruit.
+        You've gathered some basics from the kitchen. It might last a day or two.
     - else:
-        You've organized a proper supply of long-lasting food.
+        You went to the store and got proper emergency supplies.
 }
 
-+ {prep_food == 0} [Grab bread and crackers (5 min)]
++ {prep_food == 0} [Check what's in the kitchen (10 min)]
     ~ prep_food = 1
-    ~ current_time = current_time + 5
-    -> food_result_basic
+    ~ current_time = current_time + 10
+    -> food_kitchen_result
 
-+ {prep_food < 2} [Organize proper emergency food (20 min)]
-    ~ prep_food = 2
-    ~ current_time = current_time + 20
-    -> food_result_thorough
++ {prep_food < 2} [Go to the nearby grocery store (35 min)]
+    ~ current_time = current_time + 35
+    -> food_grocery_store
 
 + [← Back]
     -> preparation_hub
 
-=== food_result_basic ===
+=== food_kitchen_result ===
 # CLEAR
 
-You grab bread, crackers, and some fruit. It'll do for a day or two.
+You check the pantry and fridge.
 
-You place them on the counter where they're easy to reach in the dark.
+There's some bread that will go stale in a day, a few cans of beans, half a pack of crackers, and some apples.
+
+Not ideal for an emergency, but it's something. The bread and apples won't last long though...
 
 + [← Back to preparation]
     -> preparation_hub
 
-=== food_result_thorough ===
+// ============================================
+// GROCERY STORE
+// ============================================
+=== food_grocery_store ===
 # CLEAR
 
-You gather canned food, dried goods, nuts, and chocolate. Nothing that needs cooking or refrigeration.
+You hurry to the small grocery store down the street.
 
-You organize everything in a box - enough for a week if needed. Grandmother always said to be prepared.
+Other people had the same idea - the shelves are getting emptier. A sign says "CLOSING EARLY - STORM WARNING."
+
+You grab a basket. What do you put in it?
+
+-> grocery_shopping
+
+=== grocery_shopping ===
+# CLEAR
+
+<b>Your basket:</b>
+{food_canned: Canned food (meat, fish, vegetables) ✓}
+{food_dried: Dried foods (pasta, rice, cereals) ✓}
+{food_crackers: Crackers and biscuits ✓}
+{food_nuts: Nuts and dried fruit ✓}
+{food_energy_bars: Energy bars ✓}
+{food_chocolate: Chocolate ✓}
+{food_longlife_bread: Long-life bread ✓}
+{food_honey_jam: Honey and jam ✓}
+{food_frozen: Frozen meals ✓}
+{food_fresh_produce: Fresh vegetables ✓}
+{food_milk: Fresh milk ✓}
+{food_yogurt: Yogurt ✓}
+
++ {not food_canned} [Add canned food (meat, fish, vegetables)]
+    ~ food_canned = true
+    -> grocery_feedback_good
+
++ {not food_dried} [Add dried foods (pasta, rice, cereals)]
+    ~ food_dried = true
+    -> grocery_feedback_okay
+
++ {not food_crackers} [Add crackers and biscuits]
+    ~ food_crackers = true
+    -> grocery_feedback_good
+
++ {not food_nuts} [Add nuts and dried fruit]
+    ~ food_nuts = true
+    -> grocery_feedback_good
+
++ {not food_energy_bars} [Add energy bars]
+    ~ food_energy_bars = true
+    -> grocery_feedback_good
+
++ {not food_chocolate} [Add chocolate]
+    ~ food_chocolate = true
+    -> grocery_feedback_good
+
++ {not food_longlife_bread} [Add long-life bread]
+    ~ food_longlife_bread = true
+    -> grocery_feedback_good
+
++ {not food_honey_jam} [Add honey and jam]
+    ~ food_honey_jam = true
+    -> grocery_feedback_good
+
++ {not food_frozen} [Add frozen meals]
+    ~ food_frozen = true
+    -> grocery_feedback_bad_frozen
+
++ {not food_fresh_produce} [Add fresh vegetables]
+    ~ food_fresh_produce = true
+    -> grocery_feedback_bad_fresh
+
++ {not food_milk} [Add fresh milk]
+    ~ food_milk = true
+    -> grocery_feedback_bad_milk
+
++ {not food_yogurt} [Add yogurt]
+    ~ food_yogurt = true
+    -> grocery_feedback_bad_yogurt
+
++ [Done shopping - head home]
+    -> grocery_checkout
+
+=== grocery_feedback_good ===
+# CLEAR
+
+<b>Good choice!</b>
+
+This doesn't need refrigeration and is ready to eat. Perfect for an emergency.
+
++ [Continue shopping]
+    -> grocery_shopping
+
+=== grocery_feedback_okay ===
+# CLEAR
+
+<b>Okay choice.</b>
+
+Dried foods last long, but remember - you might not be able to cook pasta or rice without power. Cereals are good though!
+
++ [Continue shopping]
+    -> grocery_shopping
+
+=== grocery_feedback_bad_frozen ===
+# CLEAR
+
+<b>Not ideal...</b>
+
+Frozen meals will thaw and spoil when the power goes out. They'll only last a few hours.
+
+You put it back on the shelf.
+~ food_frozen = false
+
++ [Continue shopping]
+    -> grocery_shopping
+
+=== grocery_feedback_bad_fresh ===
+# CLEAR
+
+<b>Not ideal...</b>
+
+Fresh vegetables will wilt and spoil within days without refrigeration. For a 72-hour emergency, they're not the best choice.
+
+You put them back.
+~ food_fresh_produce = false
+
++ [Continue shopping]
+    -> grocery_shopping
+
+=== grocery_feedback_bad_milk ===
+# CLEAR
+
+<b>Bad choice!</b>
+
+Fresh milk spoils quickly without refrigeration - within hours in a warm house. It could make you sick.
+
+You put it back.
+~ food_milk = false
+
++ [Continue shopping]
+    -> grocery_shopping
+
+=== grocery_feedback_bad_yogurt ===
+# CLEAR
+
+<b>Bad choice!</b>
+
+Yogurt needs to stay cold. Without power, it will spoil and could cause food poisoning.
+
+You put it back.
+~ food_yogurt = false
+
++ [Continue shopping]
+    -> grocery_shopping
+
+=== grocery_checkout ===
+# CLEAR
+~ prep_food = 2
+
+You pay quickly and hurry home with your supplies.
+
+{food_canned || food_crackers || food_nuts || food_energy_bars || food_chocolate || food_longlife_bread:
+    You've got good emergency food - things that don't need refrigeration or cooking.
+- else:
+    You didn't grab much useful food. Hopefully what's in the kitchen will be enough...
+}
+
+<b>Remember for real emergencies:</b>
+• Canned food (meat, fish, vegetables, fruit)
+• Crackers, biscuits, long-life bread
+• Nuts, dried fruit, energy bars
+• Chocolate, honey, jam
+• Avoid anything that needs refrigeration or cooking!
 
 + [← Back to preparation]
     -> preparation_hub
