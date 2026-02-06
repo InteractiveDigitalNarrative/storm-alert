@@ -67,7 +67,7 @@ function InkStory() {
 
     // STEP 1: Load the ink.js library
     const inkScript = document.createElement('script');
-    inkScript.src = '/ink/ink.js';  // Path to ink.js in public folder
+    inkScript.src = import.meta.env.BASE_URL + 'ink/ink.js';  // Path to ink.js in public folder
     inkScript.async = true;
 
     inkScript.onload = () => {
@@ -75,7 +75,7 @@ function InkStory() {
 
       // STEP 2: Load your compiled story (72Hours.js)
       const storyScript = document.createElement('script');
-      storyScript.src = '/ink/72Hours.js';  // Path to your story in public folder
+      storyScript.src = import.meta.env.BASE_URL + 'ink/72Hours.js';  // Path to your story in public folder
       storyScript.async = true;
 
       storyScript.onload = () => {
