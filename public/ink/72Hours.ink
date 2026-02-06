@@ -111,24 +111,24 @@ A text appear on your mobile...
 
 === check_text ===
 #CLEAR
-Martin: "Power's going to be out for days.
+# SMS: Martin
 
-  Water. Light. Heat. Meds.
+You read the message...
 
-  Check everything NOW."
-* [Check time]
+* [Continue]
     -> check_time
 === check_time ===
 
 # CLEAR
 
-* [20:00]
-    -> hurry
-=== hurry ===
-#CLEAR
+<span class="clock-display">🕗 20:00</span>
+
+<span class="clock-subtitle">Storm arrives at 22:00 — you have 2 hours.</span>
+
 You realize time is limited. You'll need to prioritize what to prepare before the storm hits...
+
 * [Start Preparation]
-    -> preparation_intro 
+    -> preparation_intro
 
 === preparation_intro ===
 

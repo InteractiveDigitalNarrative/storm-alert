@@ -32,6 +32,9 @@ function InkStory() {
   // Radio broadcast state
   const [showRadioBroadcast, setShowRadioBroadcast] = useState(false);
 
+  // SMS overlay state
+  const [showSMS, setShowSMS] = useState(false);
+
   // Track game variables from Ink
   const [gameVars, setGameVars] = useState({
     temperature: -18,
@@ -171,6 +174,15 @@ function InkStory() {
           setShowKeypad(true);
         }
 
+        // Check for SMS tag
+        if (tag.startsWith('SMS:')) {
+          console.log('Showing SMS overlay');
+          setShowSMS(true);
+          setStoryText(lines);
+          setChoices([]);
+          return;
+        }
+
         // Check for RADIO_BROADCAST tag
         if (tag === 'RADIO_BROADCAST') {
           console.log('Showing radio broadcast');
@@ -262,6 +274,21 @@ function InkStory() {
     setCallResult(null);
     setDialedNumber('');
     setShowKeypad(true);
+  };
+
+  // ============================================
+  // SMS HANDLER
+  // ============================================
+
+  const handleSMSClose = () => {
+    setShowSMS(false);
+    const story = storyRef.current;
+    if (!story) return;
+    continueStory();
+    if (story.currentChoices.length > 0) {
+      story.ChooseChoiceIndex(0);
+      continueStory();
+    }
   };
 
   // ============================================
@@ -382,6 +409,33 @@ function InkStory() {
           onContinue={handleCallResultContinue}
           onRetry={handleCallRetry}
         />
+      )}
+
+      {/* SMS Overlay */}
+      {showSMS && (
+        <div className="sms-overlay" onClick={handleSMSClose}>
+          <div className="sms-phone" onClick={(e) => e.stopPropagation()}>
+            <div className="sms-header">
+              <div className="sms-avatar">M</div>
+              <div className="sms-contact">Martin</div>
+              <div className="sms-time">now</div>
+            </div>
+            <div className="sms-body">
+              <div className="sms-bubble">
+                Power's going to be out for days.
+              </div>
+              <div className="sms-bubble">
+                Water. Light. Heat. Meds.
+              </div>
+              <div className="sms-bubble">
+                Check everything NOW.
+              </div>
+            </div>
+            <button className="sms-close-btn" onClick={handleSMSClose}>
+              OK
+            </button>
+          </div>
+        </div>
       )}
 
       {/* Radio Broadcast Overlay */}
