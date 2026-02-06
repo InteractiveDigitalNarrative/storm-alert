@@ -133,6 +133,145 @@
 }
 
 /* ============================================
+   CLOCK DISPLAY
+   ============================================ */
+
+.clock-display {
+  display: block;
+  font-size: 4rem;
+  font-weight: 700;
+  text-align: center;
+  color: #fff;
+  letter-spacing: 4px;
+  margin-bottom: 0;
+}
+
+.clock-subtitle {
+  display: block;
+  text-align: center;
+  color: #ff9933;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+/* ============================================
+   SMS OVERLAY
+   ============================================ */
+
+.sms-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: sms-fade-in 0.3s ease;
+}
+
+@keyframes sms-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.sms-phone {
+  width: 340px;
+  background: #1a1a1e;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  animation: sms-slide-up 0.4s ease;
+}
+
+@keyframes sms-slide-up {
+  from { transform: translateY(40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.sms-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: #2a2a2e;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.sms-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #3a7bd5;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.sms-contact {
+  color: #fff;
+  font-weight: 600;
+  font-size: 16px;
+  flex: 1;
+}
+
+.sms-time {
+  color: #888;
+  font-size: 13px;
+}
+
+.sms-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sms-bubble {
+  background: #2a2a2e;
+  color: #eee;
+  padding: 10px 14px;
+  border-radius: 18px 18px 18px 4px;
+  font-size: 15px;
+  line-height: 1.4;
+  max-width: 85%;
+  animation: bubble-pop 0.3s ease backwards;
+}
+
+.sms-bubble:nth-child(1) { animation-delay: 0.3s; }
+.sms-bubble:nth-child(2) { animation-delay: 0.8s; }
+.sms-bubble:nth-child(3) { animation-delay: 1.3s; font-weight: 600; }
+
+@keyframes bubble-pop {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.sms-close-btn {
+  width: 100%;
+  padding: 16px;
+  background: none;
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: #3a7bd5;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.sms-close-btn:hover {
+  background: rgba(58, 123, 213, 0.1);
+}
+
+/* ============================================
    RADIO BROADCAST OVERLAY
    ============================================ */
 
