@@ -19,7 +19,7 @@ VAR prep_info = 0
 VAR prep_medication = 0
 
 // Water containers filled
-VAR water_target = 12
+VAR water_target = 18
 VAR water_collected = 0
 VAR water_bottles = false
 VAR water_pots = false
@@ -39,6 +39,11 @@ VAR food_frozen = false
 VAR food_fresh_produce = false
 VAR food_milk = false
 VAR food_yogurt = false
+
+// Shopping list
+VAR shop_water = false
+VAR shop_water_amount = 0
+VAR shop_visited = false
 
 // Phone call outcome tracking
 VAR call_outcome = ""
@@ -169,6 +174,9 @@ What do you want to prepare?
 + [💊 Medication{prep_medication: ✓}]
     -> category_medication
 
++ {shop_water && not shop_visited} [🛒 Go to Store]
+    -> go_to_store
+
 + [Done preparing - wait for storm]
     -> preparation_complete
 
@@ -190,10 +198,10 @@ You're in the kitchen, looking at the tap.
         You've filled plenty of containers. You should be good for days.
 }
 
-+ {prep_water == 0} [Start collecting water]
++ {prep_water == 0} [Figure out how much water you need]
     -> water_calculation
 
-+ {prep_water > 0} [Collect more water]
++ {prep_water > 0} [Fill more containers from tap]
     -> water_containers
 
 + [← Back]
@@ -207,7 +215,7 @@ You're in the kitchen, looking at the tap.
 
 Before you start filling containers, you need to figure out how much water you'll need.
 
-The rule is: <b>2 liters per person per day</b>
+The rule is: <b>3 liters per person per day</b>
 
 You live here with grandmother. That's 2 people.
 The storm could last up to 3 days.
@@ -216,14 +224,14 @@ How much water do you need in total?
 
 <span class="note-hint">📝 Remember the formula — it could help later.</span>
 
-+ [6 liters]
++ [9 liters]
     -> water_calc_wrong_low
 
 + [12 liters]
-    -> water_calc_correct
+    -> water_calc_wrong_low
 
 + [18 liters]
-    -> water_calc_wrong_high
+    -> water_calc_correct
 
 + [24 liters]
     -> water_calc_wrong_high
@@ -233,9 +241,9 @@ How much water do you need in total?
 
 <b>Not quite...</b>
 
-6 liters would only last 1.5 days for 2 people.
+That's not enough for 2 people over 3 days.
 
-Remember: 2L × 2 people × 3 days = <b>12 liters minimum</b>
+Remember: 3L × 2 people × 3 days = <b>18 liters minimum</b>
 
 + [Try again]
     -> water_calculation
@@ -245,9 +253,9 @@ Remember: 2L × 2 people × 3 days = <b>12 liters minimum</b>
 
 <b>That's more than the minimum!</b>
 
-The calculation is: 2L × 2 people × 3 days = <b>12 liters</b>
+The calculation is: 3L × 2 people × 3 days = <b>18 liters</b>
 
-Having extra water isn't bad, but 12 liters is the minimum you need. Let's aim for at least that.
+Having extra water isn't bad, but 18 liters is the minimum you need. Let's aim for at least that.
 
 + [Continue]
     -> water_containers_intro
@@ -257,7 +265,7 @@ Having extra water isn't bad, but 12 liters is the minimum you need. Let's aim f
 
 <b>Correct!</b>
 
-2L × 2 people × 3 days = <b>12 liters</b>
+3L × 2 people × 3 days = <b>18 liters</b>
 
 That's the minimum you need for drinking. More is always better if you have time.
 
@@ -270,11 +278,33 @@ That's the minimum you need for drinking. More is always better if you have time
 === water_containers_intro ===
 # CLEAR
 
-Now you need to find containers to fill.
+You look around the house for containers...
 
-You look around the house. Where can you store water?
+You spot a few water bottles in the fridge and cupboard.
 
-+ [Start filling containers]
+~ water_bottles = true
+~ water_collected = water_collected + 4
+
+<b>+4 liters found (existing bottles)</b>
+
+What else can you do?
+
++ [Continue]
+    -> water_containers
+
+=== water_added_to_list ===
+# CLEAR
+
+~ shop_water_amount = water_target - water_collected
+{shop_water_amount < 0:
+    ~ shop_water_amount = 0
+}
+
+You make a mental note: <b>buy {shop_water_amount}L of bottled water at the store.</b>
+
+You have {water_collected}L at home — the store can cover the rest.
+
++ [Continue]
     -> water_containers
 
 === water_containers ===
@@ -282,40 +312,34 @@ You look around the house. Where can you store water?
 
 <b>Water collected: {water_collected}L / {water_target}L target</b>
 
-{water_collected >= water_target:
-    You've reached your target!
-}
-
 {water_bottles: ✓ Water bottles (4L)}
 {water_pots: ✓ Cooking pots (6L)}
-{water_jerrycan: ✓ Jerry can from storage (10L)}
-{water_bathtub: ✓ Bathtub (50L)}
+{water_bathtub: ✓ Bathtub (non-drinking)}
 
-Where do you want to fill water?
-
-+ {not water_bottles} [Kitchen: Fill water bottles (4L) - 5 min]
++ {not water_bottles} [Fill empty bottles from the tap (4L) — 5 min]
     ~ water_bottles = true
     ~ water_collected = water_collected + 4
     ~ current_time = current_time + 5
     -> water_container_result_bottles
 
-+ {not water_pots} [Kitchen: Fill cooking pots (6L) - 8 min]
++ {not water_pots} [Fill cooking pots with lids (6L) — 8 min]
     ~ water_pots = true
     ~ water_collected = water_collected + 6
     ~ current_time = current_time + 8
     -> water_container_result_pots
 
-+ {not water_jerrycan} [Storage: Find and fill jerry can (10L) - 12 min]
-    ~ water_jerrycan = true
-    ~ water_collected = water_collected + 10
-    ~ current_time = current_time + 12
-    -> water_container_result_jerrycan
-
-+ {not water_bathtub} [Bathroom: Fill the bathtub (50L) - 15 min]
++ {not water_bathtub} [Fill the bathtub — 10 min]
     ~ water_bathtub = true
-    ~ water_collected = water_collected + 50
-    ~ current_time = current_time + 15
+    ~ current_time = current_time + 10
     -> water_container_result_bathtub
+
++ {not shop_water} [Add bottled water to shopping list instead]
+    ~ shop_water = true
+    ~ shop_water_amount = water_target - water_collected
+    {shop_water_amount < 0:
+        ~ shop_water_amount = 0
+    }
+    -> water_added_to_list
 
 + [Done collecting water]
     -> water_complete
@@ -323,11 +347,11 @@ Where do you want to fill water?
 === water_container_result_bottles ===
 # CLEAR
 
-You gather all the water bottles and empty containers you can find in the kitchen.
+You gather empty bottles from around the kitchen and fill them from the tap.
 
 <b>+4 liters</b>
 
-These are easy to carry and pour from. Good for drinking water.
+Easy to carry and pour from — ideal for drinking water. Seal them tight to keep the water clean.
 
 + [Continue]
     -> water_containers
@@ -339,19 +363,7 @@ You fill the large cooking pots and cover them with lids.
 
 <b>+6 liters</b>
 
-Not ideal for drinking directly, but good for storing extra water.
-
-+ [Continue]
-    -> water_containers
-
-=== water_container_result_jerrycan ===
-# CLEAR
-
-You find an old plastic jerry can in the storage room. You rinse it out and fill it up.
-
-<b>+10 liters</b>
-
-Heavy when full, but holds a lot of water!
+Harder to pour from and takes up counter space, but a reliable way to store extra water in a pinch.
 
 + [Continue]
     -> water_containers
@@ -361,9 +373,9 @@ Heavy when full, but holds a lot of water!
 
 You plug the bathtub drain and let it fill.
 
-<b>+50 liters</b>
+<b>+50 liters (non-drinking)</b>
 
-This won't be drinking water, but it's useful for flushing toilets and washing. In an emergency, every drop counts.
+This water isn't for drinking — but it's useful for flushing toilets and washing hands. A smart move in any emergency.
 
 + [Continue]
     -> water_containers
@@ -376,20 +388,55 @@ This won't be drinking water, but it's useful for flushing toilets and washing. 
         ~ prep_water = 2
         <b>Well done!</b>
 
-        You've collected {water_collected} liters - more than enough for 3 days.
+        You've collected {water_collected} liters of drinking water — that covers the {water_target}L needed for 2 people over 3 days.
+
+    - water_collected > 0 && shop_water:
+        ~ prep_water = 1
+        <b>You have {water_collected}L at home so far.</b>
+
+        You've added bottled water to your shopping list — visit the store to top up.
+
     - water_collected > 0:
         ~ prep_water = 1
         <b>You've collected {water_collected} liters.</b>
 
         That's less than the {water_target}L recommended, but it's something.
+
     - else:
         You didn't collect any water. That could be a problem...
 }
 
 <b>Remember:</b>
-• 2 liters per person per day minimum
+• 3 liters per person per day minimum
 • Fill containers BEFORE the power goes out
 • Bathtub water is good for washing, not drinking
+
++ [← Back to preparation]
+    -> preparation_hub
+
+
+// ============================================
+// STORE TRIP
+// ============================================
+=== go_to_store ===
+# CLEAR
+
+~ current_time = current_time + 35
+~ shop_visited = true
+
+You grab your coat and head to the nearby shop. The wind is already picking up.
+
+The store is busy — others had the same idea.
+
+{shop_water:
+    You grab several large bottles of water — <b>{shop_water_amount} liters</b>.
+    ~ water_collected = water_collected + shop_water_amount
+    ~ prep_water = 2
+}
+
+You hurry back home with your supplies.
+
+<b>Time spent: 35 minutes</b>
 
 + [← Back to preparation]
     -> preparation_hub

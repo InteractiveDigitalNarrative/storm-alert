@@ -133,6 +133,49 @@
 }
 
 /* ============================================
+   SHOPPING LIST
+   ============================================ */
+
+.shopping-list {
+  position: fixed;
+  bottom: 70px;
+  right: 20px;
+  background: rgba(20, 20, 20, 0.95);
+  border: 1px solid rgba(255, 153, 51, 0.3);
+  border-radius: 12px;
+  padding: 12px 16px;
+  z-index: 98;
+  min-width: 180px;
+  animation: list-slide-in 0.4s ease;
+}
+
+@keyframes list-slide-in {
+  from { transform: translateX(20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.shopping-list-header {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ff9933;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+.shopping-list-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.shopping-list-items li {
+  font-size: 13px;
+  color: #ddd;
+  padding: 4px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ============================================
    CLOCK DISPLAY
    ============================================ */
 

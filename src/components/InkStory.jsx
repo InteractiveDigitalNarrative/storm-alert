@@ -213,6 +213,10 @@ function InkStory() {
       storm_time: story.variablesState["storm_time"],
       start_time: story.variablesState["start_time"],
       in_preparation: story.variablesState["in_preparation"],
+      // Shopping list
+      shop_water: story.variablesState["shop_water"],
+      shop_water_amount: story.variablesState["shop_water_amount"],
+      shop_visited: story.variablesState["shop_visited"],
     });
 
     // Get current choices from Ink
@@ -362,6 +366,16 @@ function InkStory() {
           stormTime={gameVars.storm_time}
           startTime={gameVars.start_time}
         />
+      )}
+
+      {/* Shopping List - visible during preparation when items added */}
+      {!!gameVars.in_preparation && !!gameVars.shop_water && !gameVars.shop_visited && (
+        <div className="shopping-list">
+          <div className="shopping-list-header">🛒 Shopping List</div>
+          <ul className="shopping-list-items">
+            {!!gameVars.shop_water && <li>💧 Bottled water ({gameVars.shop_water_amount}L)</li>}
+          </ul>
+        </div>
       )}
 
       <div className="story-content">
