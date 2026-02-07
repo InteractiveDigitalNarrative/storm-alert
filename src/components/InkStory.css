@@ -32,6 +32,7 @@
 .story-content {
   max-width: 800px;
   width: 100%;
+  padding: 0 30px;
   max-height: 100%;
   overflow-y: auto;
   scrollbar-width: none;
@@ -451,4 +452,153 @@
   background: linear-gradient(145deg, #d4923a, #b97c2c);
   transform: translateY(-2px);
   box-shadow: 0 4px 15px rgba(185, 124, 44, 0.4);
+}
+
+/* ============================================
+   MOBILE RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .ink-story-container {
+    padding: 55px 15px 55px 15px;
+  }
+
+  .story-content {
+    transform: translateY(-20px);
+  }
+
+  .story-text {
+    font-size: 14pt;
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+
+  .story-text p {
+    margin-bottom: 10px;
+  }
+
+  .choices {
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .choice-btn {
+    padding: 12px 20px;
+    font-size: 12pt;
+  }
+
+  /* Resource bar */
+  .resource-bar {
+    padding: 8px 15px;
+  }
+
+  .temperature {
+    font-size: 14px;
+  }
+
+  .resources {
+    gap: 8px;
+  }
+
+  .resource-item {
+    font-size: 28px;
+  }
+
+  /* Shopping list */
+  .shopping-list {
+    bottom: 60px;
+    right: 10px;
+    min-width: 150px;
+    padding: 10px 12px;
+  }
+
+  .shopping-list-header {
+    font-size: 12px;
+  }
+
+  .shopping-list-items li {
+    font-size: 11px;
+  }
+
+  /* SMS overlay */
+  .sms-phone {
+    width: 290px;
+  }
+
+  /* Radio broadcast */
+  .radio-broadcast {
+    padding: 25px;
+    max-width: 90vw;
+  }
+
+  .radio-icon {
+    font-size: 40px;
+  }
+
+  .broadcast-content {
+    font-size: 14px;
+  }
+
+  .broadcast-numbers {
+    padding: 8px 10px;
+    margin: 10px 0;
+  }
+
+  .broadcast-close-btn {
+    padding: 12px 30px;
+    font-size: 14px;
+  }
+
+  /* Clock display */
+  .clock-display {
+    font-size: 3rem;
+  }
+
+  .clock-subtitle {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .ink-story-container {
+    padding: 50px 10px 50px 10px;
+  }
+
+  .story-text {
+    font-size: 12pt;
+  }
+
+  .choice-btn {
+    padding: 10px 15px;
+    font-size: 11pt;
+    letter-spacing: 0;
+  }
+
+  .resource-bar {
+    padding: 6px 10px;
+  }
+
+  .resource-item {
+    font-size: 22px;
+  }
+
+  .resources {
+    gap: 5px;
+  }
+
+  .sms-phone {
+    width: 260px;
+  }
+
+  .sms-bubble {
+    font-size: 13px;
+  }
+
+  .radio-broadcast {
+    padding: 20px 15px;
+  }
+
+  .clock-display {
+    font-size: 2.5rem;
+  }
 }
