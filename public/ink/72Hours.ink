@@ -685,49 +685,176 @@ You pay and hurry home with your supplies.
 // ============================================
 // HEAT CATEGORY
 // ============================================
+VAR heat_sealed = false
+VAR heat_one_room = false
+VAR heat_stove = false
+VAR heat_pipes = false
+VAR heat_clothing = false
+
 === category_heat ===
 # CLEAR
 
-The old wood stove sits in the corner of the living room.
-
 {
     - prep_heat == 0:
-        You haven't used it in years. If the heating goes out, it could get dangerously cold.
-    - prep_heat == 1:
-        You've gathered blankets and warm clothes.
+        You think ahead — when the power goes out, the central heating stops. It's -18°C outside.
+
+        What's the most important thing to do FIRST?
+
+        + [Seal the house — close windows, ventilation, block drafts]
+            -> heat_quiz_right
+
+        + [Turn the heating up as high as possible now]
+            -> heat_quiz_wrong
+
+        + [Open windows to let fresh air circulate]
+            -> heat_quiz_wrong
+
     - else:
-        The wood stove is ready and you have plenty of firewood inside.
+        You've been preparing the house for the cold.
 }
 
-+ {prep_heat == 0} [Gather blankets and warm clothes (10 min)]
-    ~ prep_heat = 1
++ {prep_heat > 0} [Continue preparing]
+    -> heat_hub
+
++ {prep_heat > 0} [← Back]
+    -> preparation_hub
+
+=== heat_quiz_right ===
+# CLEAR
+
+<b>Correct!</b>
+
+When heating fails, your first priority is to stop heat from escaping. Close ventilation, seal windows, block drafts under doors.
+
+Now let's prepare the house.
+
++ [Continue]
+    -> heat_hub
+
+=== heat_quiz_wrong ===
+# CLEAR
+
+<b>Not quite.</b>
+
+Cranking the heating or opening windows won't help when the power's out. The first priority is to <b>seal the house</b> — close ventilation, shut windows, block drafts. Keep the warm air IN.
+
++ [Continue]
+    -> heat_hub
+
+=== heat_hub ===
+# CLEAR
+
+~ prep_heat = 1
+
+<b>Heat preparation:</b>
+{heat_sealed: ✓ Windows & ventilation sealed}
+{heat_one_room: ✓ Warm room set up}
+{heat_stove: ✓ Wood stove ready}
+{heat_pipes: ✓ Pipes insulated}
+{heat_clothing: ✓ Warm clothes gathered}
+
+What do you want to do?
+
++ {not heat_sealed} [Seal windows & ventilation — 3 min]
+    ~ heat_sealed = true
+    ~ current_time = current_time + 3
+    -> heat_result_sealed
+
++ {not heat_one_room} [Move grandmother to living room — 3 min]
+    ~ heat_one_room = true
+    ~ current_time = current_time + 3
+    -> heat_result_one_room
+
++ {not heat_stove} [Prepare wood stove & bring firewood — 10 min]
+    ~ heat_stove = true
     ~ current_time = current_time + 10
-    -> heat_result_basic
+    -> heat_result_stove
 
-+ {prep_heat < 2} [Prepare wood stove and bring firewood (40 min)]
-    ~ prep_heat = 2
-    ~ current_time = current_time + 40
-    -> heat_result_thorough
++ {not heat_pipes} [Insulate water pipes — 3 min]
+    ~ heat_pipes = true
+    ~ current_time = current_time + 3
+    -> heat_result_pipes
 
-+ [← Back]
-    -> preparation_hub
++ {not heat_clothing} [Gather warm clothes & blankets — 3 min]
+    ~ heat_clothing = true
+    ~ current_time = current_time + 3
+    -> heat_result_clothing
 
-=== heat_result_basic ===
++ [Done with heat]
+    -> heat_complete
+
+=== heat_result_sealed ===
 # CLEAR
 
-You gather every blanket and warm item you can find.
+You switch off the forced ventilation, shut every window, and stuff towels along drafty gaps under doors.
 
-Wool sweaters, thick socks, grandmother's old quilts. Layering will help if it gets cold.
+<b>Every sealed gap keeps precious warmth inside.</b>
 
-+ [← Back to preparation]
-    -> preparation_hub
++ [Continue]
+    -> heat_hub
 
-=== heat_result_thorough ===
+=== heat_result_one_room ===
 # CLEAR
 
-You check the stove's flue, clear old ash, and haul armloads of firewood from the shed.
+You set up a comfortable spot for grandmother in the living room — pillows, her blanket, medication nearby. You close the doors to all other rooms.
 
-Your back protests with each trip, but now you have enough wood stacked inside to heat the house for days. The stove is ready to light at a moment's notice.
+<b>One room is easier to heat, and every person gives off body heat — staying together helps.</b>
+
++ [Continue]
+    -> heat_hub
+
+=== heat_result_stove ===
+# CLEAR
+
+You check the flue — it opens. You clear old ash and haul armloads of firewood from the shed. The stove is ready to light at a moment's notice.
+
+<b>Always check the flue before lighting. Never leave a fire unattended. Keep a fire blanket nearby.</b>
+
++ [Continue]
+    -> heat_hub
+
+=== heat_result_pipes ===
+# CLEAR
+
+You wrap exposed pipes with old towels and rags. Not perfect insulation, but it could prevent a burst pipe.
+
+<b>A burst pipe in a frozen house is a disaster on top of a disaster. A slow drip from taps also helps — moving water freezes slower.</b>
+
++ [Continue]
+    -> heat_hub
+
+=== heat_result_clothing ===
+# CLEAR
+
+You dig out wool sweaters, thermal socks, grandmother's thick quilts. Warm clothes for both of you, ready to go.
+
+<b>Layer up: thermal base, wool/fleece middle, windproof outer. Don't forget hat, gloves, and thick socks.</b>
+
++ [Continue]
+    -> heat_hub
+
+=== heat_complete ===
+# CLEAR
+
+{
+    - heat_sealed && heat_one_room && heat_stove && heat_pipes && heat_clothing:
+        ~ prep_heat = 2
+        <b>Fully prepared!</b>
+
+        The house is sealed, grandmother is in the warm room, the stove is ready, pipes are insulated, and warm clothes are laid out.
+
+    - heat_stove:
+        ~ prep_heat = 2
+        <b>Good preparation.</b>
+
+        The stove is ready — that's the most important part. You've done what you can.
+
+    - else:
+        ~ prep_heat = 1
+        <b>Basic preparation done.</b>
+
+        You've taken some steps, but there's more you could do to stay safe.
+}
 
 + [← Back to preparation]
     -> preparation_hub
