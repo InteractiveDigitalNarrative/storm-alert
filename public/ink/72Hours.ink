@@ -311,6 +311,13 @@ You have {water_collected}L at home — the store can cover the rest.
 === water_containers ===
 # CLEAR
 
+{shop_water:
+    ~ shop_water_amount = water_target - water_collected
+    {shop_water_amount < 0:
+        ~ shop_water_amount = 0
+    }
+}
+
 <b>Water collected: {water_collected}L / {water_target}L target</b>
 
 {water_bottles: ✓ Water bottles (4L)}
@@ -430,6 +437,10 @@ You grab your coat and head to the nearby shop. The wind is already picking up.
 The store is busy — others had the same idea.
 
 {shop_water:
+    ~ shop_water_amount = water_target - water_collected
+    {shop_water_amount < 0:
+        ~ shop_water_amount = 0
+    }
     You grab several large bottles of water — <b>{shop_water_amount} liters</b>.
     ~ water_collected = water_collected + shop_water_amount
     ~ prep_water = 2
