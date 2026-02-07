@@ -25,6 +25,7 @@ VAR water_bottles = false
 VAR water_pots = false
 VAR water_bathtub = false
 VAR water_jerrycan = false
+VAR water_extra_bottles = false
 
 // Food items picked at grocery store
 VAR food_canned = false
@@ -323,6 +324,7 @@ You have {water_collected}L at home — the store can cover the rest.
 
 {water_bottles: ✓ Water bottles (4L)}
 {water_pots: ✓ Cooking pots (6L)}
+{water_extra_bottles: ✓ Extra bottles from around the house (6L)}
 {water_bathtub: ✓ Bathtub (non-drinking)}
 
 + {not water_bottles} [Fill empty bottles from the tap (4L) — 5 min]
@@ -336,6 +338,12 @@ You have {water_collected}L at home — the store can cover the rest.
     ~ water_collected = water_collected + 6
     ~ current_time = current_time + 8
     -> water_container_result_pots
+
++ {not water_extra_bottles} [Search house for more bottles & fill them (6L) — 10 min]
+    ~ water_extra_bottles = true
+    ~ water_collected = water_collected + 6
+    ~ current_time = current_time + 10
+    -> water_container_result_extra_bottles
 
 + {not water_bathtub} [Fill the bathtub — 10 min]
     ~ water_bathtub = true
@@ -373,6 +381,20 @@ You fill the large cooking pots and cover them with lids.
 <b>+6 liters</b>
 
 Harder to pour from and takes up counter space, but a reliable way to store extra water in a pinch.
+
++ [Continue]
+    -> water_containers
+
+=== water_container_result_extra_bottles ===
+# CLEAR
+
+You search the whole house — closets, garage, grandmother's room. You find old juice bottles, a thermos, and some glass jars.
+
+You rinse them out and fill them from the tap.
+
+<b>+6 liters</b>
+
+It took a while, but every container counts. Label them so you know it's drinking water.
 
 + [Continue]
     -> water_containers
@@ -1214,49 +1236,152 @@ While it charges, you switch on power saving mode and turn off background apps.
 // ============================================
 // MEDICATION CATEGORY
 // ============================================
+
+VAR med_pills_counted = false
+VAR med_organized = false
+VAR med_first_aid = false
+
 === category_medication ===
 # CLEAR
 
-Grandmother takes blood pressure medication daily.
-
 {
     - prep_medication == 0:
-        Her pills are on the kitchen counter, but you haven't checked how many are left.
-    - prep_medication == 1:
-        You checked - there's about 5 days worth left.
+        Grandmother takes blood pressure medication daily. If pharmacies close, she can't get more.
+
+        In a crisis, pharmacies may be closed for days. What should you check first?
+
+        + [Pain medication stock]
+            -> med_quiz_pain
+
+        + [Prescription medicine supply]
+            -> med_quiz_right
+
+        + [First-aid kit]
+            -> med_quiz_firstaid
+
     - else:
-        You've checked the supply and organized everything she needs within reach.
+        You've started preparing grandmother's medication.
 }
 
-+ {prep_medication == 0} [Check medication supply (5 min)]
-    ~ prep_medication = 1
-    ~ current_time = current_time + 5
-    -> medication_result_basic
++ {prep_medication > 0} [Continue preparing]
+    -> medication_hub
 
-+ {prep_medication < 2} [Organize all her medical needs (15 min)]
-    ~ prep_medication = 2
-    ~ current_time = current_time + 15
-    -> medication_result_thorough
-
-+ [← Back]
++ {prep_medication > 0} [← Back]
     -> preparation_hub
 
-=== medication_result_basic ===
+=== med_quiz_pain ===
 # CLEAR
 
-You count the pills. Five days left. Should be enough... you hope.
+<b>Important, but not the priority.</b>
 
-You make a mental note of where they are. Grandmother will need them in the morning.
+Painkillers and fever reducers are useful, but you can survive without them. Grandmother's blood pressure medication is critical — missing even one dose could be dangerous.
 
-+ [← Back to preparation]
-    -> preparation_hub
+<i>Always check prescription medicines first.</i>
 
-=== medication_result_thorough ===
++ [Continue]
+    -> medication_hub
+
+=== med_quiz_right ===
 # CLEAR
 
-You check all her medications and organize them by day in a small box.
+<b>Correct!</b>
 
-You place the box with a glass of water by her bed, along with her reading glasses and a small bell she can ring if she needs you in the night. She'll have everything within reach.
+Prescription medicines are the top priority. Missing doses of blood pressure medication can be life-threatening. Always ensure at least a 7-day supply.
+
++ [Continue]
+    -> medication_hub
+
+=== med_quiz_firstaid ===
+# CLEAR
+
+<b>Good idea, but not the first priority.</b>
+
+A first-aid kit is important, but grandmother's daily prescription medication is critical. Without it, her health could deteriorate fast.
+
+<i>Check prescription medicines first, then the first-aid kit.</i>
+
++ [Continue]
+    -> medication_hub
+
+=== medication_hub ===
+# CLEAR
+
+~ prep_medication = 1
+
+{med_pills_counted: ✓ Pills counted}
+{med_organized: ✓ Medication organized}
+{med_first_aid: ✓ First-aid kit checked}
+
++ {not med_pills_counted} [Count grandmother's pills — 2 min]
+    ~ med_pills_counted = true
+    ~ current_time = current_time + 2
+    -> med_result_count
+
++ {med_pills_counted && not med_organized} [Organize medication by day — 3 min]
+    ~ med_organized = true
+    ~ current_time = current_time + 3
+    -> med_result_organize
+
++ {not med_first_aid} [Check first-aid kit — 2 min]
+    ~ med_first_aid = true
+    ~ current_time = current_time + 2
+    -> med_result_firstaid
+
++ [Done with medication]
+    -> medication_complete
+
+=== med_result_count ===
+# CLEAR
+
+You find grandmother's blood pressure pills on the kitchen counter and count them carefully.
+
+<b>5 days' worth left.</b> That should last through the storm — but just barely.
+
+<i>Experts recommend keeping at least a 7-day supply of prescription medicines at home.</i>
+
++ [Continue]
+    -> medication_hub
+
+=== med_result_organize ===
+# CLEAR
+
+You sort grandmother's pills into a small box, organized by day. Morning dose, evening dose — clearly separated.
+
+You place the box by her bed with a glass of water, her reading glasses, and a small bell she can ring if she needs you.
+
+<b>She'll have everything within reach, even in the dark.</b>
+
++ [Continue]
+    -> medication_hub
+
+=== med_result_firstaid ===
+# CLEAR
+
+You dig out the first-aid kit from the bathroom cabinet and check inside.
+
+Bandages, antiseptic, painkillers, fever reducers... mostly intact. The painkillers expired last year.
+
+<b>Not perfect, but it'll do.</b>
+
+<i>A good emergency kit should include: bandages, antiseptic, painkillers, fever reducers, allergy medication, and any prescription medicines.</i>
+
++ [Continue]
+    -> medication_hub
+
+=== medication_complete ===
+# CLEAR
+
+{
+    - med_pills_counted && med_organized && med_first_aid:
+        ~ prep_medication = 2
+        Grandmother's medication is sorted and within reach. First-aid kit is checked. You're well prepared.
+    - med_pills_counted || med_first_aid:
+        ~ prep_medication = 1
+        You've done the basics. {not med_organized: Organizing the pills by day would make things easier for grandmother in the dark.}
+    - else:
+        ~ prep_medication = 1
+        You've thought about medication, but haven't done much yet.
+}
 
 + [← Back to preparation]
     -> preparation_hub
