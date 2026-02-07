@@ -448,10 +448,14 @@ The store is busy — others had the same idea.
 }
 
 {shop_batteries:
-    You pick up a pack of fresh batteries.
+    You pick up a pack of fresh batteries — enough for the flashlight and radio.
     ~ light_batteries = true
+    ~ info_radio_batteries = true
     {light_flashlight:
         ~ prep_light = 2
+    }
+    {info_radio:
+        ~ prep_info = 2
     }
 }
 
@@ -1040,49 +1044,168 @@ You gather candles from around the house and find a box of matches in the kitche
 // ============================================
 // INFORMATION CATEGORY
 // ============================================
+VAR info_radio = false
+VAR info_radio_batteries = false
+VAR info_phone_charged = false
+
 === category_info ===
 # CLEAR
 
-You need a way to get information if the power goes out.
-
 {
     - prep_info == 0:
-        Your phone works now, but batteries drain fast. And cell towers might go down.
-    - prep_info == 1:
-        You found the old radio. Batteries are low, but it works.
+        When the power goes out, you lose Wi-Fi, TV, and eventually phone signal. How will you stay informed?
+
+        Your phone battery is at 70%. The power could go out any time. What's the best way to get updates during the storm?
+
+        + [Keep checking social media on your phone]
+            -> info_quiz_social
+
+        + [Turn on a battery-powered radio]
+            -> info_quiz_right
+
+        + [Call a friend to ask what's happening]
+            -> info_quiz_call
+
     - else:
-        The radio has fresh batteries and you've tested it. You're ready to stay informed.
+        You've set up your communication plan.
 }
 
-+ {prep_info == 0} [Find the battery radio (15 min)]
-    ~ prep_info = 1
-    ~ current_time = current_time + 15
-    -> info_result_basic
++ {prep_info > 0} [Continue preparing]
+    -> info_hub
 
-+ {prep_info < 2} [Radio with fresh batteries (25 min)]
-    ~ prep_info = 2
-    ~ current_time = current_time + 25
-    -> info_result_thorough
-
-+ [← Back]
++ {prep_info > 0} [← Back]
     -> preparation_hub
 
-=== info_result_basic ===
+=== info_quiz_social ===
 # CLEAR
 
-You dig through the closet and find the old radio.
+<b>Bad idea.</b>
 
-You turn the dial and hear static, then voices - the emergency broadcast station. Batteries are low, but it works. This could be your lifeline to the outside world.
+Scrolling social media drains your phone battery fast. And once the mobile network goes down, you'll have no internet at all. You need that battery for emergency calls.
 
-+ [← Back to preparation]
-    -> preparation_hub
+<i>Better approach: A battery-powered radio doesn't need internet or phone signal. It receives emergency broadcasts directly.</i>
 
-=== info_result_thorough ===
++ [Continue]
+    -> info_hub
+
+=== info_quiz_right ===
 # CLEAR
 
-You find the radio and replace the batteries with fresh ones.
+<b>Correct!</b>
 
-You tune it to the emergency broadcast frequency and test it. Crystal clear. If anything happens, you'll know about it. You set it on the kitchen table, ready to go.
+A battery-powered radio works without internet, phone signal, or electricity. It's your lifeline for official emergency updates and instructions.
+
++ [Continue]
+    -> info_hub
+
+=== info_quiz_call ===
+# CLEAR
+
+<b>Not ideal.</b>
+
+Phone calls drain battery, and your friend probably knows as much as you do. In a crisis, save your phone battery for emergency calls — 112, 1220, 1247.
+
+<i>Better approach: Use a battery-powered radio for updates. Save your phone for when you really need it.</i>
+
++ [Continue]
+    -> info_hub
+
+=== info_hub ===
+# CLEAR
+
+~ prep_info = 1
+
+{info_radio: ✓ Radio found}
+{info_radio_batteries: ✓ Radio batteries}
+{info_phone_charged: ✓ Phone charged & ready}
+
++ {not info_radio} [Find the battery radio — 3 min]
+    ~ info_radio = true
+    ~ current_time = current_time + 3
+    -> info_result_radio
+
++ {info_radio && not info_radio_batteries && not shop_batteries} [Search for spare batteries — 3 min]
+    ~ current_time = current_time + 3
+    -> info_result_search_batteries
+
++ {info_radio && not info_radio_batteries && not shop_batteries} [Add batteries to shopping list]
+    ~ shop_batteries = true
+    -> info_result_shop_batteries
+
++ {not info_phone_charged} [Charge phone & set up power saving — 2 min]
+    ~ info_phone_charged = true
+    ~ current_time = current_time + 2
+    -> info_result_phone
+
++ [Done with information]
+    -> info_complete
+
+=== info_result_radio ===
+# CLEAR
+
+You dig through the hall closet and find the old battery radio. You turn the dial — static, then faint voices. The emergency broadcast frequency still works.
+
+<b>The batteries are low though. It might last a few hours at most.</b>
+
++ [Continue]
+    -> info_hub
+
+=== info_result_search_batteries ===
+# CLEAR
+
+~ info_radio_batteries = true
+
+You check the kitchen drawer — there's a set of batteries that fit the radio. You swap them in and test it.
+
+<b>Clear signal. The radio is ready to go.</b>
+
++ [Continue]
+    -> info_hub
+
+=== info_result_shop_batteries ===
+# CLEAR
+
+You add <b>batteries</b> to your shopping list. Fresh ones from the store will cover both the flashlight and radio.
+
++ [Continue]
+    -> info_hub
+
+=== info_result_phone ===
+# CLEAR
+
+You plug your phone in to charge while the power is still on.
+
+While it charges, you switch on power saving mode and turn off background apps.
+
+<b>Tips for a crisis:</b>
+• Turn off Wi-Fi, Bluetooth, and location when not needed
+• Lower screen brightness
+• Only use your phone for emergency calls
+• Remember — you wrote down the emergency numbers, right? If your phone dies, that paper is your backup.
+
++ [Continue]
+    -> info_hub
+
+=== info_complete ===
+# CLEAR
+
+{
+    - info_radio && (info_radio_batteries || shop_batteries) && info_phone_charged:
+        ~ prep_info = 2
+        <b>Fully prepared!</b>
+
+        Radio ready with batteries, phone charged and in power-save mode. You'll stay informed no matter what.
+
+    - info_radio:
+        <b>Basic preparation.</b>
+
+        You have the radio, but {info_radio_batteries == false: the batteries are weak — it might not last.}{info_radio_batteries: you could also charge your phone while there's still power.}
+
+    - else:
+        <b>No radio found.</b>
+
+        Without a radio, you'll be relying entirely on your phone — and that battery won't last forever.
+}
 
 + [← Back to preparation]
     -> preparation_hub
