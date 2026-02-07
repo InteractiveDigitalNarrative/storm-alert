@@ -217,6 +217,7 @@ function InkStory() {
       shop_water: story.variablesState["shop_water"],
       shop_water_amount: story.variablesState["shop_water_amount"],
       shop_food: story.variablesState["shop_food"],
+      shop_batteries: story.variablesState["shop_batteries"],
       shop_visited: story.variablesState["shop_visited"],
     });
 
@@ -370,12 +371,13 @@ function InkStory() {
       )}
 
       {/* Shopping List - visible during preparation when items added */}
-      {!!gameVars.in_preparation && (!!gameVars.shop_water || !!gameVars.shop_food) && !gameVars.shop_visited && (
+      {!!gameVars.in_preparation && (!!gameVars.shop_water || !!gameVars.shop_food || !!gameVars.shop_batteries) && !gameVars.shop_visited && (
         <div className="shopping-list">
           <div className="shopping-list-header">🛒 Shopping List</div>
           <ul className="shopping-list-items">
             {!!gameVars.shop_water && <li>💧 Bottled water ({gameVars.shop_water_amount}L)</li>}
             {!!gameVars.shop_food && <li>🍞 Emergency food</li>}
+            {!!gameVars.shop_batteries && <li>🔋 Batteries</li>}
           </ul>
         </div>
       )}
