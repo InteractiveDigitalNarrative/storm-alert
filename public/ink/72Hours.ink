@@ -44,6 +44,7 @@ VAR food_yogurt = false
 VAR shop_water = false
 VAR shop_water_amount = 0
 VAR shop_food = false
+VAR shop_batteries = false
 VAR shop_visited = false
 
 // Phone call outcome tracking
@@ -175,7 +176,7 @@ What do you want to prepare?
 + [💊 Medication{prep_medication: ✓}]
     -> category_medication
 
-+ {(shop_water || shop_food) && not shop_visited} [🛒 Go to Store]
++ {(shop_water || shop_food || shop_batteries) && not shop_visited} [🛒 Go to Store]
     -> go_to_store
 
 + [Done preparing - wait for storm]
@@ -444,6 +445,14 @@ The store is busy — others had the same idea.
     You grab several large bottles of water — <b>{shop_water_amount} liters</b>.
     ~ water_collected = water_collected + shop_water_amount
     ~ prep_water = 2
+}
+
+{shop_batteries:
+    You pick up a pack of fresh batteries.
+    ~ light_batteries = true
+    {light_flashlight:
+        ~ prep_light = 2
+    }
 }
 
 {shop_food:
@@ -863,49 +872,166 @@ You dig out wool sweaters, thermal socks, grandmother's thick quilts. Warm cloth
 // ============================================
 // LIGHT CATEGORY
 // ============================================
+VAR light_flashlight = false
+VAR light_batteries = false
+VAR light_candles = false
+
 === category_light ===
 # CLEAR
 
-You think about light sources.
-
 {
     - prep_light == 0:
-        Your phone has a flashlight, but the battery won't last forever.
-    - prep_light == 1:
-        You found the flashlight. Batteries seem okay.
+        The power could go out any moment once the storm hits. You'll be in complete darkness.
+
+        What's the safest thing to reach for first when the lights go out?
+
+        + [Your phone flashlight]
+            -> light_quiz_phone
+
+        + [A candle]
+            -> light_quiz_candle
+
+        + [A flashlight kept in a known spot]
+            -> light_quiz_right
+
     - else:
-        You have the flashlight with fresh batteries, plus candles and matches.
+        You've prepared your light sources.
 }
 
-+ {prep_light == 0} [Find the flashlight (10 min)]
-    ~ prep_light = 1
-    ~ current_time = current_time + 10
-    -> light_result_basic
++ {prep_light > 0} [Continue preparing]
+    -> light_hub
 
-+ {prep_light < 2} [Fresh batteries + gather candles (20 min)]
-    ~ prep_light = 2
-    ~ current_time = current_time + 20
-    -> light_result_thorough
-
-+ [← Back]
++ {prep_light > 0} [← Back]
     -> preparation_hub
 
-=== light_result_basic ===
+=== light_quiz_phone ===
 # CLEAR
 
-You find the flashlight in the closet. The beam is a bit dim, but it works.
+<b>Not ideal.</b>
 
-You click it on and off a few times. The batteries might last a night or two.
+Your phone flashlight works, but it drains the battery fast — and you'll need that battery for emergency calls. Save your phone for communication.
 
-+ [← Back to preparation]
-    -> preparation_hub
+<i>Better approach: Keep a dedicated flashlight in a spot everyone knows.</i>
 
-=== light_result_thorough ===
++ [Continue]
+    -> light_hub
+
+=== light_quiz_candle ===
 # CLEAR
 
-You replace the flashlight batteries with fresh ones. The beam is bright and strong.
+<b>Risky.</b>
 
-You also gather candles and matches, placing them strategically around the house - living room, kitchen, grandmother's room. You won't be left in the dark.
+Stumbling around in the dark looking for a candle and matches is a fire hazard. An open flame in a dark, unfamiliar situation can lead to accidents.
+
+<i>Better approach: Reach for a flashlight first. Use candles only as backup, and never leave them unattended.</i>
+
++ [Continue]
+    -> light_hub
+
+=== light_quiz_right ===
+# CLEAR
+
+<b>Correct!</b>
+
+A flashlight is safe, instant, and doesn't drain your phone. Keep it somewhere everyone in the house knows — so you can find it in the dark.
+
++ [Continue]
+    -> light_hub
+
+=== light_hub ===
+# CLEAR
+
+~ prep_light = 1
+
+{light_flashlight: ✓ Flashlight found}
+{light_batteries: ✓ Fresh batteries}
+{light_candles: ✓ Candles & matches}
+
++ {not light_flashlight} [Find the flashlight — 3 min]
+    ~ light_flashlight = true
+    ~ current_time = current_time + 3
+    -> light_result_flashlight
+
++ {light_flashlight && not light_batteries && not shop_batteries} [Search for spare batteries at home — 3 min]
+    ~ current_time = current_time + 3
+    -> light_result_search_batteries
+
++ {light_flashlight && not light_batteries && not shop_batteries} [Add batteries to shopping list]
+    ~ shop_batteries = true
+    -> light_result_shop_batteries
+
++ {not light_candles} [Gather candles & matches — 3 min]
+    ~ light_candles = true
+    ~ current_time = current_time + 3
+    -> light_result_candles
+
++ [Done with light]
+    -> light_complete
+
+=== light_result_flashlight ===
+# CLEAR
+
+You find the flashlight in the hall closet. You click it on — the beam is weak and yellowish.
+
+<b>The batteries are low.</b> It'll work for a while, but won't last the night.
+
+You need fresh batteries.
+
++ [Continue]
+    -> light_hub
+
+=== light_result_search_batteries ===
+# CLEAR
+
+You rummage through kitchen drawers and the junk box in the hallway...
+
+~ light_batteries = true
+
+You find a pack of AA batteries tucked behind some old tape. They look unused.
+
+<b>You swap them in — the beam is bright and strong.</b>
+
++ [Continue]
+    -> light_hub
+
+=== light_result_shop_batteries ===
+# CLEAR
+
+You add <b>batteries</b> to your shopping list. You'll grab fresh ones at the store.
+
++ [Continue]
+    -> light_hub
+
+=== light_result_candles ===
+# CLEAR
+
+You gather candles from around the house and find a box of matches in the kitchen drawer. You place them in the living room and kitchen — ready to light if needed.
+
+<b>Candles are good backup light, but never leave them unattended. Keep them away from curtains and paper. Always have matches nearby.</b>
+
++ [Continue]
+    -> light_hub
+
+=== light_complete ===
+# CLEAR
+
+{
+    - light_flashlight && (light_batteries || shop_batteries) && light_candles:
+        ~ prep_light = 2
+        <b>Well prepared!</b>
+
+        Flashlight ready, batteries sorted, candles as backup. You won't be caught in the dark.
+
+    - light_flashlight:
+        <b>Basic preparation.</b>
+
+        You have a flashlight, but {light_batteries == false: the batteries are weak.}{light_batteries: it could use some backup.}
+
+    - else:
+        <b>You haven't found a light source yet.</b>
+
+        Without light, navigating the house at night will be dangerous.
+}
 
 + [← Back to preparation]
     -> preparation_hub
