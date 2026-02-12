@@ -1,0 +1,401 @@
+/* ============================================
+   ENDING SCREEN OVERLAY
+   ============================================ */
+
+.ending-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  z-index: 2000;
+  overflow-y: auto;
+  animation: ending-fade-in 0.6s ease;
+  backdrop-filter: blur(10px);
+}
+
+@keyframes ending-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.ending-screen {
+  width: 100%;
+  max-width: 720px;
+  padding: 40px 30px 60px;
+  box-sizing: border-box;
+}
+
+/* ============================================
+   HEADER BADGE
+   ============================================ */
+
+.ending-badge {
+  text-align: center;
+  border: 2px solid;
+  border-radius: 16px;
+  padding: 30px 20px;
+  margin-bottom: 35px;
+  background: linear-gradient(145deg, #1a1a1a, #2d2d2d);
+  animation: badge-pop 0.5s ease 0.3s backwards;
+}
+
+@keyframes badge-pop {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.ending-badge h2 {
+  font-size: 28px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin: 0 0 12px 0;
+}
+
+.ending-summary {
+  color: #ccc;
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ============================================
+   SECTION TITLES
+   ============================================ */
+
+.section-title {
+  color: #ff9933;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 30px 0 15px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 153, 51, 0.3);
+}
+
+/* ============================================
+   REPORT CARD GRID
+   ============================================ */
+
+.report-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+}
+
+.report-card {
+  background: linear-gradient(145deg, #1a1a1a, #252525);
+  border: 2px solid;
+  border-radius: 12px;
+  padding: 14px;
+  transition: transform 0.2s;
+}
+
+.report-card:hover {
+  transform: translateY(-2px);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.card-icon {
+  font-size: 22px;
+}
+
+.card-label {
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  flex: 1;
+}
+
+.prep-dots {
+  display: flex;
+  gap: 4px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #444;
+  display: inline-block;
+}
+
+.dot.filled {
+  background: #ff9933;
+}
+
+.card-consequence {
+  color: #bbb;
+  font-size: 13px;
+  line-height: 1.4;
+  margin: 0 0 6px 0;
+}
+
+.card-feedback {
+  color: #ffcc80;
+  font-size: 12px;
+  font-style: italic;
+  line-height: 1.4;
+  margin: 0;
+  padding-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ============================================
+   EMERGENCY NUMBERS
+   ============================================ */
+
+.numbers-box {
+  background: linear-gradient(145deg, #1a1a1a, #252525);
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.number-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  transition: background 0.2s;
+}
+
+.number-row.dialed {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.num {
+  color: #ff3333;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  min-width: 50px;
+}
+
+.num-desc {
+  color: #ccc;
+  font-size: 14px;
+  flex: 1;
+}
+
+.num-tag {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(231, 76, 60, 0.2);
+  color: #e74c3c;
+  white-space: nowrap;
+}
+
+.number-row.dialed.correct-number .num-tag,
+.num-tag.best {
+  background: rgba(76, 175, 80, 0.2);
+  color: #4caf50;
+}
+
+.numbers-hint {
+  color: #ffcc80;
+  font-style: italic;
+  font-size: 13px;
+  text-align: center;
+  margin: 12px 0 0 0;
+}
+
+/* ============================================
+   TAKEAWAYS
+   ============================================ */
+
+.takeaways {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.takeaways li {
+  color: #ccc;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 8px 0 8px 20px;
+  position: relative;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.takeaways li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: #ff9933;
+}
+
+.takeaways li:last-child {
+  border-bottom: none;
+  color: #6495ed;
+}
+
+/* ============================================
+   SCORE
+   ============================================ */
+
+.prep-score {
+  text-align: center;
+  margin: 30px 0 20px;
+}
+
+.score-number {
+  font-size: 48px;
+  font-weight: 700;
+  color: #ff9933;
+}
+
+.score-label {
+  font-size: 18px;
+  color: #888;
+  margin-left: 4px;
+}
+
+/* ============================================
+   PLAY AGAIN BUTTON
+   ============================================ */
+
+.play-again-btn {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+  padding: 16px 40px;
+  background: linear-gradient(145deg, #b97c2c, #8a5d21);
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.play-again-btn:hover {
+  background: linear-gradient(145deg, #d4923a, #b97c2c);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(185, 124, 44, 0.4);
+}
+
+.play-again-btn:active {
+  transform: translateY(0);
+}
+
+/* ============================================
+   RESPONSIVE - TABLET
+   ============================================ */
+
+@media (max-width: 768px) {
+  .ending-screen {
+    padding: 25px 20px 50px;
+  }
+
+  .ending-badge {
+    padding: 20px 15px;
+  }
+
+  .ending-badge h2 {
+    font-size: 22px;
+    letter-spacing: 3px;
+  }
+
+  .ending-summary {
+    font-size: 14px;
+  }
+
+  .report-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .section-title {
+    font-size: 16px;
+  }
+
+  .score-number {
+    font-size: 40px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - MOBILE
+   ============================================ */
+
+@media (max-width: 400px) {
+  .ending-screen {
+    padding: 20px 15px 40px;
+  }
+
+  .ending-badge h2 {
+    font-size: 18px;
+    letter-spacing: 2px;
+  }
+
+  .ending-summary {
+    font-size: 13px;
+  }
+
+  .report-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .report-card {
+    padding: 10px;
+  }
+
+  .card-icon {
+    font-size: 18px;
+  }
+
+  .card-label {
+    font-size: 12px;
+  }
+
+  .card-consequence {
+    font-size: 12px;
+  }
+
+  .card-feedback {
+    font-size: 11px;
+  }
+
+  .num {
+    font-size: 16px;
+    min-width: 42px;
+  }
+
+  .num-desc {
+    font-size: 12px;
+  }
+
+  .score-number {
+    font-size: 36px;
+  }
+
+  .score-label {
+    font-size: 14px;
+  }
+
+  .play-again-btn {
+    font-size: 14px;
+    padding: 14px 30px;
+  }
+}
