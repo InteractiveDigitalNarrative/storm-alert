@@ -29,6 +29,10 @@ function App() {
     // Later we'll load saved game here
   };
 
+  const handleReturnToMenu = () => {
+    setCurrentScreen('menu');
+  };
+
   // STEP 4: RENDER
   return (
     <div className="App">
@@ -43,7 +47,7 @@ function App() {
       )}
 
       {currentScreen === 'game' && (
-        <InkStory />
+        <InkStory onReturnToMenu={handleReturnToMenu} />
       )}
     </div>
   );
