@@ -1,10 +1,10 @@
 import './EndingScreen.css';
 
-const ENDING_CONFIG = {
-  good:    { color: '#4caf50', label: 'WELL PREPARED',       summary: 'You were ready for the crisis and knew exactly who to call.' },
-  partial: { color: '#6495ed', label: 'PARTIALLY PREPARED',  summary: 'Help arrived, but the right number would have been faster.' },
-  delayed: { color: '#ff9933', label: 'UNDERPREPARED',       summary: 'Help was delayed — calling 112 for a non-emergency tied up resources.' },
-  bad:     { color: '#e74c3c', label: 'UNPREPARED',          summary: 'Without the right number, help came too late. Grandmother was lucky.' },
+const CALL_FEEDBACK = {
+  good:    'You called 1220 — the right number for medical advice. Help arrived quickly.',
+  partial: 'You called 1247 (Rescue Coordination) — they helped, but 1220 would have been faster.',
+  delayed: 'You called 112 for a non-emergency — this tied up critical resources and delayed help.',
+  bad:     'Without the right number, help came too late. A neighbor eventually drove grandmother in.',
 };
 
 const CATEGORIES = [
@@ -57,9 +57,18 @@ const EMERGENCY_NUMBERS = [
 ];
 
 function EndingScreen({ gameVars, endingType, onPlayAgain }) {
-  const config = ENDING_CONFIG[endingType] || ENDING_CONFIG.bad;
   const totalPrep = gameVars.total_prep || 0;
   const dialedNumber = gameVars.dialed_number || '';
+
+  // Badge based on actual preparedness score, not phone call outcome
+  const getBadge = (score) => {
+    if (score >= 10) return { color: '#4caf50', label: 'WELL PREPARED' };
+    if (score >= 6)  return { color: '#6495ed', label: 'PARTIALLY PREPARED' };
+    if (score >= 3)  return { color: '#ff9933', label: 'UNDERPREPARED' };
+    return { color: '#e74c3c', label: 'UNPREPARED' };
+  };
+  const badge = getBadge(totalPrep);
+  const callFeedback = CALL_FEEDBACK[endingType] || CALL_FEEDBACK.bad;
 
   // Generate dynamic takeaways based on what wasn't prepared
   const takeaways = [];
@@ -96,9 +105,9 @@ function EndingScreen({ gameVars, endingType, onPlayAgain }) {
       <div className="ending-screen">
 
         {/* Header Badge */}
-        <div className="ending-badge" style={{ borderColor: config.color }}>
-          <h2 style={{ color: config.color }}>{config.label}</h2>
-          <p className="ending-summary">{config.summary}</p>
+        <div className="ending-badge" style={{ borderColor: badge.color }}>
+          <h2 style={{ color: badge.color }}>{badge.label}</h2>
+          <p className="ending-summary">{callFeedback}</p>
         </div>
 
         {/* Preparation Report Card */}

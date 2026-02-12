@@ -1,0 +1,284 @@
+/* ============================================
+   CRISIS SCREEN OVERLAY
+   ============================================ */
+
+.crisis-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  z-index: 2000;
+  overflow-y: auto;
+  animation: crisis-fade-in 0.6s ease;
+  backdrop-filter: blur(10px);
+}
+
+@keyframes crisis-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.crisis-screen {
+  width: 100%;
+  max-width: 720px;
+  padding: 40px 30px 60px;
+  box-sizing: border-box;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.crisis-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.crisis-title {
+  color: #ff9933;
+  font-size: 28px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin: 0 0 10px 0;
+}
+
+.crisis-subtitle {
+  color: #999;
+  font-size: 15px;
+  margin: 0;
+  font-style: italic;
+}
+
+/* ============================================
+   CARD GRID
+   ============================================ */
+
+.crisis-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.crisis-grid.grid-2 {
+  grid-template-columns: 1fr 1fr;
+}
+
+.crisis-grid.grid-4 {
+  grid-template-columns: 1fr 1fr;
+}
+
+.crisis-card {
+  background: linear-gradient(145deg, #1a1a1a, #252525);
+  border: 2px solid;
+  border-radius: 12px;
+  padding: 18px;
+  animation: crisis-card-in 0.4s ease backwards;
+}
+
+.crisis-card:nth-child(1) { animation-delay: 0.1s; }
+.crisis-card:nth-child(2) { animation-delay: 0.2s; }
+.crisis-card:nth-child(3) { animation-delay: 0.3s; }
+.crisis-card:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes crisis-card-in {
+  from { transform: translateY(15px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.crisis-card-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.crisis-card-icon {
+  font-size: 24px;
+}
+
+.crisis-card-label {
+  color: #fff;
+  font-weight: 700;
+  font-size: 16px;
+  flex: 1;
+}
+
+.crisis-dots {
+  display: flex;
+  gap: 4px;
+}
+
+.crisis-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #444;
+}
+
+.crisis-dot.filled {
+  background: #ff9933;
+}
+
+.crisis-card-prepared {
+  color: #aaa;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.crisis-card-prepared strong {
+  color: #ddd;
+}
+
+.crisis-card-consequence {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+
+.crisis-card-tip {
+  font-size: 12px;
+  color: #ffcc80;
+  font-style: italic;
+  line-height: 1.4;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ============================================
+   WARNING (pipes)
+   ============================================ */
+
+.crisis-warning {
+  background: rgba(255, 153, 51, 0.1);
+  border: 1px solid rgba(255, 153, 51, 0.3);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-top: 16px;
+  color: #ff9933;
+  font-size: 14px;
+  text-align: center;
+}
+
+.crisis-warning-tip {
+  display: block;
+  color: #ffcc80;
+  font-style: italic;
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+/* ============================================
+   CONTINUE BUTTON
+   ============================================ */
+
+.crisis-continue-btn {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  margin: 30px auto 0;
+  padding: 16px 40px;
+  background: linear-gradient(145deg, #b97c2c, #8a5d21);
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.crisis-continue-btn:hover {
+  background: linear-gradient(145deg, #d4923a, #b97c2c);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(185, 124, 44, 0.4);
+}
+
+.crisis-continue-btn:active {
+  transform: translateY(0);
+}
+
+/* ============================================
+   RESPONSIVE — TABLET
+   ============================================ */
+
+@media (max-width: 768px) {
+  .crisis-screen {
+    padding: 25px 20px 50px;
+  }
+
+  .crisis-title {
+    font-size: 22px;
+  }
+
+  .crisis-card {
+    padding: 14px;
+  }
+
+  .crisis-card-icon {
+    font-size: 20px;
+  }
+
+  .crisis-card-label {
+    font-size: 14px;
+  }
+
+  .crisis-card-consequence {
+    font-size: 14px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE — MOBILE
+   ============================================ */
+
+@media (max-width: 400px) {
+  .crisis-screen {
+    padding: 20px 15px 40px;
+  }
+
+  .crisis-title {
+    font-size: 18px;
+    letter-spacing: 2px;
+  }
+
+  .crisis-subtitle {
+    font-size: 13px;
+  }
+
+  .crisis-grid.grid-2,
+  .crisis-grid.grid-4 {
+    grid-template-columns: 1fr;
+  }
+
+  .crisis-card {
+    padding: 12px;
+  }
+
+  .crisis-card-icon {
+    font-size: 18px;
+  }
+
+  .crisis-card-label {
+    font-size: 13px;
+  }
+
+  .crisis-card-consequence {
+    font-size: 13px;
+  }
+
+  .crisis-card-tip {
+    font-size: 11px;
+  }
+
+  .crisis-continue-btn {
+    font-size: 14px;
+    padding: 14px 30px;
+  }
+}
