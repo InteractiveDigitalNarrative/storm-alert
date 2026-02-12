@@ -7,6 +7,7 @@ import CallResult from './CallResult';
 import TimeBar from './TimeBar';
 import StoreOverlay from './StoreOverlay';
 import EndingScreen from './EndingScreen';
+import CrisisScreen from './CrisisScreen';
 
 function InkStory({ onReturnToMenu }) {
   // ============================================
@@ -42,6 +43,9 @@ function InkStory({ onReturnToMenu }) {
 
   // Ending screen state
   const [showEndingScreen, setShowEndingScreen] = useState(false);
+
+  // Crisis screen state
+  const [crisisPhase, setCrisisPhase] = useState(null); // 'night' or 'morning'
 
   // Track game variables from Ink
   const [gameVars, setGameVars] = useState({
@@ -139,6 +143,40 @@ function InkStory({ onReturnToMenu }) {
   // STORY FUNCTIONS
   // ============================================
 
+  // Helper to read all game variables from Ink
+  const readGameVars = (story) => {
+    const vars = {
+      temperature: story.variablesState["temperature"],
+      // Preparation categories
+      prep_water: story.variablesState["prep_water"],
+      prep_food: story.variablesState["prep_food"],
+      prep_heat: story.variablesState["prep_heat"],
+      prep_light: story.variablesState["prep_light"],
+      prep_info: story.variablesState["prep_info"],
+      prep_medication: story.variablesState["prep_medication"],
+      // Time tracking
+      current_time: story.variablesState["current_time"],
+      storm_time: story.variablesState["storm_time"],
+      start_time: story.variablesState["start_time"],
+      in_preparation: story.variablesState["in_preparation"],
+      // Shopping list
+      shop_water: story.variablesState["shop_water"],
+      shop_water_amount: story.variablesState["shop_water_amount"],
+      shop_food: story.variablesState["shop_food"],
+      shop_batteries: story.variablesState["shop_batteries"],
+      shop_visited: story.variablesState["shop_visited"],
+      // Heat sub-vars
+      heat_pipes: story.variablesState["heat_pipes"],
+      // Ending tracking
+      ending_type: story.variablesState["ending_type"],
+      total_prep: story.variablesState["total_prep"],
+      call_outcome: story.variablesState["call_outcome"],
+      dialed_number: story.variablesState["dialed_number"],
+    };
+    setGameVars(vars);
+    return vars;
+  };
+
   // Function to get next story chunk and update display
   const continueStory = () => {
     const story = storyRef.current;
@@ -195,10 +233,9 @@ function InkStory({ onReturnToMenu }) {
         if (tag === 'RADIO_BROADCAST') {
           console.log('Showing radio broadcast');
           setShowRadioBroadcast(true);
-          // Stop processing - don't show choices until broadcast is closed
           setStoryText(lines);
-          setChoices([]); // Hide choices while broadcast is showing
-          return; // Exit early - story will continue after broadcast closes
+          setChoices([]);
+          return;
         }
 
         // Check for STORE_SHOPPING tag
@@ -210,9 +247,30 @@ function InkStory({ onReturnToMenu }) {
           return;
         }
 
+        // Check for CRISIS_NIGHT tag
+        if (tag === 'CRISIS_NIGHT') {
+          console.log('Showing crisis night screen');
+          readGameVars(story);
+          setCrisisPhase('night');
+          setStoryText(lines);
+          setChoices([]);
+          return;
+        }
+
+        // Check for CRISIS_MORNING tag
+        if (tag === 'CRISIS_MORNING') {
+          console.log('Showing crisis morning screen');
+          readGameVars(story);
+          setCrisisPhase('morning');
+          setStoryText(lines);
+          setChoices([]);
+          return;
+        }
+
         // Check for ENDING_SCREEN tag
         if (tag === 'ENDING_SCREEN') {
           console.log('Showing ending screen');
+          readGameVars(story);
           setShowEndingScreen(true);
           setStoryText(lines);
           setChoices([]);
@@ -225,32 +283,7 @@ function InkStory({ onReturnToMenu }) {
     setStoryText(lines);
 
     // Read game variables from Ink
-    setGameVars({
-      temperature: story.variablesState["temperature"],
-      // Preparation categories
-      prep_water: story.variablesState["prep_water"],
-      prep_food: story.variablesState["prep_food"],
-      prep_heat: story.variablesState["prep_heat"],
-      prep_light: story.variablesState["prep_light"],
-      prep_info: story.variablesState["prep_info"],
-      prep_medication: story.variablesState["prep_medication"],
-      // Time tracking
-      current_time: story.variablesState["current_time"],
-      storm_time: story.variablesState["storm_time"],
-      start_time: story.variablesState["start_time"],
-      in_preparation: story.variablesState["in_preparation"],
-      // Shopping list
-      shop_water: story.variablesState["shop_water"],
-      shop_water_amount: story.variablesState["shop_water_amount"],
-      shop_food: story.variablesState["shop_food"],
-      shop_batteries: story.variablesState["shop_batteries"],
-      shop_visited: story.variablesState["shop_visited"],
-      // Ending tracking
-      ending_type: story.variablesState["ending_type"],
-      total_prep: story.variablesState["total_prep"],
-      call_outcome: story.variablesState["call_outcome"],
-      dialed_number: story.variablesState["dialed_number"],
-    });
+    readGameVars(story);
 
     // Get current choices from Ink
     const currentChoices = story.currentChoices;
@@ -401,6 +434,21 @@ function InkStory({ onReturnToMenu }) {
 
     // Continue the story and auto-select the first choice to proceed to checkout
     continueStory();
+    if (story.currentChoices.length > 0) {
+      story.ChooseChoiceIndex(0);
+      continueStory();
+    }
+  };
+
+  // ============================================
+  // CRISIS SCREEN HANDLER
+  // ============================================
+
+  const handleCrisisClose = () => {
+    setCrisisPhase(null);
+    const story = storyRef.current;
+    if (!story) return;
+    // Auto-select the first choice (the "Continue" choice in Ink)
     if (story.currentChoices.length > 0) {
       story.ChooseChoiceIndex(0);
       continueStory();
@@ -591,6 +639,15 @@ function InkStory({ onReturnToMenu }) {
           shopBatteries={gameVars.shop_batteries}
           shopWaterAmount={gameVars.shop_water_amount}
           onClose={handleStoreClose}
+        />
+      )}
+
+      {/* Crisis Screen Overlay */}
+      {crisisPhase && (
+        <CrisisScreen
+          phase={crisisPhase}
+          gameVars={gameVars}
+          onContinue={handleCrisisClose}
         />
       )}
 

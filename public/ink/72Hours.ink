@@ -492,6 +492,7 @@ You think about food supplies.
 
 + {not shop_food} [Add emergency food to shopping list]
     ~ shop_food = true
+    ~ prep_food = 1
     -> food_added_to_list
 
 + [← Back]
@@ -510,7 +511,7 @@ Not ideal for an emergency, but it's something. The bread and apples won't last 
     ~ shop_food = true
     -> food_added_to_list
 
-+ [← Back to preparation]
++ [Done with food — back to preparation]
     -> preparation_hub
 
 === food_added_to_list ===
@@ -1284,212 +1285,24 @@ You wake up. Something is wrong — the usual hum of the house is gone. Total si
 The power is out. The storm must have taken down the lines.
 
 * [Reach for a light]
-    -> crisis_light
+    -> crisis_night
 
 // ============================================
-// CRISIS: LIGHT
+// CRISIS — NIGHT (Light + Heat)
 // ============================================
-=== crisis_light ===
+=== crisis_night ===
 # CLEAR
-
-You reach out in the darkness...
-
-{
-    - prep_light >= 2:
-        Your hand finds the flashlight right where you left it. Click — a strong, bright beam cuts through the darkness.
-
-        You're glad you prepared. The hallway, the kitchen, grandmother's room — you can see everything clearly without wasting your phone battery.
-
-    - prep_light == 1:
-        You grab the flashlight from the closet. Click — a dim, yellowish beam flickers to life.
-
-        It works, but the beam is weak. It won't last long at this brightness.
-
-        <b>Fresh batteries would have made all the difference. Always keep spares next to your flashlight.</b>
-
-    - else:
-        You fumble in the dark, hands sweeping across the nightstand. Nothing. You pull out your phone and switch on the flashlight.
-
-        The battery indicator drops from 62% to 47%. At this rate, your phone won't last until morning.
-
-        <b>Keep a flashlight in a known spot — every family member should know where it is. Save your phone battery for emergency calls.</b>
-}
+# CRISIS_NIGHT
 
 * [Continue]
-    -> crisis_heat
+    -> crisis_morning
 
 // ============================================
-// CRISIS: HEAT
+// CRISIS — MORNING (Water + Medication + Food + Info)
 // ============================================
-=== crisis_heat ===
+=== crisis_morning ===
 # CLEAR
-
-Hours pass. The storm rages outside. Without power, the central heating has stopped.
-
-{
-    - prep_heat >= 2:
-        You light the wood stove. Within minutes, warmth radiates through the living room. The sealed windows hold the heat in.
-
-        Grandmother sleeps peacefully under her quilt. The room stays comfortable even as the temperature outside drops further.
-
-    - prep_heat == 1:
-        You wrap grandmother in blankets and huddle close. The house is cold, but bearable — for now.
-
-        By dawn, you can see your breath. The cold is creeping in through every crack.
-
-        <b>A wood stove or fireplace is your best backup when central heating fails. Seal windows and doors to trap every bit of warmth.</b>
-
-    - else:
-        The cold comes fast. Within hours, you can see your breath indoors. Grandmother shivers under every blanket you can find.
-
-        The walls feel like ice. Your fingers go numb.
-
-        <b>At -18°C outside, an unheated house drops fast. Seal windows, prepare a stove, layer clothing — heat escapes through every gap.</b>
-}
-
-{heat_pipes == false:
-    You hear a creak from the water pipes. In this cold, they could freeze and burst.
-
-    <b>A slow drip from the taps helps — moving water freezes slower. Insulate exposed pipes before a crisis.</b>
-}
-
-* [Continue]
-    -> crisis_water
-
-// ============================================
-// CRISIS: WATER
-// ============================================
-=== crisis_water ===
-# CLEAR
-
-Morning comes. You're thirsty. Grandmother needs water for her pills.
-
-You try the kitchen tap — nothing. The electric pump is dead without power.
-
-{
-    - prep_water >= 2:
-        But you planned for this. You have bottles, pots, and containers full of clean water. Plenty for drinking, cooking, and grandmother's medication.
-
-        {water_bathtub: The bathtub water handles flushing and washing — no need to waste drinking water.}
-
-        You pour a glass for grandmother and one for yourself. This supply will last days.
-
-    - prep_water == 1:
-        You have some water stored, but not much. You'll need to ration carefully.
-
-        You pour a small glass for grandmother — she needs it for her pills. You take a few sips yourself and seal the container.
-
-        <b>The more containers you fill before the power goes, the longer you last. Fill bottles, pots, even the bathtub for washing.</b>
-
-    - else:
-        The taps are dead. You search the house — one half-empty bottle in the fridge. That's it.
-
-        Grandmother needs water for her pills. You give her what you can and go thirsty yourself.
-
-        <b>Remember: 3 liters per person per day. Did you write that formula down? Fill every available container before the power goes out.</b>
-}
-
-* [Continue]
-    -> crisis_medication
-
-// ============================================
-// CRISIS: MEDICATION
-// ============================================
-=== crisis_medication ===
-# CLEAR
-
-It's time for grandmother's morning dose. Her blood pressure medication — she takes it every day without fail.
-
-{
-    - prep_medication >= 2:
-        The pill box is right by her bed, organized by day. She reaches over, finds the right compartment by touch, and takes her dose with a sip of water.
-
-        She didn't even need your help. That's what good preparation looks like.
-
-    - prep_medication == 1:
-        You find the pills on the kitchen counter. In the dim light, the labels are hard to read.
-
-        You squint at the dosage. Is it one pill or two? You're pretty sure it's one...
-
-        <b>Organize pills by day in a labeled box so anyone can administer them — even in the dark. Keep them at the bedside, not across the house.</b>
-
-    - else:
-        You scramble through the dark kitchen, knocking things over. Where are the pills? You find the bottle but can't read the label.
-
-        How many does she take? When was her last dose? You're not sure.
-
-        <b>Prescription medicines come first in any emergency kit. Keep a 7-day supply counted, organized by day, and within reach.</b>
-}
-
-* [Continue]
-    -> crisis_food
-
-// ============================================
-// CRISIS: FOOD
-// ============================================
-=== crisis_food ===
-# CLEAR
-
-Your stomach growls. Neither of you has eaten since last night.
-
-The fridge is warming up — everything inside will spoil soon. The electric stove is dead.
-
-{
-    - prep_food >= 2:
-        You open a can of beans and grab some crackers and an energy bar. No cooking needed — just open and eat.
-
-        You set aside enough for the rest of the day. Your supplies should last through the crisis.
-
-    - prep_food == 1:
-        There's bread and some pantry items. Not ideal, but you can manage for today.
-
-        The bread will go stale by tomorrow, and there's not much variety. You eat what you can.
-
-        <b>Stock canned goods, nuts, crackers, and energy bars — food that needs no fridge and no stove. Think shelf-stable.</b>
-
-    - else:
-        The fridge is warming. The milk will spoil. The frozen food is thawing.
-
-        You find stale crackers and a bruised apple. That's breakfast for two.
-
-        <b>No power means no fridge and no stove. Plan for food that works without both — cans, nuts, dried fruit, energy bars.</b>
-}
-
-* [Continue]
-    -> crisis_info
-
-// ============================================
-// CRISIS: INFORMATION
-// ============================================
-=== crisis_info ===
-# CLEAR
-
-You need to know what's happening. How long will the power be out? Are roads blocked? Is help available?
-
-{
-    - prep_info >= 2:
-        You turn on the battery radio. The signal is clear — an emergency broadcast comes through.
-
-        <i>"Power restoration estimated in 36 hours. Roads partially blocked. Emergency services operating. Call 1220 for medical advice."</i>
-
-        Knowing what's happening keeps you calm and helps you plan. You conserve your phone battery for when you truly need it.
-
-    - prep_info == 1:
-        The radio crackles to life, but the signal fades in and out. You catch fragments.
-
-        <i>"...power... 36 hours... roads blocked... emergency..."</i>
-
-        You get the picture — it's bad, but help exists. You're not sure of the details though.
-
-        <b>Fresh batteries make the difference between a clear signal and static. A working radio is your lifeline when the internet is down.</b>
-
-    - else:
-        No radio. Your phone is your only connection to the outside world — and it's dying.
-
-        You try loading a news site, but mobile data barely works. The page doesn't load. Battery drops to 15%.
-
-        <b>A battery-powered radio doesn't need internet or phone signal. It's your lifeline in a blackout. Did you note the emergency numbers from the broadcast?</b>
-}
+# CRISIS_MORNING
 
 * [Continue]
     -> crisis_culmination
@@ -1504,23 +1317,23 @@ You need to know what's happening. How long will the power be out? Are roads blo
 
 {
     - total_prep >= 10:
-        The morning passes. It's not comfortable, but you're managing. The house is warm enough, there's food and water, and you know help is on the way.
+        You're managing. Warm enough, fed, hydrated, informed. You're in control.
 
     - total_prep >= 6:
-        The hours drag on. Some things are handled, others aren't. You're getting by, but it's harder than it needs to be.
+        Some things handled, others not. You're getting by — harder than it should be.
 
     - total_prep >= 3:
-        It's a rough morning. Cold, hungry, uncertain. You're surviving, but barely.
+        Cold, hungry, uncertain. Surviving, but barely.
 
     - else:
-        The house is freezing. There's almost nothing to eat or drink. You have no idea what's happening outside. Every hour feels like a day.
+        Freezing. Nothing to eat or drink. No idea what's happening outside.
 }
 
-Then grandmother calls out. Her voice is weak, strained. She's dizzy. Her blood pressure feels wrong.
+Then grandmother calls out — weak, strained. She's dizzy. Her blood pressure feels wrong.
 
-She needs medical attention — not a life-threatening emergency, but she needs help. And you can't drive out — the roads are blocked by the storm.
+She needs medical attention. Not life-threatening, but she needs help. The roads are blocked.
 
-You need to call someone.
+<span class="note-hint">📝 Check your notes — which number fits this situation?</span>
 
 * [Get your phone]
     -> call_for_help
