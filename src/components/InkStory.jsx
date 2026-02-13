@@ -546,30 +546,36 @@ function InkStory({ onReturnToMenu }) {
         </div>
       )}
 
-      <div className={`story-content ${textSpeed === 'instant' ? 'text-instant' : ''}`}>
+      <div className={`story-wrapper ${textSpeed === 'instant' ? 'text-instant' : ''}`}>
         {!storyLoaded ? (
           <p>Loading your story...</p>
         ) : (
           <>
-            {/* Story text */}
-            <div className="story-text">
-              {storyText.map((line, index) => (
-                <p key={index} dangerouslySetInnerHTML={{ __html: line }} />
-              ))}
-            </div>
+            {/* Story text — glass panel (only if there's visible text) */}
+            {storyText.some((line) => line.trim() !== '') && (
+              <div className="story-content">
+                <div className="story-text">
+                  {storyText.map((line, index) => (
+                    <p key={index} dangerouslySetInnerHTML={{ __html: line }} />
+                  ))}
+                </div>
+              </div>
+            )}
 
-            {/* Choices */}
-            <div className="choices">
-              {choices.map((choice, index) => (
-                <button
-                  key={index}
-                  className="choice-btn"
-                  onClick={() => handleChoiceClick(index)}
-                >
-                  {choice.text}
-                </button>
-              ))}
-            </div>
+            {/* Choices — outside the panel */}
+            {choices.length > 0 && (
+              <div className="choices">
+                {choices.map((choice, index) => (
+                  <button
+                    key={index}
+                    className="choice-btn"
+                    onClick={() => handleChoiceClick(index)}
+                  >
+                    {choice.text}
+                  </button>
+                ))}
+              </div>
+            )}
           </>
         )}
       </div>
