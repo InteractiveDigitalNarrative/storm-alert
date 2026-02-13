@@ -47,6 +47,19 @@ function InkStory({ onReturnToMenu }) {
   // Crisis screen state
   const [crisisPhase, setCrisisPhase] = useState(null); // 'night' or 'morning'
 
+  // Text speed: 'slow' (fade-in) or 'instant'
+  const [textSpeed, setTextSpeed] = useState(() => {
+    return localStorage.getItem('textSpeed') || 'slow';
+  });
+
+  const toggleTextSpeed = () => {
+    setTextSpeed((prev) => {
+      const next = prev === 'slow' ? 'instant' : 'slow';
+      localStorage.setItem('textSpeed', next);
+      return next;
+    });
+  };
+
   // Track game variables from Ink
   const [gameVars, setGameVars] = useState({
     temperature: -18,
@@ -490,16 +503,25 @@ function InkStory({ onReturnToMenu }) {
         <div className="temperature">
           🌡️ {gameVars.temperature}°C
         </div>
-        <div className="resources">
-          {categories.map((cat) => (
-            <span
-              key={cat.key}
-              className={`resource-item ${getPrepClass(gameVars[cat.key])}`}
-              title={`${cat.label}: ${gameVars[cat.key] === 0 ? 'Not prepared' : gameVars[cat.key] === 1 ? 'Basic' : 'Thorough'}`}
-            >
-              {cat.icon}
-            </span>
-          ))}
+        <div className="resource-bar-right">
+          <div className="resources">
+            {categories.map((cat) => (
+              <span
+                key={cat.key}
+                className={`resource-item ${getPrepClass(gameVars[cat.key])}`}
+                title={`${cat.label}: ${gameVars[cat.key] === 0 ? 'Not prepared' : gameVars[cat.key] === 1 ? 'Basic' : 'Thorough'}`}
+              >
+                {cat.icon}
+              </span>
+            ))}
+          </div>
+          <button
+            className="text-speed-toggle"
+            onClick={toggleTextSpeed}
+            title={textSpeed === 'slow' ? 'Text: Animated' : 'Text: Instant'}
+          >
+            {textSpeed === 'slow' ? '▸' : '▸▸'}
+          </button>
         </div>
       </div>
 
@@ -524,7 +546,7 @@ function InkStory({ onReturnToMenu }) {
         </div>
       )}
 
-      <div className="story-content">
+      <div className={`story-content ${textSpeed === 'instant' ? 'text-instant' : ''}`}>
         {!storyLoaded ? (
           <p>Loading your story...</p>
         ) : (
