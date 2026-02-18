@@ -6,6 +6,7 @@ import PhoneKeypad from './PhoneKeypad';
 import CallResult from './CallResult';
 import TimeBar from './TimeBar';
 import StoreOverlay from './StoreOverlay';
+import WaterCalculation from './WaterCalculation';
 import EndingScreen from './EndingScreen';
 import CrisisScreen from './CrisisScreen';
 
@@ -68,6 +69,10 @@ function InkStory({ onReturnToMenu }) {
 
   // SMS overlay state
   const [showSMS, setShowSMS] = useState(false);
+
+  // Water calculation quiz state
+  const [showWaterCalc, setShowWaterCalc] = useState(false);
+  const [waterCalcPendingIndex, setWaterCalcPendingIndex] = useState(null);
 
   // Store overlay state
   const [showStore, setShowStore] = useState(false);
@@ -477,10 +482,31 @@ function InkStory({ onReturnToMenu }) {
   };
 
   // ============================================
+  // WATER CALCULATION QUIZ HANDLER
+  // ============================================
+
+  const handleWaterCalcClose = () => {
+    setShowWaterCalc(false);
+    const pendingIndex = waterCalcPendingIndex;
+    setWaterCalcPendingIndex(null);
+
+    const story = storyRef.current;
+    if (!story) return;
+
+    // Tell the Ink story the quiz has been completed so category_water
+    // routes to water_containers_intro (the kitchen/4L scene) instead of
+    // its own built-in quiz knot, avoiding a duplicate quiz.
+    story.variablesState["water_quiz_done"] = true;
+
+    if (pendingIndex !== null) {
+      handleChoiceClick(pendingIndex);
+    }
+  };
+
   // STORE OVERLAY HANDLER
   // ============================================
 
-  const handleStoreClose = (basketItems) => {
+  const handleStoreClose = (basketItems, timeCost = 0) => {
     setShowStore(false);
     const story = storyRef.current;
     if (!story) return;
@@ -533,6 +559,7 @@ function InkStory({ onReturnToMenu }) {
       }
 
       story.variablesState["shop_visited"] = true;
+      story.variablesState["current_time"] = (story.variablesState["current_time"] || 1200) + timeCost;
 
       // Refresh the UI to reflect updated prep icons — do NOT advance the story
       readGameVars(story);
@@ -571,6 +598,9 @@ function InkStory({ onReturnToMenu }) {
     if (story.variablesState["shop_food"]) {
       story.variablesState["prep_food"] = 2;
     }
+
+    // Apply time cost for items grabbed
+    story.variablesState["current_time"] = (story.variablesState["current_time"] || 1200) + timeCost;
 
     // Continue the story and auto-select the first choice to proceed to checkout
     continueStory();
@@ -634,6 +664,10 @@ function InkStory({ onReturnToMenu }) {
     !!gameVars.in_preparation &&
     choices.length >= 4 &&
     catKeywordCount >= 3;
+
+  // True when the storm has arrived (no preparation time left)
+  const timeUp = !!gameVars.in_preparation &&
+    gameVars.current_time >= gameVars.storm_time;
 
   // True if a shop/store choice already exists in current Ink choices
   const hasShopChoice = choices.some(
@@ -718,6 +752,18 @@ function InkStory({ onReturnToMenu }) {
               atPrepHub ? (
                 /* Preparation hub: grid + separate shop + done buttons */
                 <div className="prep-hub-layout">
+
+                  {/* Storm-arrived warning banner */}
+                  {timeUp && (
+                    <div className="prep-storm-warning">
+                      <span className="prep-storm-warning-icon">🌪</span>
+                      <div>
+                        <strong>The storm has arrived.</strong>
+                        <span> It's too late to prepare or go outside. Take cover and wait it out.</span>
+                      </div>
+                    </div>
+                  )}
+
                   {/* Category grid — only known prep categories (not shop, done, or unrecognised) */}
                   <div className="prep-choices-grid">
                     {choices
@@ -730,25 +776,42 @@ function InkStory({ onReturnToMenu }) {
                       .map(({ choice, index }) => {
                         const meta = getPrepChoiceMeta(choice.text);
                         const isDone = meta.gameVar && gameVars[meta.gameVar] > 0;
+                        const isLocked = timeUp && !isDone;
+                        const handleCardClick = () => {
+                          if (isLocked) return;
+                          if (meta.gameVar === 'prep_water' && !isDone) {
+                            setWaterCalcPendingIndex(index);
+                            setShowWaterCalc(true);
+                          } else {
+                            handleChoiceClick(index);
+                          }
+                        };
+
                         return (
                           <button
                             key={index}
-                            className={`prep-choice-card${isDone ? ' prep-choice-done' : ''}`}
-                            onClick={() => handleChoiceClick(index)}
+                            className={[
+                              'prep-choice-card',
+                              isDone   ? 'prep-choice-done'   : '',
+                              isLocked ? 'prep-choice-locked' : '',
+                            ].join(' ')}
+                            onClick={handleCardClick}
+                            disabled={isLocked}
                           >
                             <span className="prep-choice-icon">{meta.icon}</span>
                             <span className="prep-choice-label">{stripEmoji(choice.text)}</span>
                             {meta.description && (
                               <span className="prep-choice-desc">{meta.description}</span>
                             )}
-                            {isDone && <span className="prep-choice-tick">✓</span>}
+                            {isDone   && <span className="prep-choice-tick">✓</span>}
+                            {isLocked && <span className="prep-choice-lock">🔒</span>}
                           </button>
                         );
                       })}
                   </div>
 
-                  {/* Go to Shop — full-width button below the grid */}
-                  {hasShopChoice ? (
+                  {/* Go to Shop — hidden once the storm arrives */}
+                  {!timeUp && (hasShopChoice ? (
                     choices
                       .map((choice, index) => ({ choice, index }))
                       .filter(({ choice }) => {
@@ -761,7 +824,7 @@ function InkStory({ onReturnToMenu }) {
                           className="prep-action-btn prep-shop-btn"
                           onClick={() => handleChoiceClick(index)}
                         >
-                          🛒 {choice.text}
+                          🛒 {stripEmoji(choice.text)}
                         </button>
                       ))
                   ) : (
@@ -771,7 +834,7 @@ function InkStory({ onReturnToMenu }) {
                     >
                       🛒 Go to Shop
                     </button>
-                  )}
+                  ))}
 
                   {/* Done — full-width button at the very end */}
                   {choices
@@ -786,7 +849,7 @@ function InkStory({ onReturnToMenu }) {
                         className="prep-action-btn prep-done-btn"
                         onClick={() => handleChoiceClick(index)}
                       >
-                        ✅ {choice.text}
+                        ✅ {timeUp ? 'Done Preparing' : choice.text}
                       </button>
                     ))}
                 </div>
@@ -888,6 +951,11 @@ function InkStory({ onReturnToMenu }) {
             </button>
           </div>
         </div>
+      )}
+
+      {/* Water Calculation Quiz */}
+      {showWaterCalc && (
+        <WaterCalculation onClose={handleWaterCalcClose} />
       )}
 
       {/* Store Overlay */}

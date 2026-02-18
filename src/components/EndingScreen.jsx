@@ -84,10 +84,10 @@ function EndingScreen({ gameVars, endingType, onPlayAgain }) {
   }
   takeaways.push('Visit olevalmis.ee for Estonia\'s official preparedness guide.');
 
-  // Prep level dots
+  // Prep level dots — 2 dots matching the 0–2 scale
   const renderDots = (level) => (
     <span className="prep-dots">
-      {[0, 1, 2].map((i) => (
+      {[0, 1].map((i) => (
         <span key={i} className={`dot ${i < level ? 'filled' : ''}`} />
       ))}
     </span>

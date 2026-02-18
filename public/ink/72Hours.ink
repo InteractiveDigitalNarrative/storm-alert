@@ -18,6 +18,9 @@ VAR prep_light = 0
 VAR prep_info = 0
 VAR prep_medication = 0
 
+// Set to true by the React WaterCalculation overlay so the Ink quiz is skipped
+VAR water_quiz_done = false
+
 // Water containers filled
 VAR water_target = 18
 VAR water_collected = 0
@@ -205,8 +208,11 @@ You're in the kitchen, looking at the tap.
         You've filled plenty of containers. You should be good for days.
 }
 
-+ {prep_water == 0} [Figure out how much water you need]
++ {prep_water == 0 && !water_quiz_done} [Figure out how much water you need]
     -> water_calculation
+
++ {prep_water == 0 && water_quiz_done} [Start collecting water]
+    -> water_containers_intro
 
 + {prep_water > 0} [Fill more containers from tap]
     -> water_containers

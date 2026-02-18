@@ -4,16 +4,16 @@ import './StoreOverlay.css';
 const STORE_ITEMS = [
   // ── ESSENTIALS ──────────────────────────────────────────────
   { id: 'water',         name: 'Bottled Water',       emoji: '💧', category: 'essentials', quality: 'good', description: 'Several litres' },
-  { id: 'batteries',     name: 'AA Batteries',         emoji: '🔋', category: 'essentials', quality: 'good', description: 'Pack of 8' },
+  { id: 'batteries',     name: 'AA Batteries',         emoji: '🔋', category: 'essentials', quality: 'good', description: 'Pack of 8 — powers everything' },
   { id: 'candles',       name: 'Emergency Candles',    emoji: '🕯️', category: 'essentials', quality: 'good', description: 'Burns 8 hrs each' },
-  { id: 'matches',       name: 'Waterproof Matches',   emoji: '🔥', category: 'essentials', quality: 'good', description: 'Strike anywhere' },
   { id: 'first_aid',     name: 'First Aid Kit',        emoji: '🩹', category: 'essentials', quality: 'good', description: 'Bandages, antiseptic' },
-  { id: 'power_bank',    name: 'Power Bank',           emoji: '📱', category: 'essentials', quality: 'good', description: '20,000 mAh' },
   { id: 'blanket',       name: 'Emergency Blanket',    emoji: '🛏️', category: 'essentials', quality: 'good', description: 'Retains 90% body heat' },
-  { id: 'hand_sanitizer',name: 'Hand Sanitizer',       emoji: '🧴', category: 'essentials', quality: 'good', description: 'No running water needed' },
-  { id: 'radio_manual',  name: 'Hand-crank Radio',     emoji: '📻', category: 'essentials', quality: 'good', description: 'No batteries needed' },
-  { id: 'whistle',       name: 'Emergency Whistle',    emoji: '🔔', category: 'essentials', quality: 'good', description: 'Signal for help' },
-  { id: 'scented_candle',name: 'Scented Candle',       emoji: '🪔', category: 'essentials', quality: 'okay', description: 'Decorative candle', feedback: 'It gives some light, but melts faster than proper emergency candles.' },
+  { id: 'matches',       name: 'Waterproof Matches',   emoji: '🔥', category: 'essentials', quality: 'okay', description: 'Strike anywhere', feedback: 'Handy backup, but a lighter does the same job for less. Worth having if you have no lighter.' },
+  { id: 'power_bank',    name: 'Power Bank',           emoji: '📱', category: 'essentials', quality: 'okay', description: '20,000 mAh', feedback: 'Gives your phone a few extra charges, but AA batteries last far longer for radios and torches.' },
+  { id: 'hand_sanitizer',name: 'Hand Sanitizer',       emoji: '🧴', category: 'essentials', quality: 'okay', description: 'No running water needed', feedback: 'Useful when the tap is dry, but stored water and soap does the same job and costs less.' },
+  { id: 'radio_manual',  name: 'Hand-crank Radio',     emoji: '📻', category: 'essentials', quality: 'okay', description: 'No batteries needed', feedback: 'Works without batteries — a genuine backup. But if you already have AA batteries, a standard battery radio is lighter and easier.' },
+  { id: 'whistle',       name: 'Emergency Whistle',    emoji: '🔔', category: 'essentials', quality: 'okay', description: 'Signal for help', feedback: 'Vital if you might need outdoor rescue, but low priority if you\'re sheltering at home.' },
+  { id: 'scented_candle',name: 'Scented Candle',       emoji: '🪔', category: 'essentials', quality: 'okay', description: 'Decorative candle', feedback: 'It gives some light, but melts faster than proper emergency candles and won\'t last the night.' },
 
   // ── FOOD & WATER ─────────────────────────────────────────────
   { id: 'canned',        name: 'Canned Food',          emoji: '🥫', category: 'food', quality: 'good', description: 'Meat, fish, veg' },
@@ -52,7 +52,7 @@ const STORE_ITEMS = [
 ];
 
 const CATEGORIES = [
-  { id: 'essentials', label: 'Essentials', emoji: '🛡️', description: 'Critical supplies for the storm' },
+  { id: 'essentials', label: 'Essentials', emoji: '🛡️', description: 'Some are must-haves — others depend on what you already have' },
   { id: 'food',       label: 'Food & Drink', emoji: '🍽️', description: 'Choose non-perishables that don\'t need refrigeration' },
   { id: 'luxury',     label: 'Luxury',     emoji: '🛍️', description: 'Is this really the time?' },
 ];
@@ -67,6 +67,7 @@ const shuffle = (arr) => {
 };
 
 function StoreOverlay({ shopWater, shopFood, shopBatteries, shopWaterAmount, onClose }) {
+  const [showWarning, setShowWarning] = useState(true);
   const [basket, setBasket] = useState([]);
   const [toast, setToast] = useState(null);
   const [shakingItem, setShakingItem] = useState(null);
@@ -96,7 +97,10 @@ function StoreOverlay({ shopWater, shopFood, shopBatteries, shopWaterAmount, onC
     setBasket(prev => [...prev, item.id]);
   }, [basket, showToast]);
 
-  const handleCheckout = () => onClose(basket);
+  const BASE_VISIT_COST = 20; // minutes to travel to the store and back
+  const timeCost = BASE_VISIT_COST + basket.length; // +1 minute per item
+
+  const handleCheckout = () => onClose(basket, timeCost);
 
   // Which items are available based on shop flags + category rules
   const isAvailable = (item) => {
@@ -106,7 +110,7 @@ function StoreOverlay({ shopWater, shopFood, shopBatteries, shopWaterAmount, onC
       if (item.id === 'batteries') return shopBatteries;
       return true; // other essentials always available
     }
-    if (item.category === 'food') return shopFood;
+    if (item.category === 'food') return true;
     return false;
   };
 
@@ -114,6 +118,27 @@ function StoreOverlay({ shopWater, shopFood, shopBatteries, shopWaterAmount, onC
     if (item.id === 'water') return shopWaterAmount ? `${shopWaterAmount}L` : item.description;
     return item.description;
   };
+
+  if (showWarning) {
+    return (
+      <div className="store-overlay">
+        <div className="store-warning-panel">
+          <span className="store-warning-icon">⚠️</span>
+          <h2 className="store-warning-title">Every second counts</h2>
+          <p className="store-warning-body">
+            The storm is closing in. You don't have time to browse — grab only what you
+            genuinely need and get out.
+          </p>
+          <p className="store-warning-rule">
+            <strong>The trip to the store and back costs 20 minutes.</strong> Each item you pick up costs 1 more. Choose wisely.
+          </p>
+          <button className="store-warning-btn" onClick={() => setShowWarning(false)}>
+            Enter the store →
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="store-overlay">
@@ -146,14 +171,18 @@ function StoreOverlay({ shopWater, shopFood, shopBatteries, shopWaterAmount, onC
                     const inBasket  = basket.includes(item.id);
                     const isShaking = shakingItem === item.id;
 
+                    const selectedClass = inBasket
+                      ? item.quality === 'okay' ? 'store-item-selected-okay' : 'store-item-selected'
+                      : '';
+
                     return (
                       <button
                         key={item.id}
                         className={[
                           'store-item',
                           `store-item-${item.quality}`,
-                          inBasket  ? 'store-item-selected' : '',
-                          isShaking ? 'store-item-shake'    : '',
+                          selectedClass,
+                          isShaking ? 'store-item-shake' : '',
                         ].join(' ')}
                         onClick={() => handleItemClick(item)}
                         disabled={inBasket}
@@ -161,7 +190,11 @@ function StoreOverlay({ shopWater, shopFood, shopBatteries, shopWaterAmount, onC
                         <span className="store-item-emoji">{item.emoji}</span>
                         <span className="store-item-name">{item.name}</span>
                         <span className="store-item-desc">{getDescription(item)}</span>
-                        {inBasket && <span className="store-item-check">&#10003;</span>}
+                        {inBasket && (
+                          <span className={`store-item-check${item.quality === 'okay' ? ' store-item-check-okay' : ''}`}>
+                            &#10003;
+                          </span>
+                        )}
                       </button>
                     );
                   })}
@@ -173,7 +206,10 @@ function StoreOverlay({ shopWater, shopFood, shopBatteries, shopWaterAmount, onC
 
         {/* Basket */}
         <div className="store-basket">
-          <span className="store-basket-label">🛒 Basket</span>
+          <div className="store-basket-header">
+            <span className="store-basket-label">🛒 Basket</span>
+            <span className="store-basket-time">⏱ +{timeCost} min</span>
+          </div>
           <div className="store-basket-items">
             {basket.length === 0 && (
               <span className="store-basket-empty">Click items to add them</span>
@@ -181,7 +217,10 @@ function StoreOverlay({ shopWater, shopFood, shopBatteries, shopWaterAmount, onC
             {basket.map(id => {
               const item = STORE_ITEMS.find(i => i.id === id);
               return (
-                <span key={id} className="store-basket-chip">
+                <span
+                  key={id}
+                  className={`store-basket-chip${item.quality === 'okay' ? ' store-basket-chip-okay' : ''}`}
+                >
                   {item.emoji} {item.name}
                 </span>
               );
