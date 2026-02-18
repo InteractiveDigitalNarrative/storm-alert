@@ -677,7 +677,7 @@
 }
 
 .sms-phone {
-  width: 340px;
+  width: 360px;
   background: #1a1a1e;
   border-radius: 24px;
   overflow: hidden;
@@ -696,33 +696,54 @@
   align-items: center;
   gap: 12px;
   padding: 16px 20px;
-  background: #2a2a2e;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: #1e2530;
+  border-bottom: 2px solid rgba(30, 90, 160, 0.5);
 }
 
+/* Government avatar — shield icon on dark blue */
 .sms-avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: #3a7bd5;
-  color: #fff;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #1a3a6e, #0f2348);
+  border: 1px solid rgba(80, 140, 220, 0.5);
+  color: #7ab4f0;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
-  font-size: 16px;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.sms-avatar-govt {
+  border-radius: 10px;
+}
+
+/* Contact name + sub-label stacked */
+.sms-contact-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .sms-contact {
-  color: #fff;
-  font-weight: 600;
-  font-size: 16px;
-  flex: 1;
+  color: #c8ddf5;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+}
+
+.sms-contact-sub {
+  color: #5a7a9a;
+  font-size: 11px;
+  font-style: italic;
 }
 
 .sms-time {
-  color: #888;
-  font-size: 13px;
+  color: #556;
+  font-size: 12px;
+  flex-shrink: 0;
 }
 
 .sms-body {
@@ -732,23 +753,49 @@
   gap: 8px;
 }
 
+/* Government message bubble — full width, formal style */
 .sms-bubble {
-  background: #2a2a2e;
-  color: #eee;
-  padding: 10px 14px;
-  border-radius: 18px 18px 18px 4px;
-  font-size: 15px;
-  line-height: 1.4;
-  max-width: 85%;
-  animation: bubble-pop 0.3s ease backwards;
+  background: #1e2530;
+  color: #c8d8e8;
+  padding: 14px 16px;
+  border-radius: 4px 18px 18px 18px;
+  font-size: 14px;
+  line-height: 1.65;
+  max-width: 100%;
+  border-left: 3px solid #1a5cb0;
+  animation: bubble-pop 0.4s ease backwards;
+  animation-delay: 0.2s;
 }
 
-.sms-bubble:nth-child(1) { animation-delay: 0.3s; }
-.sms-bubble:nth-child(2) { animation-delay: 0.8s; }
-.sms-bubble:nth-child(3) { animation-delay: 1.3s; font-weight: 600; }
+.sms-bubble-govt {
+  background: #161e2c;
+}
+
+/* Alert tag at top of message */
+.sms-alert-tag {
+  display: inline-block;
+  background: rgba(220, 80, 50, 0.15);
+  border: 1px solid rgba(220, 80, 50, 0.4);
+  color: #e07060;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+/* Reference line at bottom of message */
+.sms-ref {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  color: #3a5570;
+  font-style: italic;
+}
 
 @keyframes bubble-pop {
-  from { transform: scale(0.8); opacity: 0; }
+  from { transform: scale(0.97); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
 }
 
@@ -757,16 +804,17 @@
   padding: 16px;
   background: none;
   border: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  color: #3a7bd5;
-  font-size: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  color: #4a8fd5;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s;
+  letter-spacing: 0.5px;
 }
 
 .sms-close-btn:hover {
-  background: rgba(58, 123, 213, 0.1);
+  background: rgba(30, 90, 160, 0.12);
 }
 
 /* ============================================
