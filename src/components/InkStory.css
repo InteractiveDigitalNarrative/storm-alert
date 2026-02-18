@@ -39,6 +39,12 @@
   flex-direction: column;
   align-items: stretch;
   max-height: 100%;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.story-wrapper::-webkit-scrollbar {
+  display: none;
 }
 
 /* Glass panel — text only */
@@ -221,6 +227,258 @@
 .choice-btn:active {
   transform: translateY(0);
   box-shadow: none;
+}
+
+/* ============================================
+   PREPARATION HUB GRID
+   ============================================ */
+
+/* Prep hub container: align from top so content never clips above */
+.ink-story-container.prep-hub-container {
+  align-items: flex-start;
+}
+
+/* Prep hub wrapper: widen to fit the grid */
+.story-wrapper.prep-hub-mode {
+  max-width: 860px;
+}
+
+.prep-choices-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 14px;
+  width: 100%;
+}
+
+.prep-choice-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 24px 16px 20px;
+  gap: 8px;
+  background: linear-gradient(145deg, rgba(185, 124, 44, 0.12), rgba(185, 124, 44, 0.06));
+  border: 1px solid rgba(185, 124, 44, 0.4);
+  border-radius: 12px;
+  color: #d4a54a;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: inherit;
+  position: relative;
+  overflow: hidden;
+}
+
+.prep-choice-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(185, 124, 44, 0.08), transparent);
+  transition: left 0.5s ease;
+}
+
+.prep-choice-card:hover::before {
+  left: 100%;
+}
+
+.prep-choice-card:hover {
+  background: linear-gradient(145deg, rgba(185, 124, 44, 0.25), rgba(185, 124, 44, 0.12));
+  border-color: #ff9933;
+  color: #ffb347;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(185, 124, 44, 0.2);
+}
+
+.prep-choice-card:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.prep-choice-card:focus {
+  outline: none;
+}
+
+.prep-choice-icon {
+  font-size: 40px;
+  display: block;
+  line-height: 1;
+}
+
+.prep-choice-label {
+  font-size: 12pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: block;
+}
+
+.prep-choice-desc {
+  font-size: 10pt;
+  font-weight: 400;
+  color: #9a7030;
+  text-transform: none;
+  letter-spacing: 0;
+  line-height: 1.4;
+  display: block;
+}
+
+.prep-choice-card:hover .prep-choice-desc {
+  color: #b88840;
+}
+
+/* Done state — green card with tick */
+.prep-choice-card.prep-choice-done {
+  background: linear-gradient(145deg, rgba(50, 160, 80, 0.18), rgba(35, 120, 60, 0.10));
+  border-color: rgba(70, 185, 100, 0.55);
+  color: #72d48a;
+}
+
+.prep-choice-card.prep-choice-done:hover {
+  background: linear-gradient(145deg, rgba(50, 160, 80, 0.30), rgba(35, 120, 60, 0.18));
+  border-color: #55cc77;
+  color: #90ddaa;
+  box-shadow: 0 4px 20px rgba(50, 160, 80, 0.22);
+}
+
+.prep-choice-card.prep-choice-done .prep-choice-desc {
+  color: #4a9960;
+}
+
+.prep-choice-card.prep-choice-done:hover .prep-choice-desc {
+  color: #62b878;
+}
+
+/* Tick badge in the top-right corner */
+.prep-choice-tick {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(76, 175, 80, 0.25);
+  border: 1px solid rgba(76, 175, 80, 0.6);
+  color: #4caf50;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+/* ============================================
+   PREP HUB STANDALONE ACTION BUTTONS
+   ============================================ */
+
+/* Wrapper that stacks grid + shop + done vertically */
+.prep-hub-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 14px;
+  width: 100%;
+}
+
+/* Shared base for shop and done standalone buttons */
+.prep-action-btn {
+  width: 100%;
+  padding: 14px 24px;
+  font-size: 12pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 10px;
+  border: 1px solid;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: inherit;
+  position: relative;
+  overflow: hidden;
+}
+
+.prep-action-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+  transition: left 0.5s ease;
+}
+
+.prep-action-btn:hover::before {
+  left: 100%;
+}
+
+.prep-action-btn:focus {
+  outline: none;
+}
+
+.prep-action-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* Shop button — bright blue, pops against dark background */
+.prep-shop-btn {
+  background: linear-gradient(145deg, rgba(44, 130, 210, 0.35), rgba(30, 100, 175, 0.25));
+  border-color: rgba(80, 160, 230, 0.7);
+  color: #7ec8f5;
+  box-shadow: 0 2px 12px rgba(44, 130, 210, 0.25);
+}
+
+.prep-shop-btn:hover {
+  background: linear-gradient(145deg, rgba(44, 130, 210, 0.50), rgba(30, 100, 175, 0.38));
+  border-color: #5bb8f0;
+  color: #a8deff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(44, 130, 210, 0.4);
+}
+
+/* Done button — green, signals completion */
+.prep-done-btn {
+  background: linear-gradient(145deg, rgba(50, 160, 80, 0.20), rgba(35, 120, 60, 0.12));
+  border-color: rgba(70, 180, 100, 0.5);
+  color: #6dcc88;
+}
+
+.prep-done-btn:hover {
+  background: linear-gradient(145deg, rgba(50, 160, 80, 0.34), rgba(35, 120, 60, 0.22));
+  border-color: #55cc77;
+  color: #90ddaa;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(50, 160, 80, 0.25);
+}
+
+/* Shop card — blue accent */
+.prep-shop-card {
+  background: linear-gradient(145deg, rgba(44, 120, 185, 0.12), rgba(44, 120, 185, 0.06));
+  border-color: rgba(44, 120, 185, 0.4);
+  color: #5aaae0;
+}
+
+.prep-shop-card::before {
+  background: linear-gradient(90deg, transparent, rgba(44, 120, 185, 0.08), transparent);
+}
+
+.prep-shop-card:hover {
+  background: linear-gradient(145deg, rgba(44, 120, 185, 0.25), rgba(44, 120, 185, 0.12));
+  border-color: #4499dd;
+  color: #7bbfee;
+  box-shadow: 0 4px 20px rgba(44, 120, 185, 0.2);
+}
+
+.prep-shop-card .prep-choice-desc {
+  color: #3a6fa0;
+}
+
+.prep-shop-card:hover .prep-choice-desc {
+  color: #5090c0;
 }
 
 /* ============================================
@@ -686,6 +944,34 @@
     font-size: 11pt;
   }
 
+  /* Prep grid — 2 columns on tablet */
+  .prep-choices-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .prep-choice-card {
+    padding: 18px 12px 16px;
+    gap: 7px;
+  }
+
+  .prep-choice-icon {
+    font-size: 32px;
+  }
+
+  .prep-choice-label {
+    font-size: 11pt;
+  }
+
+  .prep-choice-desc {
+    font-size: 9.5pt;
+  }
+
+  .prep-action-btn {
+    padding: 16px 20px;
+    font-size: 12pt;
+  }
+
   /* Resource bar */
   .resource-bar {
     padding: 8px 15px;
@@ -777,6 +1063,34 @@
     padding: 10px 15px;
     font-size: 11pt;
     letter-spacing: 0;
+  }
+
+  /* Prep grid — 2 columns on small screens */
+  .prep-choices-grid {
+    gap: 8px;
+  }
+
+  .prep-choice-card {
+    padding: 16px 10px 14px;
+    gap: 6px;
+  }
+
+  .prep-choice-icon {
+    font-size: 28px;
+  }
+
+  .prep-choice-label {
+    font-size: 10pt;
+    letter-spacing: 0.5px;
+  }
+
+  .prep-choice-desc {
+    font-size: 9pt;
+  }
+
+  .prep-action-btn {
+    padding: 15px;
+    font-size: 12pt;
   }
 
   .resource-bar {

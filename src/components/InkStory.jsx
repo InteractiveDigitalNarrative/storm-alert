@@ -9,6 +9,37 @@ import StoreOverlay from './StoreOverlay';
 import EndingScreen from './EndingScreen';
 import CrisisScreen from './CrisisScreen';
 
+// Prep hub choice metadata — icon, description, and the Ink variable to check for completion
+const PREP_CHOICE_META = {
+  water:      { icon: '💧', description: 'Secure safe drinking water before the storm hits.',  gameVar: 'prep_water' },
+  food:       { icon: '🍞', description: 'Stock non-perishable food to sustain your household.', gameVar: 'prep_food' },
+  heat:       { icon: '🔥', description: 'Prepare heating solutions in case power fails.',       gameVar: 'prep_heat' },
+  light:      { icon: '🔦', description: 'Ensure you can see when electricity goes out.',        gameVar: 'prep_light' },
+  info:       { icon: '📻', description: 'Stay informed using a battery-powered radio.',         gameVar: 'prep_info' },
+  radio:      { icon: '📻', description: 'Stay informed using a battery-powered radio.',         gameVar: 'prep_info' },
+  medication: { icon: '💊', description: 'Keep essential medicines safely within reach.',        gameVar: 'prep_medication' },
+  meds:       { icon: '💊', description: 'Keep essential medicines safely within reach.',        gameVar: 'prep_medication' },
+  shop:       { icon: '🛒', description: 'Buy water, food, and batteries at the grocery store.' },
+  store:      { icon: '🛒', description: 'Buy water, food, and batteries at the grocery store.' },
+  done:       { icon: '✅', description: 'Stop preparing and face the oncoming storm.' },
+  finish:     { icon: '✅', description: 'Stop preparing and face the oncoming storm.' },
+  ready:      { icon: '✅', description: 'Stop preparing and face the oncoming storm.' },
+};
+
+const HUB_KEYWORDS = Object.keys(PREP_CHOICE_META);
+
+const getPrepChoiceMeta = (text) => {
+  const lower = text.toLowerCase();
+  for (const [key, meta] of Object.entries(PREP_CHOICE_META)) {
+    if (lower.includes(key)) return meta;
+  }
+  return { icon: '▶', description: '' };
+};
+
+// Strip emoji characters from a string (so the Ink choice text label stays clean)
+const stripEmoji = (text) =>
+  text.replace(/[\u{1F000}-\u{1FFFF}\u{2600}-\u{27BF}\u{FE00}-\u{FEFF}]+\s*/gu, '').trim();
+
 function InkStory({ onReturnToMenu }) {
   // ============================================
   // STATE MANAGEMENT
@@ -40,6 +71,8 @@ function InkStory({ onReturnToMenu }) {
 
   // Store overlay state
   const [showStore, setShowStore] = useState(false);
+  // True when the store was opened via the injected "Go to Shop" button (not from an Ink tag)
+  const [storeOpenedDirectly, setStoreOpenedDirectly] = useState(false);
 
   // Ending screen state
   const [showEndingScreen, setShowEndingScreen] = useState(false);
@@ -296,8 +329,21 @@ function InkStory({ onReturnToMenu }) {
       }
     }
 
+    // Remove lines whose text is fully contained within another line in the same batch
+    // (prevents the Ink story from echoing the same sentence twice)
+    const stripHtml = (s) => s.replace(/<[^>]*>/g, '').trim().toLowerCase();
+    const deduped = lines.filter((line, i) => {
+      const t = stripHtml(line);
+      if (!t) return true;
+      return !lines.some((other, j) => {
+        if (i === j) return false;
+        const o = stripHtml(other);
+        return o.length > t.length && o.includes(t);
+      });
+    });
+
     // Update the story text display
-    setStoryText(lines);
+    setStoryText(deduped);
 
     // Read game variables from Ink
     readGameVars(story);
@@ -439,6 +485,62 @@ function InkStory({ onReturnToMenu }) {
     const story = storyRef.current;
     if (!story) return;
 
+    const direct = storeOpenedDirectly;
+    setStoreOpenedDirectly(false);
+
+    const foodMap = {
+      canned: 'food_canned',
+      crackers: 'food_crackers',
+      nuts: 'food_nuts',
+      energy_bars: 'food_energy_bars',
+      chocolate: 'food_chocolate',
+      bread: 'food_longlife_bread',
+      honey_jam: 'food_honey_jam',
+      dried: 'food_dried',
+      frozen: 'food_frozen',
+      fresh: 'food_fresh_produce',
+      milk: 'food_milk',
+      yogurt: 'food_yogurt',
+    };
+
+    if (direct) {
+      // Store was opened from the injected button — set variables based on what
+      // the player actually put in their basket, then stay at the prep hub.
+
+      if (basketItems.includes('water')) {
+        const target = story.variablesState["water_target"] || 10;
+        story.variablesState["water_collected"] = target;
+        story.variablesState["shop_water_amount"] = target;
+        story.variablesState["prep_water"] = 2;
+      }
+
+      if (basketItems.includes('batteries')) {
+        story.variablesState["light_batteries"] = true;
+        story.variablesState["info_radio_batteries"] = true;
+        story.variablesState["prep_light"] = 2;
+        story.variablesState["prep_info"] = 2;
+      }
+
+      for (const [basketId, inkVar] of Object.entries(foodMap)) {
+        if (basketItems.includes(basketId)) {
+          story.variablesState[inkVar] = true;
+        }
+      }
+
+      const boughtFood = ['canned','crackers','nuts','energy_bars','chocolate','bread','honey_jam','dried'].some(id => basketItems.includes(id));
+      if (boughtFood) {
+        story.variablesState["prep_food"] = 2;
+      }
+
+      story.variablesState["shop_visited"] = true;
+
+      // Refresh the UI to reflect updated prep icons — do NOT advance the story
+      readGameVars(story);
+      return;
+    }
+
+    // Store was opened from an Ink STORE_SHOPPING tag — original flow
+
     // Set water variables
     if (story.variablesState["shop_water"]) {
       let amount = story.variablesState["water_target"] - story.variablesState["water_collected"];
@@ -461,21 +563,6 @@ function InkStory({ onReturnToMenu }) {
     }
 
     // Set food variables based on basket
-    const foodMap = {
-      canned: 'food_canned',
-      crackers: 'food_crackers',
-      nuts: 'food_nuts',
-      energy_bars: 'food_energy_bars',
-      chocolate: 'food_chocolate',
-      bread: 'food_longlife_bread',
-      honey_jam: 'food_honey_jam',
-      dried: 'food_dried',
-      frozen: 'food_frozen',
-      fresh: 'food_fresh_produce',
-      milk: 'food_milk',
-      yogurt: 'food_yogurt',
-    };
-
     for (const [basketId, inkVar] of Object.entries(foodMap)) {
       story.variablesState[inkVar] = basketItems.includes(basketId);
     }
@@ -536,8 +623,25 @@ function InkStory({ onReturnToMenu }) {
     return 'prep-thorough';
   };
 
+  // True only at the main preparation hub.
+  // Requires 3+ distinct category keywords AND 4+ choices so sub-menus
+  // (which have 2-3 choices and focus on a single category) never trigger the grid.
+  const CATEGORY_KEYWORDS = ['water', 'food', 'heat', 'light', 'info', 'radio', 'medication', 'meds'];
+  const catKeywordCount = CATEGORY_KEYWORDS.filter(kw =>
+    choices.some(c => c.text.toLowerCase().includes(kw))
+  ).length;
+  const atPrepHub =
+    !!gameVars.in_preparation &&
+    choices.length >= 4 &&
+    catKeywordCount >= 3;
+
+  // True if a shop/store choice already exists in current Ink choices
+  const hasShopChoice = choices.some(
+    (c) => c.text.toLowerCase().includes('shop') || c.text.toLowerCase().includes('store')
+  );
+
   return (
-    <div className="ink-story-container" style={containerStyle}>
+    <div className={`ink-story-container${atPrepHub ? ' prep-hub-container' : ''}`} style={containerStyle}>
       {/* Resource Bar - always visible */}
       <div className="resource-bar">
         <div className="resource-bar-left">
@@ -593,7 +697,7 @@ function InkStory({ onReturnToMenu }) {
         </div>
       )}
 
-      <div className={`story-wrapper ${textSpeed === 'instant' ? 'text-instant' : ''}`}>
+      <div className={`story-wrapper ${textSpeed === 'instant' ? 'text-instant' : ''} ${atPrepHub ? 'prep-hub-mode' : ''}`}>
         {!storyLoaded ? (
           <p>Loading your story...</p>
         ) : (
@@ -611,17 +715,95 @@ function InkStory({ onReturnToMenu }) {
 
             {/* Choices — outside the panel */}
             {choices.length > 0 && (
-              <div className="choices">
-                {choices.map((choice, index) => (
-                  <button
-                    key={index}
-                    className="choice-btn"
-                    onClick={() => handleChoiceClick(index)}
-                  >
-                    {choice.text}
-                  </button>
-                ))}
-              </div>
+              atPrepHub ? (
+                /* Preparation hub: grid + separate shop + done buttons */
+                <div className="prep-hub-layout">
+                  {/* Category grid — only known prep categories (not shop, done, or unrecognised) */}
+                  <div className="prep-choices-grid">
+                    {choices
+                      .map((choice, index) => ({ choice, index }))
+                      .filter(({ choice }) => {
+                        const lower = choice.text.toLowerCase();
+                        const isCategory = ['water','food','heat','light','info','radio','medication','meds'].some(kw => lower.includes(kw));
+                        return isCategory;
+                      })
+                      .map(({ choice, index }) => {
+                        const meta = getPrepChoiceMeta(choice.text);
+                        const isDone = meta.gameVar && gameVars[meta.gameVar] > 0;
+                        return (
+                          <button
+                            key={index}
+                            className={`prep-choice-card${isDone ? ' prep-choice-done' : ''}`}
+                            onClick={() => handleChoiceClick(index)}
+                          >
+                            <span className="prep-choice-icon">{meta.icon}</span>
+                            <span className="prep-choice-label">{stripEmoji(choice.text)}</span>
+                            {meta.description && (
+                              <span className="prep-choice-desc">{meta.description}</span>
+                            )}
+                            {isDone && <span className="prep-choice-tick">✓</span>}
+                          </button>
+                        );
+                      })}
+                  </div>
+
+                  {/* Go to Shop — full-width button below the grid */}
+                  {hasShopChoice ? (
+                    choices
+                      .map((choice, index) => ({ choice, index }))
+                      .filter(({ choice }) => {
+                        const lower = choice.text.toLowerCase();
+                        return lower.includes('shop') || lower.includes('store');
+                      })
+                      .map(({ choice, index }) => (
+                        <button
+                          key={index}
+                          className="prep-action-btn prep-shop-btn"
+                          onClick={() => handleChoiceClick(index)}
+                        >
+                          🛒 {choice.text}
+                        </button>
+                      ))
+                  ) : (
+                    <button
+                      className="prep-action-btn prep-shop-btn"
+                      onClick={() => { setStoreOpenedDirectly(true); setShowStore(true); }}
+                    >
+                      🛒 Go to Shop
+                    </button>
+                  )}
+
+                  {/* Done — full-width button at the very end */}
+                  {choices
+                    .map((choice, index) => ({ choice, index }))
+                    .filter(({ choice }) => {
+                      const lower = choice.text.toLowerCase();
+                      return lower.includes('done') || lower.includes('finish') || lower.includes('ready');
+                    })
+                    .map(({ choice, index }) => (
+                      <button
+                        key={index}
+                        className="prep-action-btn prep-done-btn"
+                        onClick={() => handleChoiceClick(index)}
+                      >
+                        ✅ {choice.text}
+                      </button>
+                    ))}
+                </div>
+              ) : (
+                /* Normal sections: vertical list */
+                <div className="choices">
+                  {choices.map((choice, index) => (
+                    <button
+                      key={index}
+                      className="choice-btn"
+                      onClick={() => handleChoiceClick(index)}
+                    >
+                      {choice.text}
+                    </button>
+                  ))}
+                </div>
+              )
             )}
           </>
         )}
@@ -709,10 +891,10 @@ function InkStory({ onReturnToMenu }) {
       {/* Store Overlay */}
       {showStore && (
         <StoreOverlay
-          shopWater={gameVars.shop_water}
-          shopFood={gameVars.shop_food}
-          shopBatteries={gameVars.shop_batteries}
-          shopWaterAmount={gameVars.shop_water_amount}
+          shopWater={storeOpenedDirectly ? true : gameVars.shop_water}
+          shopFood={storeOpenedDirectly ? true : gameVars.shop_food}
+          shopBatteries={storeOpenedDirectly ? true : gameVars.shop_batteries}
+          shopWaterAmount={storeOpenedDirectly ? (gameVars.shop_water_amount || 10) : gameVars.shop_water_amount}
           onClose={handleStoreClose}
         />
       )}
