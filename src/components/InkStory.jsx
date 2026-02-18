@@ -833,23 +833,25 @@ function InkStory({ onReturnToMenu }) {
         <div className="sms-overlay" onClick={handleSMSClose}>
           <div className="sms-phone" onClick={(e) => e.stopPropagation()}>
             <div className="sms-header">
-              <div className="sms-avatar">M</div>
-              <div className="sms-contact">Martin</div>
+              <div className="sms-avatar sms-avatar-govt">🛡</div>
+              <div className="sms-contact-info">
+                <div className="sms-contact">GovtInfo</div>
+                <div className="sms-contact-sub">National Crisis Management Centre</div>
+              </div>
               <div className="sms-time">now</div>
             </div>
             <div className="sms-body">
-              <div className="sms-bubble">
-                Power's going to be out for days.
-              </div>
-              <div className="sms-bubble">
-                Water. Light. Heat. Meds.
-              </div>
-              <div className="sms-bubble">
-                Check everything NOW.
+              <div className="sms-bubble sms-bubble-govt">
+                <span className="sms-alert-tag">⚠ STORM ALERT</span>
+                A severe storm warning has been issued for your region. Significant power outages, disrupted water supply, and road closures are anticipated in the coming hours.
+                <br /><br />
+                Secure adequate supplies of drinking water, non-perishable food, medications, emergency lighting, and a heat source. Stay indoors and monitor official broadcast channels for further instructions.
+                <br /><br />
+                <span className="sms-ref">Ref: NCM-{new Date().getFullYear()}-STORM · Do not reply</span>
               </div>
             </div>
             <button className="sms-close-btn" onClick={handleSMSClose}>
-              OK
+              Acknowledge
             </button>
           </div>
         </div>
