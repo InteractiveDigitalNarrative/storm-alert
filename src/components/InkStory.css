@@ -12,7 +12,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 80px 20px 70px 20px;  /* Top for resource bar, bottom for time bar */
+  padding: var(--top-bar-height) 20px var(--bottom-bar-height);  /* Top for resource bar, bottom for time bar */
   position: relative;
   box-sizing: border-box;
 }
@@ -586,13 +586,14 @@
   top: 0;
   left: 0;
   width: 100%;
-  padding: 15px 30px;
+  height: var(--top-bar-height);
+  padding: 0 30px;
   box-sizing: border-box;
   background: rgba(0, 0, 0, 0.8);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 100;
+  z-index: 2500;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -689,7 +690,7 @@
 
 .shopping-list {
   position: fixed;
-  bottom: 70px;
+  bottom: var(--bottom-bar-height);
   right: 20px;
   background: rgba(20, 20, 20, 0.95);
   border: 1px solid rgba(255, 153, 51, 0.3);
@@ -761,10 +762,25 @@
   height: 100%;
   background: rgba(0, 0, 0, 0.7);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   z-index: 1000;
   animation: sms-fade-in 0.3s ease;
+  padding: var(--top-bar-height) 20px var(--bottom-bar-height);
+  box-sizing: border-box;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+}
+
+.sms-overlay::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sms-overlay::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 3px;
 }
 
 @keyframes sms-fade-in {
@@ -773,13 +789,15 @@
 }
 
 .sms-phone {
-  width: 360px;
+  width: min(360px, 100%);
   background: #1a1a1e;
   border-radius: 24px;
   overflow: hidden;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.1);
   animation: sms-slide-up 0.4s ease;
+  flex-shrink: 0;
+  margin: auto 0;
 }
 
 @keyframes sms-slide-up {
@@ -925,11 +943,26 @@
   height: 100%;
   background: rgba(0, 0, 0, 0.95);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   z-index: 2000;
   animation: fadeIn 0.5s ease;
   backdrop-filter: blur(10px);
+  padding: var(--top-bar-height) 20px var(--bottom-bar-height);
+  box-sizing: border-box;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+}
+
+.radio-broadcast-overlay::-webkit-scrollbar {
+  width: 6px;
+}
+
+.radio-broadcast-overlay::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 3px;
 }
 
 @keyframes fadeIn {
@@ -940,18 +973,34 @@
 .radio-broadcast {
   background: linear-gradient(145deg, #1a1a1a, #2d2d2d);
   border-radius: 20px;
-  padding: 40px;
+  padding: clamp(20px, 4vh, 40px) clamp(20px, 4vw, 40px);
+  width: 100%;
   max-width: 600px;
+  max-height: calc(100vh - var(--top-bar-height) - var(--bottom-bar-height));
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
   text-align: center;
   border: 2px solid #444;
   box-shadow:
     0 0 60px rgba(255, 165, 0, 0.2),
     inset 0 0 30px rgba(0, 0, 0, 0.5);
+  margin: auto 0;
+  box-sizing: border-box;
+}
+
+.radio-broadcast::-webkit-scrollbar {
+  width: 5px;
+}
+
+.radio-broadcast::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
 }
 
 .radio-icon {
-  font-size: 60px;
-  margin-bottom: 15px;
+  font-size: clamp(32px, 6vh, 60px);
+  margin-bottom: clamp(8px, 1.5vh, 15px);
   animation: pulse 2s infinite;
 }
 
@@ -962,8 +1011,8 @@
 
 .radio-broadcast h3 {
   color: #ff9933;
-  font-size: 24px;
-  margin-bottom: 25px;
+  font-size: clamp(16px, 2.5vh, 24px);
+  margin-bottom: clamp(12px, 2.5vh, 25px);
   text-transform: uppercase;
   letter-spacing: 3px;
 }
@@ -971,12 +1020,12 @@
 .broadcast-content {
   text-align: left;
   color: #ccc;
-  font-size: 16px;
-  line-height: 1.8;
+  font-size: clamp(13px, 1.8vh, 16px);
+  line-height: 1.7;
 }
 
 .broadcast-content p {
-  margin-bottom: 15px;
+  margin-bottom: clamp(8px, 1.5vh, 15px);
 }
 
 .broadcast-static {
@@ -1023,13 +1072,13 @@
 }
 
 .broadcast-close-btn {
-  margin-top: 25px;
+  margin-top: clamp(14px, 2.5vh, 25px);
   background: linear-gradient(145deg, #b97c2c, #8a5d21);
   border: none;
   color: #fff;
-  padding: 15px 50px;
+  padding: clamp(10px, 1.8vh, 15px) clamp(24px, 5vw, 50px);
   border-radius: 8px;
-  font-size: 16px;
+  font-size: clamp(13px, 1.8vh, 16px);
   font-weight: 600;
   cursor: pointer;
   text-transform: uppercase;

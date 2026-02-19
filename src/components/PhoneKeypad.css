@@ -8,10 +8,25 @@
   height: 100%;
   background: rgba(0, 0, 0, 0.85);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   z-index: 1000;
   animation: fadeIn 0.3s ease;
+  padding: var(--top-bar-height) 20px var(--bottom-bar-height);
+  box-sizing: border-box;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+}
+
+.phone-keypad-overlay::-webkit-scrollbar {
+  width: 6px;
+}
+
+.phone-keypad-overlay::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 3px;
 }
 
 @keyframes fadeIn {
@@ -22,8 +37,10 @@
 .phone-keypad {
   background: linear-gradient(145deg, #1a1a1a, #2d2d2d);
   border-radius: 24px;
-  padding: 24px;
-  width: 320px;
+  padding: clamp(14px, 2.5vh, 24px);
+  width: min(320px, 100%);
+  flex-shrink: 0;
+  margin: auto 0;
   box-shadow:
     0 20px 60px rgba(0, 0, 0, 0.5),
     0 0 40px rgba(255, 51, 51, 0.1),
@@ -65,14 +82,14 @@
 .phone-display {
   background: #0a0a0a;
   border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 20px;
+  padding: clamp(10px, 2vh, 20px);
+  margin-bottom: clamp(10px, 2vh, 20px);
   text-align: center;
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .dialed-number {
-  font-size: 32px;
+  font-size: clamp(20px, 4vh, 32px);
   font-weight: 300;
   color: #fff;
   letter-spacing: 4px;
@@ -95,17 +112,17 @@
 .keypad-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-bottom: 20px;
+  gap: clamp(8px, 1.5vh, 12px);
+  margin-bottom: clamp(10px, 2vh, 20px);
 }
 
 .keypad-digit {
   background: linear-gradient(145deg, #2a2a2a, #1f1f1f);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 50%;
-  width: 70px;
-  height: 70px;
-  font-size: 28px;
+  width: clamp(50px, 9vh, 70px);
+  height: clamp(50px, 9vh, 70px);
+  font-size: clamp(20px, 3.5vh, 28px);
   font-weight: 400;
   color: #fff;
   cursor: pointer;
@@ -186,19 +203,37 @@
   height: 100%;
   background: rgba(0, 0, 0, 0.9);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   z-index: 1001;
   animation: fadeIn 0.3s ease;
+  padding: var(--top-bar-height) 20px var(--bottom-bar-height);
+  box-sizing: border-box;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+}
+
+.call-result-overlay::-webkit-scrollbar {
+  width: 6px;
+}
+
+.call-result-overlay::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 3px;
 }
 
 .call-result {
   background: linear-gradient(145deg, #1a1a1a, #2d2d2d);
   border-radius: 20px;
-  padding: 40px;
+  padding: clamp(20px, 4vh, 40px) clamp(20px, 4vw, 40px);
+  width: 100%;
   max-width: 500px;
   text-align: center;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+  margin: auto 0;
 }
 
 .call-result.success {
@@ -222,21 +257,21 @@
 }
 
 .call-result-icon {
-  font-size: 60px;
-  margin-bottom: 20px;
+  font-size: clamp(36px, 6vh, 60px);
+  margin-bottom: clamp(10px, 2vh, 20px);
 }
 
 .call-result h3 {
   color: #fff;
-  font-size: 24px;
-  margin-bottom: 15px;
+  font-size: clamp(16px, 2.5vh, 24px);
+  margin-bottom: clamp(8px, 1.5vh, 15px);
 }
 
 .call-result p {
   color: #aaa;
-  font-size: 16px;
+  font-size: clamp(13px, 1.8vh, 16px);
   line-height: 1.6;
-  margin-bottom: 25px;
+  margin-bottom: clamp(14px, 2.5vh, 25px);
 }
 
 .call-result .continue-btn {
@@ -258,20 +293,3 @@
   transform: translateY(-2px);
 }
 
-/* Responsive */
-@media (max-width: 400px) {
-  .phone-keypad {
-    width: 280px;
-    padding: 16px;
-  }
-
-  .keypad-digit {
-    width: 60px;
-    height: 60px;
-    font-size: 24px;
-  }
-
-  .dialed-number {
-    font-size: 26px;
-  }
-}
