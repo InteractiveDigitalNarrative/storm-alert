@@ -316,13 +316,14 @@
 }
 
 .prep-choice-desc {
-  font-size: 10pt;
+  font-size: 11pt;
   font-weight: 400;
   color: #9a7030;
   text-transform: none;
   letter-spacing: 0;
-  line-height: 1.4;
+  line-height: 1.5;
   display: block;
+  opacity: 1;
 }
 
 .prep-choice-card:hover .prep-choice-desc {
