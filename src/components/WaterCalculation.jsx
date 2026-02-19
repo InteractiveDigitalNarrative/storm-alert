@@ -111,7 +111,7 @@ function WaterCalculation({ onClose }) {
               </p>
 
               <div className="wc-note-reminder">
-                📝 <strong>Write this down</strong> — you may need this formula later in the game.
+                🗒️ <strong>Write this down</strong> — you may need this formula later in the game.
               </div>
             </div>
 

@@ -944,7 +944,7 @@ function InkStory({ onReturnToMenu }) {
               </p>
               <p>Stay indoors. Conserve phone battery. Check on elderly neighbors if safe to do so.</p>
               <p className="broadcast-static">[STATIC CRACKLE]</p>
-              <p className="broadcast-hint">📝 Write these numbers down — you may need them later.</p>
+              <p className="broadcast-hint">🗒️ Write these numbers down — you may need them later.</p>
             </div>
             <button className="broadcast-close-btn" onClick={handleRadioBroadcastClose}>
               Continue
