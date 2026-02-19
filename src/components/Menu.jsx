@@ -1,4 +1,4 @@
-// Menu.jsx - Main menu component for Critical Hours game
+// Menu.jsx - Main menu component for Storm Alert game
 
 // STEP 1: IMPORTS
 // Import React and the useState hook (for managing state)
@@ -54,7 +54,7 @@ function Menu({ onStartGame, onContinueGame, hasSavedGame }) {
           {/* HEADER SECTION */}
           <div className="menu-header">
             <div className="emergency-badge">EMERGENCY PROTOCOL</div>
-            <h1 className="menu-title">CRITICAL HOURS</h1>
+            <h1 className="menu-title">STORM ALERT</h1>
             <p className="menu-subtitle">Disaster Management Simulation</p>
           </div>
 
@@ -99,7 +99,7 @@ function Menu({ onStartGame, onContinueGame, hasSavedGame }) {
             {/* Close button (X) */}
             <span className="close-modal" onClick={handleCloseAbout}>&times;</span>
 
-            <h2>About Critical Hours</h2>
+            <h2>About Storm Alert</h2>
             <p>
               In the critical hours after a disaster strikes, every decision matters.
               As an emergency response coordinator, you must manage resources, make tough choices,
