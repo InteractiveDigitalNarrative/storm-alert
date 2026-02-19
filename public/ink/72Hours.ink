@@ -67,7 +67,7 @@ VAR ending_type = ""
 === pen_and_paper ===
 # CLEAR
 
-<span style="font-size:4rem">✏️</span>
+<span style="font-size:4rem">🗒️</span>
 
 Grab a <b>pen and paper</b> — you'll need to note things down.
 
@@ -235,7 +235,7 @@ The storm could last up to 3 days.
 
 How much water do you need in total?
 
-<span class="note-hint">📝 Remember the formula — it could help later.</span>
+<span class="note-hint">🗒️ Remember the formula — it could help later.</span>
 
 + [9 liters]
     -> water_calc_wrong_low
@@ -1339,7 +1339,7 @@ Then grandmother calls out — weak, strained. She's dizzy. Her blood pressure f
 
 She needs medical attention. Not life-threatening, but she needs help. The roads are blocked.
 
-<span class="note-hint">📝 Check your notes — which number fits this situation?</span>
+<span class="note-hint">🗒️ Check your notes — which number fits this situation?</span>
 
 * [Get your phone]
     -> call_for_help
@@ -1358,7 +1358,7 @@ Grandmother needs help. Not a life-threatening emergency, but she needs medical 
     You never heard the emergency numbers. You'll have to guess or try to remember what they might be...
 }
 
-<span class="note-hint">📝 Check your notes — which number fits this situation?</span>
+<span class="note-hint">🗒️ Check your notes — which number fits this situation?</span>
 
 What number do you dial?
 

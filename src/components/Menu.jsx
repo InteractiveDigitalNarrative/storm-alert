@@ -101,7 +101,7 @@ function Menu({ onStartGame, onContinueGame, hasSavedGame }) {
 
             <h2>About Storm Alert</h2>
             <p>
-              In the critical hours after a disaster strikes, every decision matters.
+              In Storm Alert, every decision matters.
               As an emergency response coordinator, you must manage resources, make tough choices,
               and save as many lives as possible.
             </p>
