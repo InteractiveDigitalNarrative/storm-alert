@@ -12,14 +12,14 @@ import CrisisScreen from './CrisisScreen';
 
 // Prep hub choice metadata — icon, description, and the Ink variable to check for completion
 const PREP_CHOICE_META = {
-  water:      { icon: '💧', description: 'Secure safe drinking water before the storm hits.',  gameVar: 'prep_water' },
-  food:       { icon: '🍞', description: 'Stock non-perishable food to sustain your household.', gameVar: 'prep_food' },
-  heat:       { icon: '🔥', description: 'Prepare heating solutions in case power fails.',       gameVar: 'prep_heat' },
-  light:      { icon: '🔦', description: 'Ensure you can see when electricity goes out.',        gameVar: 'prep_light' },
-  info:       { icon: '📻', description: 'Stay informed using a battery-powered radio.',         gameVar: 'prep_info' },
-  radio:      { icon: '📻', description: 'Stay informed using a battery-powered radio.',         gameVar: 'prep_info' },
-  medication: { icon: '💊', description: 'Keep essential medicines safely within reach.',        gameVar: 'prep_medication' },
-  meds:       { icon: '💊', description: 'Keep essential medicines safely within reach.',        gameVar: 'prep_medication' },
+  water:      { icon: '💧', description: 'The taps are still running — but if the power goes out, the electric pump stops. Fill containers now before you lose access.', gameVar: 'prep_water' },
+  food:       { icon: '🍞', description: 'The fridge will stop working when the power cuts. Stock up on canned goods and dry food that doesn\'t need cooking or refrigeration.', gameVar: 'prep_food' },
+  heat:       { icon: '🔥', description: 'Central heating runs on electricity. If the grid fails, temperatures will drop fast — especially at night. Have a backup heat source ready.', gameVar: 'prep_heat' },
+  light:      { icon: '🔦', description: 'When the lights go out, your phone becomes your only torch — and it drains fast. A flashlight with spare batteries keeps you safe without burning your battery.', gameVar: 'prep_light' },
+  info:       { icon: '📻', description: 'The internet and mobile networks may go down. A battery-powered radio is the only reliable way to receive emergency broadcasts and official updates.', gameVar: 'prep_info' },
+  radio:      { icon: '📻', description: 'The internet and mobile networks may go down. A battery-powered radio is the only reliable way to receive emergency broadcasts and official updates.', gameVar: 'prep_info' },
+  medication: { icon: '💊', description: 'Pharmacies may close and roads may be impassable. If anyone in your household depends on regular medication, make sure you have enough to last the storm.', gameVar: 'prep_medication' },
+  meds:       { icon: '💊', description: 'Pharmacies may close and roads may be impassable. If anyone in your household depends on regular medication, make sure you have enough to last the storm.', gameVar: 'prep_medication' },
   shop:       { icon: '🛒', description: 'Buy water, food, and batteries at the grocery store.' },
   store:      { icon: '🛒', description: 'Buy water, food, and batteries at the grocery store.' },
   done:       { icon: '✅', description: 'Stop preparing and face the oncoming storm.' },

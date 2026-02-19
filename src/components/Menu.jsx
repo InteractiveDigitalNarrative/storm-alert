@@ -55,7 +55,7 @@ function Menu({ onStartGame, onContinueGame, hasSavedGame }) {
           <div className="menu-header">
             <div className="emergency-badge">EMERGENCY PROTOCOL</div>
             <h1 className="menu-title">STORM ALERT</h1>
-            <p className="menu-subtitle">Disaster Management Simulation</p>
+            <p className="menu-subtitle">Crisis Management Simulation</p>
           </div>
 
           {/* BUTTONS SECTION */}
