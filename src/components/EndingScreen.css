@@ -12,7 +12,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  z-index: 2000;
+  z-index: 3000;
   overflow-y: auto;
   animation: ending-fade-in 0.6s ease;
   backdrop-filter: blur(10px);

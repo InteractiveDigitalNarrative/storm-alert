@@ -1,4 +1,7 @@
 :root {
+  --top-bar-height: 60px;
+  --bottom-bar-height: 60px;
+
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;

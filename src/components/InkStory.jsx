@@ -633,7 +633,6 @@ function InkStory({ onReturnToMenu }) {
   // Add extra padding when time bar is visible
   const containerStyle = {
     ...(background ? { backgroundImage: `url(${background})` } : {}),
-    ...(gameVars.in_preparation ? { paddingTop: '140px' } : {}),
   };
 
   // List of preparation categories with their icons and labels
