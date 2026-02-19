@@ -239,8 +239,13 @@
 }
 
 /* Prep hub wrapper: widen to fit the grid */
+.ink-story-container.prep-hub-container {
+  align-items: flex-start;
+}
+
 .story-wrapper.prep-hub-mode {
   max-width: 860px;
+  margin: auto;
 }
 
 .prep-choices-grid {
@@ -328,6 +333,32 @@
 
 .prep-choice-card:hover .prep-choice-desc {
   color: #b88840;
+}
+
+.prep-choice-time {
+  font-size: 9pt;
+  font-weight: 600;
+  color: #7a6020;
+  background: rgba(185, 124, 44, 0.12);
+  border: 1px solid rgba(185, 124, 44, 0.25);
+  border-radius: 6px;
+  padding: 2px 8px;
+  letter-spacing: 0.5px;
+  text-transform: none;
+  display: inline-block;
+  margin-top: 2px;
+}
+
+.prep-choice-card:hover .prep-choice-time {
+  color: #a07830;
+  background: rgba(185, 124, 44, 0.2);
+}
+
+.prep-action-time {
+  font-size: 10pt;
+  font-weight: 500;
+  opacity: 0.7;
+  margin-left: 8px;
 }
 
 /* Done state — green card with tick */
@@ -430,6 +461,16 @@
    ============================================ */
 
 /* Wrapper that stacks grid + shop + done vertically */
+/* Prep hub header — no scroll, no height cap, no fade overlay */
+.story-content-fixed {
+  overflow-y: visible;
+  max-height: none;
+}
+
+.story-content-fixed::after {
+  display: none;
+}
+
 .prep-hub-layout {
   display: flex;
   flex-direction: column;
