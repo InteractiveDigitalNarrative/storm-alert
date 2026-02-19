@@ -77,8 +77,8 @@ function WaterCalculation({ onClose }) {
 
             <div className="wc-info-block">
               <p className="wc-text">
-                Emergency guidelines recommend storing <strong>2 litres</strong> of water
-                per person per day — covering drinking, cooking, and basic hygiene.
+                Emergency guidelines recommend storing <strong>{L_PER_PERSON_DAY} litres</strong> of water
+                per person per day.
               </p>
 
               <div className="wc-formula-box">
