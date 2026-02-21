@@ -78,6 +78,8 @@ function InkStory({ onReturnToMenu }) {
   const [showStore, setShowStore] = useState(false);
   // True when the store was opened via the injected "Go to Shop" button (not from an Ink tag)
   const [storeOpenedDirectly, setStoreOpenedDirectly] = useState(false);
+  // Live time cost preview while the store is open
+  const [liveStoreCost, setLiveStoreCost] = useState(0);
 
   // Prep hub: which card is expanded in accordion (mobile)
   const [expandedCard, setExpandedCard] = useState(null);
@@ -511,6 +513,7 @@ function InkStory({ onReturnToMenu }) {
 
   const handleStoreClose = (basketItems, timeCost = 0) => {
     setShowStore(false);
+    setLiveStoreCost(0);
     const story = storyRef.current;
     if (!story) return;
 
@@ -715,7 +718,7 @@ function InkStory({ onReturnToMenu }) {
       {/* Time Bar - visible during preparation phase */}
       {!!gameVars.in_preparation && (
         <TimeBar
-          currentTime={gameVars.current_time}
+          currentTime={gameVars.current_time + (showStore ? liveStoreCost : 0)}
           stormTime={gameVars.storm_time}
           startTime={gameVars.start_time}
         />
@@ -1026,6 +1029,7 @@ function InkStory({ onReturnToMenu }) {
           shopBatteries={storeOpenedDirectly ? true : gameVars.shop_batteries}
           shopWaterAmount={storeOpenedDirectly ? (gameVars.shop_water_amount || 10) : gameVars.shop_water_amount}
           onClose={handleStoreClose}
+          onTimeCostChange={setLiveStoreCost}
         />
       )}
 

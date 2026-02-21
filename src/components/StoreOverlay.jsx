@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import './StoreOverlay.css';
 
 const STORE_ITEMS = [
@@ -66,39 +66,53 @@ const shuffle = (arr) => {
   return a;
 };
 
-function StoreOverlay({ shopWater, shopFood, shopBatteries, shopWaterAmount, onClose }) {
+function StoreOverlay({ shopWater, shopFood, shopBatteries, shopWaterAmount, onClose, onTimeCostChange }) {
   const [showWarning, setShowWarning] = useState(true);
   const [basket, setBasket] = useState([]);
-  const [toast, setToast] = useState(null);
+  const [badClicks, setBadClicks] = useState([]);
+  const [expandedFeedback, setExpandedFeedback] = useState(null);
   const [shakingItem, setShakingItem] = useState(null);
 
   // Shuffle items once per store open — keeps order stable across re-renders
   const shuffledItems = useMemo(() => shuffle(STORE_ITEMS), []);
 
-  const showToast = useCallback((message, type) => {
-    setToast({ message, type });
-    setTimeout(() => setToast(null), 2500);
-  }, []);
-
   const handleItemClick = useCallback((item) => {
-    if (basket.includes(item.id)) return;
+    // Click again to collapse feedback
+    if (expandedFeedback === item.id) {
+      setExpandedFeedback(null);
+      return;
+    }
+
+    // Already in basket — allow toggling feedback for okay items
+    if (basket.includes(item.id)) {
+      if (item.feedback) setExpandedFeedback(item.id);
+      return;
+    }
 
     if (item.quality === 'bad') {
       setShakingItem(item.id);
-      showToast(item.feedback, 'bad');
       setTimeout(() => setShakingItem(null), 500);
+      setBadClicks(prev => prev.includes(item.id) ? prev : [...prev, item.id]);
+      setExpandedFeedback(item.id);
       return;
     }
 
     if (item.quality === 'okay') {
-      showToast(item.feedback, 'okay');
+      setBasket(prev => [...prev, item.id]);
+      setExpandedFeedback(item.id);
+      return;
     }
 
+    // good items — just add
     setBasket(prev => [...prev, item.id]);
-  }, [basket, showToast]);
+  }, [basket, expandedFeedback]);
 
   const BASE_VISIT_COST = 20; // minutes to travel to the store and back
-  const timeCost = BASE_VISIT_COST + basket.length; // +1 minute per item
+  const timeCost = BASE_VISIT_COST + basket.length + badClicks.length; // +1 minute per item (good or bad)
+
+  useEffect(() => {
+    onTimeCostChange?.(timeCost);
+  }, [timeCost, onTimeCostChange]);
 
   const handleCheckout = () => onClose(basket, timeCost);
 
@@ -168,12 +182,14 @@ function StoreOverlay({ shopWater, shopFood, shopBatteries, shopWaterAmount, onC
 
                 <div className="store-items-grid">
                   {items.map(item => {
-                    const inBasket  = basket.includes(item.id);
-                    const isShaking = shakingItem === item.id;
+                    const inBasket   = basket.includes(item.id);
+                    const isShaking  = shakingItem === item.id;
+                    const isExpanded = expandedFeedback === item.id;
 
                     const selectedClass = inBasket
                       ? item.quality === 'okay' ? 'store-item-selected-okay' : 'store-item-selected'
                       : '';
+                    const expandedBadClass = isExpanded && item.quality === 'bad' ? 'store-item-expanded-bad' : '';
 
                     return (
                       <button
@@ -182,10 +198,11 @@ function StoreOverlay({ shopWater, shopFood, shopBatteries, shopWaterAmount, onC
                           'store-item',
                           `store-item-${item.quality}`,
                           selectedClass,
+                          expandedBadClass,
                           isShaking ? 'store-item-shake' : '',
                         ].join(' ')}
                         onClick={() => handleItemClick(item)}
-                        disabled={inBasket}
+                        disabled={inBasket && item.quality === 'good'}
                       >
                         <span className="store-item-emoji">{item.emoji}</span>
                         <span className="store-item-name">{item.name}</span>
@@ -193,6 +210,11 @@ function StoreOverlay({ shopWater, shopFood, shopBatteries, shopWaterAmount, onC
                         {inBasket && (
                           <span className={`store-item-check${item.quality === 'okay' ? ' store-item-check-okay' : ''}`}>
                             &#10003;
+                          </span>
+                        )}
+                        {isExpanded && item.feedback && (
+                          <span className={`store-item-feedback store-item-feedback-${item.quality}`}>
+                            {item.feedback}
                           </span>
                         )}
                       </button>
@@ -233,11 +255,6 @@ function StoreOverlay({ shopWater, shopFood, shopBatteries, shopWaterAmount, onC
         </button>
       </div>
 
-      {toast && (
-        <div className={`store-toast store-toast-${toast.type}`}>
-          {toast.message}
-        </div>
-      )}
     </div>
   );
 }
