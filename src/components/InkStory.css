@@ -970,38 +970,62 @@
   to { opacity: 1; }
 }
 
+/* Panel — mobile: fixed height, no scroll */
 .radio-broadcast {
   background: linear-gradient(145deg, #1a1a1a, #2d2d2d);
   border-radius: 20px;
-  padding: clamp(20px, 4vh, 40px) clamp(20px, 4vw, 40px);
+  padding: clamp(14px, 2vh, 36px) clamp(16px, 3vw, 36px);
   width: 100%;
-  max-width: 600px;
-  max-height: calc(100vh - var(--top-bar-height) - var(--bottom-bar-height));
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
-  text-align: center;
+  max-width: 560px;
+  /* Fill the space between the two bars exactly */
+  height: calc(100vh - var(--top-bar-height) - var(--bottom-bar-height) - 16px);
+  height: calc(100dvh - var(--top-bar-height) - var(--bottom-bar-height) - 16px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 1.8vh, 20px);
   border: 2px solid #444;
-  box-shadow:
-    0 0 60px rgba(255, 165, 0, 0.2),
-    inset 0 0 30px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 60px rgba(255, 165, 0, 0.2), inset 0 0 30px rgba(0, 0, 0, 0.5);
   margin: auto 0;
   box-sizing: border-box;
 }
 
-.radio-broadcast::-webkit-scrollbar {
-  width: 5px;
+/* Wide layout — two columns */
+@media (min-width: 640px) {
+  .radio-broadcast {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr auto;
+    align-items: start;
+    max-width: min(90vw, 960px);
+    /* Reset fixed height for wide screens — grid handles layout */
+    height: auto;
+    max-height: calc(100vh - var(--top-bar-height) - var(--bottom-bar-height) - 16px);
+    overflow: hidden;
+    gap: clamp(20px, 3vw, 40px);
+    padding: clamp(24px, 3vh, 40px) clamp(24px, 4vw, 48px);
+  }
+
+  .radio-broadcast-left  { grid-column: 1; grid-row: 1; }
+  .radio-broadcast-right { grid-column: 2; grid-row: 1; }
+  .broadcast-close-btn   { grid-column: 1 / -1; grid-row: 2; }
 }
 
-.radio-broadcast::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 3px;
+/* Left column — flex column; icon + title pinned, transcript box fills the rest */
+.radio-broadcast-left {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(6px, 1.2vh, 14px);
+  text-align: center;
+  flex: 1;
+  min-height: 0;
 }
 
 .radio-icon {
-  font-size: clamp(32px, 6vh, 60px);
-  margin-bottom: clamp(8px, 1.5vh, 15px);
+  font-size: clamp(28px, 4.5vh, 56px);
   animation: pulse 2s infinite;
+  display: block;
+  flex-shrink: 0;
 }
 
 @keyframes pulse {
@@ -1011,35 +1035,101 @@
 
 .radio-broadcast h3 {
   color: #ff9933;
-  font-size: clamp(16px, 2.5vh, 24px);
-  margin-bottom: clamp(12px, 2.5vh, 25px);
+  font-size: clamp(13px, 1.9vh, 22px);
+  margin: 0;
   text-transform: uppercase;
   letter-spacing: 3px;
+  flex-shrink: 0;
 }
 
+/* Broadcast transcript box — a designed scrollable zone */
 .broadcast-content {
   text-align: left;
   color: #ccc;
-  font-size: clamp(13px, 1.8vh, 16px);
-  line-height: 1.7;
+  font-size: clamp(12px, 1.6vh, 15px);
+  line-height: 1.65;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(5px, 1vh, 10px);
+  /* Scroll lives here, not in the panel */
+  flex: 1;
+  min-height: 0;
+  overflow-y: scroll;            /* always renders the track */
+  /* Visible track — makes the scroll area feel intentional */
+  scrollbar-width: auto;
+  scrollbar-color: rgba(255, 255, 255, 0.25) rgba(255, 255, 255, 0.05);
+  /* Terminal-style inset box */
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: clamp(8px, 1.2vh, 14px) clamp(10px, 1.5vw, 14px);
+  box-sizing: border-box;
 }
 
-.broadcast-content p {
-  margin-bottom: clamp(8px, 1.5vh, 15px);
-}
+.broadcast-content::-webkit-scrollbar { width: 6px; }
+.broadcast-content::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.04); border-radius: 3px; }
+.broadcast-content::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.22); border-radius: 3px; }
+
+.broadcast-content p { margin: 0; }
 
 .broadcast-static {
-  color: #666;
+  color: #555;
   font-style: italic;
   text-align: center;
+}
+
+/* Right column — numbers reference card, never shrinks */
+.radio-broadcast-right {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(6px, 1.2vh, 14px);
+  background: rgba(255, 153, 51, 0.04);
+  border: 1px solid rgba(255, 153, 51, 0.2);
+  border-radius: 14px;
+  padding: clamp(10px, 1.6vh, 22px) clamp(12px, 2vw, 20px);
+  flex-shrink: 0;
+}
+
+.broadcast-numbers-title {
+  color: #ff9933;
+  font-size: clamp(12px, 1.6vh, 14px);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin: 0 0 clamp(4px, 1vh, 8px);
+}
+
+.broadcast-number-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: clamp(5px, 0.8vh, 12px) clamp(8px, 1.2vw, 14px);
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.broadcast-number {
+  font-size: clamp(16px, 2.2vh, 22px);
+  font-weight: 700;
+  color: #ff4444;
+  font-family: 'Courier New', monospace;
+  min-width: clamp(44px, 6vw, 56px);
+  flex-shrink: 0;
+}
+
+.broadcast-number-desc {
+  font-size: clamp(11px, 1.4vh, 13px);
+  color: #aaa;
+  line-height: 1.3;
 }
 
 .broadcast-hint {
   text-align: center;
   color: #ffcc80;
   font-style: italic;
-  margin-top: 15px;
-  font-size: 0.9rem;
+  font-size: clamp(11px, 1.4vh, 13px);
+  margin-top: clamp(4px, 1vh, 8px);
   animation: hint-glow 2s ease-in-out infinite;
 }
 
@@ -1072,7 +1162,8 @@
 }
 
 .broadcast-close-btn {
-  margin-top: clamp(14px, 2.5vh, 25px);
+  flex-shrink: 0;
+  margin-top: 0;
   background: linear-gradient(145deg, #b97c2c, #8a5d21);
   border: none;
   color: #fff;
