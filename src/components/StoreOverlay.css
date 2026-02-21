@@ -277,11 +277,9 @@
 .store-item-selected-okay {
   border-color: #ffb74d !important;
   background: rgba(255, 183, 77, 0.12) !important;
-  cursor: default;
 }
 
-.store-item-selected:hover,
-.store-item-selected-okay:hover {
+.store-item-selected:hover {
   transform: none !important;
 }
 
@@ -293,6 +291,38 @@
 .store-item-bad:hover:not(:disabled) {
   opacity: 1;
   border-color: rgba(229, 57, 53, 0.4) !important;
+}
+
+/* Expanded bad item — red border */
+.store-item-expanded-bad {
+  border-color: #e53935 !important;
+  background: rgba(229, 57, 53, 0.1) !important;
+  opacity: 1;
+}
+
+/* Inline feedback text inside card */
+.store-item-feedback {
+  display: block;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 10px;
+  line-height: 1.4;
+  text-align: center;
+  animation: feedback-reveal 0.2s ease;
+}
+
+.store-item-feedback-bad {
+  color: #ef9a9a;
+}
+
+.store-item-feedback-okay {
+  color: #ffe0b2;
+}
+
+@keyframes feedback-reveal {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* Shake animation for bad items */
