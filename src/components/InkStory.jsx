@@ -79,6 +79,9 @@ function InkStory({ onReturnToMenu }) {
   // True when the store was opened via the injected "Go to Shop" button (not from an Ink tag)
   const [storeOpenedDirectly, setStoreOpenedDirectly] = useState(false);
 
+  // Prep hub: which card is expanded in accordion (mobile)
+  const [expandedCard, setExpandedCard] = useState(null);
+
   // Ending screen state
   const [showEndingScreen, setShowEndingScreen] = useState(false);
 
@@ -786,28 +789,67 @@ function InkStory({ onReturnToMenu }) {
                           }
                         };
 
+                        const isExpanded = expandedCard === index;
+                        const handleHeaderClick = () => {
+                          if (isLocked) return;
+                          // Mobile: toggle accordion. Wide: trigger action directly.
+                          if (window.innerWidth <= 639) {
+                            setExpandedCard(isExpanded ? null : index);
+                          } else {
+                            handleCardClick();
+                          }
+                        };
+
                         return (
-                          <button
+                          <div
                             key={index}
                             className={[
                               'prep-choice-card',
-                              isDone   ? 'prep-choice-done'   : '',
-                              isLocked ? 'prep-choice-locked' : '',
-                            ].join(' ')}
-                            onClick={handleCardClick}
-                            disabled={isLocked}
+                              isDone     ? 'prep-choice-done'     : '',
+                              isLocked   ? 'prep-choice-locked'   : '',
+                              isExpanded ? 'prep-choice-expanded' : '',
+                            ].filter(Boolean).join(' ')}
                           >
-                            <span className="prep-choice-icon">{meta.icon}</span>
-                            <span className="prep-choice-label">{stripEmoji(choice.text)}</span>
-                            {meta.description && (
-                              <span className="prep-choice-desc">{meta.description}</span>
-                            )}
-                            {meta.timeRange && (
-                              <span className="prep-choice-time">⏱ {meta.timeRange}</span>
-                            )}
-                            {isDone   && <span className="prep-choice-tick">✓</span>}
-                            {isLocked && <span className="prep-choice-lock">🔒</span>}
-                          </button>
+                            {/* Always-visible header row */}
+                            <div
+                              className="prep-card-header"
+                              onClick={handleHeaderClick}
+                              role={isLocked ? undefined : 'button'}
+                              tabIndex={isLocked ? -1 : 0}
+                              onKeyDown={(e) => {
+                                if ((e.key === 'Enter' || e.key === ' ') && !isLocked) {
+                                  e.preventDefault();
+                                  handleHeaderClick();
+                                }
+                              }}
+                            >
+                              <span className="prep-choice-icon">{meta.icon}</span>
+                              <div className="prep-card-header-text">
+                                <span className="prep-choice-label">{stripEmoji(choice.text)}</span>
+                                {meta.timeRange && (
+                                  <span className="prep-choice-time">⏱ {meta.timeRange}</span>
+                                )}
+                              </div>
+                              {isDone   && <span className="prep-choice-tick">✓</span>}
+                              {isLocked && <span className="prep-choice-lock">🔒</span>}
+                              {!isDone && !isLocked && <span className="prep-card-chevron" />}
+                            </div>
+
+                            {/* Expandable body: description + action */}
+                            <div className="prep-card-body">
+                              {meta.description && (
+                                <p className="prep-choice-desc">{meta.description}</p>
+                              )}
+                              {!isDone && !isLocked && (
+                                <button className="prep-card-prepare-btn" onClick={handleCardClick}>
+                                  Prepare
+                                </button>
+                              )}
+                              {isDone && (
+                                <p className="prep-card-done-msg">✓ Already prepared</p>
+                              )}
+                            </div>
+                          </div>
                         );
                       })}
                   </div>
