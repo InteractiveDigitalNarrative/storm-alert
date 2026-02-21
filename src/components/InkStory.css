@@ -244,7 +244,7 @@
 }
 
 .story-wrapper.prep-hub-mode {
-  max-width: 860px;
+  max-width: min(95vw, 1200px);
   margin: auto;
 }
 
@@ -259,20 +259,69 @@
 .prep-choice-card {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   text-align: center;
-  padding: 24px 16px 20px;
-  gap: 8px;
+  padding: 0;
+  gap: 0;
   background: linear-gradient(145deg, rgba(185, 124, 44, 0.12), rgba(185, 124, 44, 0.06));
   border: 1px solid rgba(185, 124, 44, 0.4);
   border-radius: 12px;
   color: #d4a54a;
-  cursor: pointer;
+  cursor: default;
   transition: all 0.25s ease;
   font-family: inherit;
   position: relative;
   overflow: hidden;
 }
+
+/* ── Card header (wide: column-flex centred, mobile: row) ── */
+.prep-card-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 14px 8px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.prep-card-header-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  width: 100%;
+}
+
+/* Chevron hidden on wide */
+.prep-card-chevron { display: none; }
+
+/* ── Card body (wide: always visible, centred) ── */
+.prep-card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 0 14px 12px;
+  text-align: center;
+}
+
+/* Prepare button — mobile accordion only */
+.prep-card-prepare-btn { display: none; }
+
+.prep-card-prepare-btn:hover {
+  background: linear-gradient(145deg, rgba(185, 124, 44, 0.45), rgba(185, 124, 44, 0.28));
+  border-color: #ff9933;
+  color: #ffc060;
+  transform: translateY(-1px);
+}
+
+.prep-card-prepare-btn:active {
+  transform: translateY(0);
+}
+
+/* Done message — mobile accordion only */
+.prep-card-done-msg { display: none; }
 
 .prep-choice-card::before {
   content: '';
@@ -289,21 +338,12 @@
   left: 100%;
 }
 
-.prep-choice-card:hover {
-  background: linear-gradient(145deg, rgba(185, 124, 44, 0.25), rgba(185, 124, 44, 0.12));
-  border-color: #ff9933;
-  color: #ffb347;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 20px rgba(185, 124, 44, 0.2);
+.prep-card-header:hover {
+  background: rgba(185, 124, 44, 0.07);
 }
 
-.prep-choice-card:active {
-  transform: translateY(0);
-  box-shadow: none;
-}
-
-.prep-choice-card:focus {
-  outline: none;
+.prep-choice-card:has(.prep-card-header:hover) {
+  border-color: rgba(185, 124, 44, 0.65);
 }
 
 .prep-choice-icon {
@@ -383,7 +423,7 @@
   color: #62b878;
 }
 
-/* Tick badge in the top-right corner */
+/* Tick badge — absolute on wide, inline on mobile */
 .prep-choice-tick {
   position: absolute;
   top: 7px;
@@ -400,6 +440,7 @@
   align-items: center;
   justify-content: center;
   line-height: 1;
+  flex-shrink: 0;
 }
 
 /* Locked state — when storm has arrived */
@@ -482,7 +523,7 @@
 /* Shared base for shop and done standalone buttons */
 .prep-action-btn {
   width: 100%;
-  padding: 14px 24px;
+  padding: 11px 24px;
   font-size: 12pt;
   font-weight: 700;
   text-transform: uppercase;
@@ -1186,6 +1227,141 @@
 /* ============================================
    MOBILE RESPONSIVE
    ============================================ */
+
+/* ============================================
+   MOBILE ACCORDION (portrait / narrow screens)
+   ============================================ */
+
+@media (max-width: 639px) {
+  /* Grid becomes a vertical stack */
+  .prep-choices-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  /* Card: full-width row-based */
+  .prep-choice-card {
+    border-radius: 10px;
+    text-align: left;
+  }
+
+  /* Header: horizontal row */
+  .prep-card-header {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 14px;
+    text-align: left;
+  }
+
+  .prep-choice-icon {
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+
+  /* Text group fills available width */
+  .prep-card-header-text {
+    flex: 1;
+    min-width: 0;
+    align-items: flex-start;
+    gap: 3px;
+  }
+
+  .prep-choice-label {
+    font-size: 11pt;
+    text-align: left;
+  }
+
+  .prep-choice-time {
+    font-size: 8.5pt;
+    margin-top: 0;
+  }
+
+  /* Chevron: CSS triangle, rotates when expanded */
+  .prep-card-chevron {
+    display: block;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid rgba(185, 124, 44, 0.65);
+    flex-shrink: 0;
+    transition: transform 0.25s ease;
+    margin-top: 2px;
+  }
+
+  .prep-choice-expanded .prep-card-chevron {
+    transform: rotate(180deg);
+  }
+
+  /* Tick and lock inline in row (not absolute) */
+  .prep-choice-tick,
+  .prep-choice-lock {
+    position: static;
+    flex-shrink: 0;
+  }
+
+  /* Body: hidden by default, revealed when expanded */
+  .prep-card-body {
+    display: none;
+    padding: 10px 14px 14px;
+    align-items: stretch;
+    gap: 10px;
+    text-align: left;
+    border-top: 1px solid rgba(185, 124, 44, 0.2);
+  }
+
+  .prep-choice-expanded .prep-card-body {
+    display: flex;
+  }
+
+  .prep-choice-desc {
+    font-size: 10pt;
+    line-height: 1.5;
+    padding-top: 2px;
+    margin: 0;
+  }
+
+  .prep-card-prepare-btn {
+    display: block;
+    width: 100%;
+    padding: 10px 16px;
+    background: linear-gradient(145deg, rgba(185, 124, 44, 0.28), rgba(185, 124, 44, 0.16));
+    border: 1px solid rgba(185, 124, 44, 0.55);
+    border-radius: 8px;
+    color: #ffb347;
+    font-size: 10pt;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    margin-top: 2px;
+  }
+
+  .prep-card-prepare-btn:hover {
+    background: linear-gradient(145deg, rgba(185, 124, 44, 0.45), rgba(185, 124, 44, 0.28));
+    border-color: #ff9933;
+    color: #ffc060;
+    transform: translateY(-1px);
+  }
+
+  .prep-card-prepare-btn:active {
+    transform: translateY(0);
+  }
+
+  .prep-card-done-msg {
+    display: block;
+    font-size: 10pt;
+    color: #72d48a;
+    font-style: italic;
+    margin: 0;
+    padding-top: 2px;
+  }
+}
 
 @media (max-width: 768px) {
   .ink-story-container {
