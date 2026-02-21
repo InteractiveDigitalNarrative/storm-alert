@@ -926,31 +926,47 @@ function InkStory({ onReturnToMenu }) {
       {showRadioBroadcast && (
         <div className="radio-broadcast-overlay">
           <div className="radio-broadcast">
-            <div className="radio-icon">📻</div>
-            <h3>Emergency Broadcast</h3>
-            <div className="broadcast-content">
-              <p className="broadcast-static">[STATIC CRACKLE]</p>
-              <p>This is an emergency broadcast from the National Crisis Center.</p>
-              <p>A severe storm is affecting coastal regions. Power outages have been reported across multiple districts.</p>
-              <p className="broadcast-numbers">
-                <strong>Life-threatening emergency: <span className="number">1-1-2</span></strong>
-              </p>
-              <p className="broadcast-numbers">
-                <strong>Family doctor / health advice: <span className="number">1-2-2-0</span></strong>
-              </p>
-              <p className="broadcast-numbers">
-                <strong>Rescue coordination: <span className="number">1-2-4-7</span></strong>
-              </p>
-              <p className="broadcast-numbers">
-                <strong>Power outage reporting: <span className="number">1-3-4-3</span></strong>
-              </p>
-              <p>Stay indoors. Conserve phone battery. Check on elderly neighbors if safe to do so.</p>
-              <p className="broadcast-static">[STATIC CRACKLE]</p>
+
+            {/* ── Left: broadcast narrative ── */}
+            <div className="radio-broadcast-left">
+              <div className="radio-icon">📻</div>
+              <h3>Emergency Broadcast</h3>
+              <div className="broadcast-content">
+                <p className="broadcast-static">[STATIC CRACKLE]</p>
+                <p>This is an emergency broadcast from the National Crisis Center.</p>
+                <p>A severe storm is affecting coastal regions. Power outages have been reported across multiple districts.</p>
+                <p>Stay indoors. Conserve phone battery. Check on elderly neighbors if safe to do so.</p>
+                <p className="broadcast-static">[STATIC CRACKLE]</p>
+              </div>
+            </div>
+
+            {/* ── Right: emergency numbers reference ── */}
+            <div className="radio-broadcast-right">
+              <h4 className="broadcast-numbers-title">Emergency Numbers</h4>
+              <div className="broadcast-number-item">
+                <span className="broadcast-number">112</span>
+                <span className="broadcast-number-desc">Life-threatening emergency</span>
+              </div>
+              <div className="broadcast-number-item">
+                <span className="broadcast-number">1220</span>
+                <span className="broadcast-number-desc">Family doctor / health advice</span>
+              </div>
+              <div className="broadcast-number-item">
+                <span className="broadcast-number">1247</span>
+                <span className="broadcast-number-desc">Rescue coordination</span>
+              </div>
+              <div className="broadcast-number-item">
+                <span className="broadcast-number">1343</span>
+                <span className="broadcast-number-desc">Power outage reporting</span>
+              </div>
               <p className="broadcast-hint">🗒️ Write these numbers down — you may need them later.</p>
             </div>
+
+            {/* ── Button spans full width ── */}
             <button className="broadcast-close-btn" onClick={handleRadioBroadcastClose}>
               Continue
             </button>
+
           </div>
         </div>
       )}
