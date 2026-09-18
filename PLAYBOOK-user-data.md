@@ -78,13 +78,17 @@ What a uni-server move would still need rewritten:
 - Security rules on every table before any data arrives.
 
 ## Tables (planned)
+Built in step 7 → [db/README.md](db/README.md) · [db/schema.sql](db/schema.sql)
+
 | Table | One row per | Key fields |
 |---|---|---|
-| `profiles` | player | age bracket, gender, created |
-| `consents` | consent given | version, research, analytics, given/withdrawn |
-| `sessions` | playthrough | start, end, language, device class, game version |
-| `events` | choice/screen | type, screen, small payload, time |
-| `results` | finished game | prep scores, total, call score, ending, household, pre/post rating |
+| `players` | player | random id, created |
+| `consents` | consent answer | version, given, given/withdrawn |
+| `profiles` | player | age, gender, prep before, feel before |
+| `sessions` | playthrough | playthrough no., start, end, language, device class, version |
+| `households` | playthrough | family size, elderly/children, building, heating |
+| `events` | screen/choice/resume | type, screen id, small payload, t_ms |
+| `results` | finished game | prep scores, total, call score, ending, feel after |
 
 ## Steps
 Each: **creates / changes / spends**. Phase A = backend-free. Phase B = Supabase (≈30% rewrite if uni server chosen).
@@ -125,6 +129,7 @@ Each: **creates / changes / spends**. Phase A = backend-free. Phase B = Supabase
     - Spends: free tier (€0)
 12. **Supabase adapter**
     - Also: send last batch on page close (O15)
+    - Also: drop/park rows the server rejects for good (O16)
     - Creates: `src/lib/data/supabaseAdapter.js`, `.env.local` (git-ignored)
     - Changes: `package.json` (+ `@supabase/supabase-js`), `.github/workflows/deploy.yml`, GitHub secrets
 13. **Account screen (magic link, 18+ gate)**

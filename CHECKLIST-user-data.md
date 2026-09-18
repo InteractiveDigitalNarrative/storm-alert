@@ -7,11 +7,11 @@ New session? Say: **"Resume user data work — read CHECKLIST-user-data.md"**
 
 | Item | Value |
 |---|---|
-| Next step | 7 — Portable table design (after step 6 review) |
+| Next step | 8 — Create Supabase EU project (after step 7 review) — Phase B |
 | Last updated | 2026-09-18 |
 | Branch | `feature/user-data` |
 | Blockers | none |
-| Open items | 15 (3 done) — see "Open items" below |
+| Open items | 16 (4 done) — see "Open items" below |
 
 **How we work (grill-me gate)**
 1. Dev says what the step creates / changes / spends.
@@ -48,6 +48,7 @@ New session? Say: **"Resume user data work — read CHECKLIST-user-data.md"**
 | 2026-09-18 | Step 5 committed (`6052312`). Step 6: post-rating before ending; result saved (scores + rating); pre/post mismatch flagged (O14) | Review step 6 → step 7 |
 | 2026-09-18 | O14 fixed: "feel prepared" question added to start survey. Dev shortcuts page. ✅ ticks | Review step 6 → step 7 |
 | 2026-09-18 | Mid-game quit: `resume` event on Continue; quit handling documented; O15 logged for step 12 | Review step 6 → step 7 |
+| 2026-09-18 | Step 6 committed (`bc31f20`). Step 7: portable schema, 7 tables, tested in real Postgres; O13 closed; O16 logged. Phase A complete | Review step 7 → Phase B |
 
 
 Status: TODO / IN PROGRESS / ✅ DONE / BLOCKED
@@ -63,7 +64,7 @@ Rules: branch `feature/user-data` · `collectionEnabled: false` · test data onl
 | 4 | Save demographics + household | ✅ DONE | browser 11/11, unit 15/15, build OK; relative name excluded; survey once; household pre-fill | yes (2026-09-18) |
 | 5 | Event logger + offline queue | ✅ DONE | unit 22/22, browser 17/17, device class phone/tablet OK, build OK | yes (2026-09-18) |
 | 6 | End summary + post rating | ✅ DONE | browser 10/10 (EN/ET, phone, skip, no-consent), regressions OK, build OK; O14 feel question; resume event | yes (2026-09-18) |
-| 7 | Portable table design | TODO | | |
+| 7 | Portable table design | ✅ DONE | `db/schema.sql`; real Postgres 18.3 (PGlite) 21/21 | yes (2026-09-18) |
 
 ## Phase B — backend
 | # | Step | Status | Evidence | Approved |
@@ -96,9 +97,10 @@ Found while building. Close before merge unless noted.
 | O10 | Pre-existing lint errors: `App.jsx:35`, `InkStory.jsx` (7), `FamilySetup.jsx:49` | 3 | Dev | Fixed or accepted (not ours) | OPEN |
 | O11 | Publish full privacy notice (EN + ET) + link it | 3 | team + Dev | Hosted (uni site or in-game page); `privacyNoticeUrl` set in config; link visible on consent screen | OPEN |
 | O12 | Privacy notice reachable anytime (not only consent) | 3 | Dev | Menu link added (with step 13/14 menu work) | OPEN |
-| O13 | Household: one per player or per playthrough? | 4 | Dev | Decided: per playthrough. Apply in step 7 tables | OPEN |
+| O13 | Household: one per player or per playthrough? | 4 | Dev | Decided: per playthrough. Apply in step 7 tables | ✅ DONE (`households` keyed by session) |
 | O14 | Start question = past behaviour; end = feeling → not a true pre/post pair | 6 | Dev | Added matching "feel" question to start survey (`feel_prepared_before`) | ✅ DONE (team to confirm wording) |
 | O15 | Unsent events lost if tab closes and player never returns (backend only) | 6 | Dev | Step 12: send last batch on page close (`keepalive` / `sendBeacon`) | OPEN |
+| O16 | Queue blocks if server rejects a row for good (bad value, no session) | 7 | Dev | Step 12 adapter: drop/park permanent errors (4xx), retry only temporary ones | OPEN |
 
 ## Questions for co-workers
 Full doc + answers: [QUESTIONS-user-data.md](QUESTIONS-user-data.md) (Q1–Q10)
@@ -108,6 +110,6 @@ Full doc + answers: [QUESTIONS-user-data.md](QUESTIONS-user-data.md) (Q1–Q10)
 |---|---|
 | Team answered Q1–Q10 | |
 | Built steps adjusted to answers | |
-| Open items O1–O15 closed or accepted | |
+| Open items O1–O16 closed or accepted | |
 | Ethics approval received | |
 | `collectionEnabled` turned on | |

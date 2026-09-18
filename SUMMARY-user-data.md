@@ -5,7 +5,7 @@
 Last updated: 2026-09-18 · Branch: `feature/user-data` · Nothing live, nothing sent anywhere
 
 ## Big picture
-- Phase A (no backend): **6 of 7 steps done**
+- Phase A (no backend): **✅ all 7 steps done**
 - Phase B (Supabase): not started
 - Master switch `collectionEnabled: false` → all data stays on the device
 - Not on `main` → the live game is unchanged
@@ -18,7 +18,8 @@ Last updated: 2026-09-18 · Branch: `feature/user-data` · Nothing live, nothing
 | ✅ 3 | Consent screen (EN + ET) | `3c89d11` |
 | ✅ 4 | Survey + household saved; survey once; household pre-fill | `d7660b5` |
 | ✅ 5 | Events, sessions, offline queue | `6052312` |
-| ✅ 6 | Post-game rating (before results) + result saved | STEP6SHA |
+| ✅ 6 | Post-game rating (before results) + result saved | `bc31f20` |
+| ✅ 7 | Portable database design (7 tables, plain Postgres) | STEP7SHA |
 
 ## How it works now
 1. Player picks a language.
@@ -61,9 +62,11 @@ Last updated: 2026-09-18 · Branch: `feature/user-data` · Nothing live, nothing
 - Ethics approval
 - Team OK on the new "feel prepared" start question
 
-Open items: 15 (3 done) → see checklist.
+Open items: 16 (4 done) → see checklist.
 
 ## Next
 | Step | What |
 |---|---|
-| 7 | Portable table design |
+| 8 | Create Supabase EU project (you click, I guide) |
+| 9 | Lock down access (2FA) |
+| 10 | Tables + security rules + tests |
