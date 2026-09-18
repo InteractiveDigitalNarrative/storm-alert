@@ -7,9 +7,9 @@ New session? Say: **"Resume user data work — read CHECKLIST-user-data.md"**
 
 | Item | Value |
 |---|---|
-| Next step | 2 — Data layer + config + local adapter (after step 1 review) |
+| Next step | 3 — Consent screen (after step 2 review) |
 | Last updated | 2026-09-18 |
-| Branch | `feature/user-data` (not created yet — step 2) |
+| Branch | `feature/user-data` |
 | Blockers | none |
 
 **How we work (grill-me gate)**
@@ -37,6 +37,7 @@ New session? Say: **"Resume user data work — read CHECKLIST-user-data.md"**
 |---|---|---|
 | 2026-09-18 | Interview, playbook, checklist, team questions | Step 1 |
 | 2026-09-18 | Step 1: privacy notice + data summary drafts; relative-name free text flagged as never-collect | Review step 1 → step 2 |
+| 2026-09-18 | Step 1 committed (`3c80b47`). Step 2: data layer, allow-list filter, consent gate, local adapter | Review step 2 → step 3 |
 
 
 Status: TODO / IN PROGRESS / DONE / BLOCKED
@@ -47,7 +48,7 @@ Rules: branch `feature/user-data` · `collectionEnabled: false` · test data onl
 | # | Step | Status | Evidence | Approved |
 |---|---|---|---|---|
 | 1 | Privacy docs draft | DONE | `docs/data/privacy-notice.md`, `docs/data/data-summary.md` | yes (2026-09-18) |
-| 2 | Data layer + config + local adapter | TODO | | |
+| 2 | Data layer + config + local adapter | DONE | `src/lib/data/`; smoke test 10/10, lint, build OK | yes (2026-09-18) |
 | 3 | Consent screen | TODO | | |
 | 4 | Save demographics + household | TODO | | |
 | 5 | Event logger + offline queue | TODO | | |
