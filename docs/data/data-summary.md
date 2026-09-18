@@ -27,7 +27,7 @@ Last updated: 2026-09-18
 3. Anonymous guest ID created (random, no personal info).
 4. Demographics + household answers saved.
 5. Game choices + timing saved as events (queued on device, sent when online).
-6. End: scores + post-game self-rating saved.
+6. End: self-rating (before results) → scores + rating saved.
 7. Optional: player adds email → can log in on other devices.
 8. Researchers export data **without** emails.
 
@@ -39,7 +39,8 @@ Only collected after consent.
 |---|---|---|
 | Age bracket | under 18 … 65+ (7 brackets) | Compare groups |
 | Gender | male / female / non-binary / prefer not say | Compare groups |
-| Prep before | fully / somewhat / never | Baseline |
+| Prep before | fully / somewhat / never — *past behaviour* | Background |
+| Feel prepared before | fully / somewhat / not_at_all — *feeling* | Baseline (pairs with end) |
 
 Source: `src/components/Demography.jsx`
 
@@ -59,7 +60,7 @@ Source: `src/components/Demography.jsx`
 |---|---|---|
 | Choices | Ink knot id + choice number (no text) | What players do |
 | Screen views | overlay name or Ink knot id | Where players go |
-| Timing | ms since playthrough start | Time per screen (gap between views) |
+| Timing | ms since playthrough start | Time per screen (gap between views; `resume` marks time away) |
 | Playthrough | number on this device (1, 2, 3…) | Separate first plays from replays |
 | Prep scores | water/food/heat/light/info/meds, 0–2 each | Learning outcome |
 | Call score + dialed number | number, 112/1220/1247/1343 | Emergency-number knowledge |
@@ -70,7 +71,10 @@ Source: Ink vars in `public/ink/72Hours.ink`, `src/components/EndingScreen.jsx`
 ### After game
 | Field | Values | Why |
 |---|---|---|
-| Prep after | fully / somewhat / never | Pre/post change |
+| Feel prepared after | fully / somewhat / not_at_all — *feeling* | Learning outcome |
+
+- Asked **before** the results screen, so scores can't sway it.
+- Pairs with "Feel prepared before": same wording, same scale.
 
 ### Technical
 | Field | Values | Why |
@@ -84,6 +88,16 @@ Source: Ink vars in `public/ink/72Hours.ink`, `src/components/EndingScreen.jsx`
 | Field | Stored where | Why |
 |---|---|---|
 | Email | Login system only, never game tables | Log in, cross-device |
+
+## 3b. Quitting mid-game
+| Case | What is kept |
+|---|---|
+| Quits, never returns | Session start + events up to last screen. No end time, no result |
+| Continues saved game later | Same session; `resume` event marks the gap (time away) |
+| Starts a new game instead | Old session stays unfinished; new session = next playthrough |
+
+- Unfinished = session with no end time → drop-out rate + drop-out point.
+- Same consent, retention and deletion rules as finished games.
 
 ## 4. Never collected
 - Names (player or relatives)

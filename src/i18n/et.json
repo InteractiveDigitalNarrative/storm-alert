@@ -20,7 +20,7 @@
     "collectLabel": "Kui nõustud, salvestame",
     "collect": [
       "Vanuserühma ja soo",
-      "Kui valmis end tunned, enne ja pärast mängu",
+      "Kui valmis oled ja end tunned, enne ja pärast mängu",
       "Leibkonna tüübi (ainult kategooriad)",
       "Sinu valikud, punktid ja aja mängus",
       "Mängu keele ja seadme tüübi (telefon / tahvel / arvuti)"
@@ -42,6 +42,18 @@
     "optional": "Jagamine on vabatahtlik. Mäng töötab mõlemal juhul samamoodi.",
     "yes": "Jah, jagan",
     "no": "Ei, aitäh"
+  },
+  "postRating": {
+    "title": "Enne tulemusi",
+    "subtitle": "Üks kiire küsimus meie uuringu jaoks.",
+    "question": "Kui valmis tunned end nüüd 72-tunniseks hädaolukorraks?",
+    "options": {
+      "fully": "Täiesti valmis",
+      "somewhat": "Mõnevõrra valmis",
+      "not_at_all": "Ei ole valmis"
+    },
+    "skip": "Jäta vahele",
+    "continue": "Näita tulemusi"
   },
   "demography": {
     "title": "Räägi meile endast",
@@ -65,6 +77,7 @@
       "prefer_not_say": "Eelistan mitte öelda"
     },
     "prepLabel": "Kas oled varem hädaolukorraks valmistunud?",
+    "feelLabel": "Kui valmis tunned end praegu 72-tunniseks hädaolukorraks?",
     "prepOptions": {
       "fully": "Jah, täielikult",
       "somewhat": "Mõnevõrra",

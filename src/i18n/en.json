@@ -20,7 +20,7 @@
     "collectLabel": "If you say yes, we save",
     "collect": [
       "Age group and gender",
-      "How prepared you feel, before and after",
+      "How prepared you are, and feel, before and after playing",
       "Household type (categories only)",
       "Your choices, scores and time in the game",
       "Game language and device type (phone / tablet / desktop)"
@@ -42,6 +42,18 @@
     "optional": "Sharing is optional. The game works the same either way.",
     "yes": "Yes, share",
     "no": "No, thanks"
+  },
+  "postRating": {
+    "title": "Before your results",
+    "subtitle": "One quick question for our research.",
+    "question": "How prepared do you feel now for a 72-hour emergency?",
+    "options": {
+      "fully": "Fully prepared",
+      "somewhat": "Somewhat prepared",
+      "not_at_all": "Not prepared"
+    },
+    "skip": "Skip",
+    "continue": "See my results"
   },
   "demography": {
     "title": "Tell us about you",
@@ -65,6 +77,7 @@
       "prefer_not_say": "Prefer not to say"
     },
     "prepLabel": "Have you prepared for an emergency before?",
+    "feelLabel": "How prepared do you feel right now for a 72-hour emergency?",
     "prepOptions": {
       "fully": "Yes, fully",
       "somewhat": "Somewhat",

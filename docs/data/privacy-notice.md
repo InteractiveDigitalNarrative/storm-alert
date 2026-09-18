@@ -42,7 +42,8 @@ Version: `consent-v0.1-draft` · Last updated: 2026-09-18
 |---|---|
 | Age bracket | 25–34 |
 | Gender | female / prefer not to say |
-| Preparedness before + after playing | somewhat → fully |
+| Past preparation | somewhat |
+| How prepared you feel, before + after playing | somewhat → fully |
 | Household type (categories only) | has elderly: yes; apartment |
 | Choices in the story | filled the bathtub |
 | Scores + ending | water 2/2, ending "good" |

@@ -199,6 +199,14 @@ export async function startSession({ language } = {}) {
   return session;
 }
 
+// Saved game continued. Same playthrough → same session, marked with a
+// `resume` event. No session on this device (e.g. data was deleted) → new one.
+export async function resumeSession({ language } = {}) {
+  if (!currentSession()) return startSession({ language });
+  await logEvent('resume', 'game');
+  return currentSession();
+}
+
 // Game reached an ending.
 export async function endSession() {
   const session = currentSession();

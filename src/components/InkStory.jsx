@@ -24,10 +24,11 @@ import LightNote from './LightNote';
 import FlashlightSearch from './FlashlightSearch';
 import RumorSort from './RumorSort';
 import CabinetCheck from './CabinetCheck';
+import PostRating from './PostRating';
 import { useAudioContext } from '../context/AudioContext';
 import { useTranslation } from '../hooks/useTranslation';
 import { useNotebook } from '../context/NotebookContext';
-import { saveHousehold, setLastHousehold, startSession, endSession, logEvent } from '../lib/data';
+import { saveHousehold, setLastHousehold, startSession, resumeSession, endSession, logEvent, hasConsent, saveResult } from '../lib/data';
 
 // localStorage key for the in-progress save (bump the suffix if the shape changes)
 export const SAVE_KEY = 'storm_save_v1';
@@ -285,6 +286,9 @@ function InkStory({ onReturnToMenu, resume = false }) {
   // Ending screen state
   const [showEndingScreen, setShowEndingScreen] = useState(false);
 
+  // Post-game self-rating, shown before the ending (consenting players only)
+  const [showPostRating, setShowPostRating] = useState(false);
+
   // Crisis screen state
   const [crisisPhase, setCrisisPhase] = useState(null); // 'night' or 'morning'
 
@@ -372,6 +376,7 @@ function InkStory({ onReturnToMenu, resume = false }) {
   // One research session per playthrough — guards against the story loader
   // running twice (React StrictMode re-runs mount effects in dev).
   const sessionStartedRef = useRef(false);
+  const resultSavedRef = useRef(false);
 
   // History stack for back button
   const historyRef = useRef([]);
@@ -491,6 +496,10 @@ function InkStory({ onReturnToMenu, resume = false }) {
                 continueStory();
                 setStoryText(save.text || []);
                 resumed = true;
+                if (!sessionStartedRef.current) {
+                  sessionStartedRef.current = true;
+                  resumeSession({ language }).catch(() => {});
+                }
               }
             } catch (e) {
               console.warn('Could not resume saved game:', e);
@@ -574,6 +583,7 @@ function InkStory({ onReturnToMenu, resume = false }) {
   // wins; otherwise the Ink knot. Logged on change; time per screen = gap
   // between consecutive screen_view events.
   const activeScreen = [
+    ['post_rating', showPostRating],
     ['ending', showEndingScreen],
     ['outcome', showOutcomeScreen],
     ['family_setup', showFamilySetup],
@@ -940,7 +950,10 @@ function InkStory({ onReturnToMenu, resume = false }) {
           console.log('Showing ending screen');
           readGameVars(story);
           endSession().catch(() => {});
-          setShowEndingScreen(true);
+          // Consenting players rate themselves first — before seeing scores.
+          hasConsent()
+            .then(yes => (yes ? setShowPostRating(true) : setShowEndingScreen(true)))
+            .catch(() => setShowEndingScreen(true));
           setStoryText(lines);
           setChoices([]);
           return;
@@ -1211,6 +1224,21 @@ function InkStory({ onReturnToMenu, resume = false }) {
 
     // Continue the story from where it paused to get the remaining text + choices
     continueStory();
+  };
+
+  // POST-RATING → save the playthrough's result, then show the ending.
+  // `rating` is null when skipped; the scores are saved either way.
+  const handlePostRatingDone = (rating) => {
+    setShowPostRating(false);
+    if (!resultSavedRef.current) {
+      resultSavedRef.current = true;
+      saveResult({
+        ...gameVars,
+        call_score: callScore,
+        feel_prepared_after: rating,
+      }).catch(() => {});
+    }
+    setShowEndingScreen(true);
   };
 
   // GO-CHECK (real-time walk-away) HANDLER
@@ -2010,6 +2038,9 @@ function InkStory({ onReturnToMenu, resume = false }) {
           if (showSleepFade) setSleepFadingOut(true);
         }} />
       )}
+
+      {/* Post-game self-rating — before the ending, so scores can't sway it */}
+      {showPostRating && <PostRating onDone={handlePostRatingDone} />}
 
       {/* Ending Screen Overlay */}
       {showEndingScreen && (

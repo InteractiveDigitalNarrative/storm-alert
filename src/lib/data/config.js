@@ -32,7 +32,7 @@ export const DATA_CONFIG = {
   // Allow-lists: only these fields ever leave a screen. Anything else (e.g. the
   // relative's free-text name) is dropped by the data layer.
   fields: {
-    profile: ['age', 'gender', 'prep_before'],
+    profile: ['age', 'gender', 'prep_before', 'feel_prepared_before'],
     session: [
       'playthrough', 'language', 'device_class', 'game_version',
       'started_at', 'ended_at', 'completed',
@@ -44,14 +44,16 @@ export const DATA_CONFIG = {
     result: [
       'prep_water', 'prep_food', 'prep_heat', 'prep_light', 'prep_info',
       'prep_medication', 'total_prep', 'call_score', 'dialed_number',
-      'call_outcome', 'ending_type', 'prep_after',
+      'call_outcome', 'ending_type', 'feel_prepared_after',
     ],
   },
 
   // Event types the logger accepts:
   //   screen_view — player now sees `screen` (overlay name or Ink knot)
   //   choice      — picked choice `index` at Ink knot `screen`
-  events: ['screen_view', 'choice'],
+  //   resume      — saved game continued; the gap before it is time away,
+  //                 not time on the previous screen
+  events: ['screen_view', 'choice', 'resume'],
 
   // Build id (git commit), set in vite.config.js; 'dev' when unknown.
   gameVersion: import.meta.env?.VITE_GAME_VERSION || 'dev',

@@ -7,18 +7,21 @@ const BASE_URL = import.meta.env.BASE_URL;
 const AGE_BRACKETS = ['under_18', '18_24', '25_34', '35_44', '45_54', '55_64', '65_plus'];
 const GENDERS = ['male', 'female', 'non_binary', 'prefer_not_say'];
 const PREP_LEVELS = ['fully', 'somewhat', 'never'];
+// Same scale + labels as the post-game question (PostRating) → true pre/post pair.
+const FEEL_LEVELS = ['fully', 'somewhat', 'not_at_all'];
 
 function Demography({ onSubmit, onSkip }) {
   const { t } = useTranslation();
   const [age, setAge] = useState('');
   const [gender, setGender] = useState('');
   const [prep, setPrep] = useState('');
+  const [feel, setFeel] = useState('');
 
-  const canContinue = age && gender && prep;
+  const canContinue = age && gender && prep && feel;
 
   const handleContinue = () => {
     if (!canContinue) return;
-    onSubmit({ age, gender, prep_before: prep });
+    onSubmit({ age, gender, prep_before: prep, feel_prepared_before: feel });
   };
 
   return (
@@ -79,6 +82,23 @@ function Demography({ onSubmit, onSkip }) {
                 onClick={() => setPrep(key)}
               >
                 {t(`demography.prepOptions.${key}`)}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* How prepared they feel now — pairs with the post-game question */}
+        <div className="demo-field">
+          <label className="demo-label">{t('demography.feelLabel')}</label>
+          <div className="demo-pills">
+            {FEEL_LEVELS.map((key) => (
+              <button
+                key={key}
+                type="button"
+                className={`demo-pill ${feel === key ? 'is-active' : ''}`}
+                onClick={() => setFeel(key)}
+              >
+                {t(`postRating.options.${key}`)}
               </button>
             ))}
           </div>

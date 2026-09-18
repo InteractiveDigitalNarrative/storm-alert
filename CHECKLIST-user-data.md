@@ -7,11 +7,11 @@ New session? Say: **"Resume user data work — read CHECKLIST-user-data.md"**
 
 | Item | Value |
 |---|---|
-| Next step | 6 — End summary + post rating (after step 5 review) |
+| Next step | 7 — Portable table design (after step 6 review) |
 | Last updated | 2026-09-18 |
 | Branch | `feature/user-data` |
 | Blockers | none |
-| Open items | 13 (2 done) — see "Open items" below |
+| Open items | 15 (3 done) — see "Open items" below |
 
 **How we work (grill-me gate)**
 1. Dev says what the step creates / changes / spends.
@@ -26,6 +26,7 @@ New session? Say: **"Resume user data work — read CHECKLIST-user-data.md"**
 | This file | Tracker + resume point |
 | [QUESTIONS-user-data.md](QUESTIONS-user-data.md) | Co-worker questions + answers |
 | [SUMMARY-user-data.md](SUMMARY-user-data.md) | What's built so far (short) |
+| [DEV-SHORTCUTS.md](DEV-SHORTCUTS.md) | Scene jump links + data reset snippets |
 
 **Key facts (no need to re-derive)**
 - Game = static site, GitHub Pages; push to `main` auto-deploys.
@@ -44,21 +45,24 @@ New session? Say: **"Resume user data work — read CHECKLIST-user-data.md"**
 | 2026-09-18 | Step 3 committed (`3c89d11`). Step 4: survey + household saved via data layer; home fields reset per playthrough | Review step 4 → step 5 |
 | 2026-09-18 | Step 4 extended: survey asked once; household pre-filled on replay (device only). Summary file added | Review step 4 → step 5 |
 | 2026-09-18 | Step 4 committed (`d7660b5`). Step 5: queue for all writes, sessions + playthrough no., screen/choice events, device class, game version. Fixed double session (StrictMode) | Review step 5 → step 6 |
+| 2026-09-18 | Step 5 committed (`6052312`). Step 6: post-rating before ending; result saved (scores + rating); pre/post mismatch flagged (O14) | Review step 6 → step 7 |
+| 2026-09-18 | O14 fixed: "feel prepared" question added to start survey. Dev shortcuts page. ✅ ticks | Review step 6 → step 7 |
+| 2026-09-18 | Mid-game quit: `resume` event on Continue; quit handling documented; O15 logged for step 12 | Review step 6 → step 7 |
 
 
-Status: TODO / IN PROGRESS / DONE / BLOCKED
+Status: TODO / IN PROGRESS / ✅ DONE / BLOCKED
 
 Rules: branch `feature/user-data` · `collectionEnabled: false` · test data only
 
 ## Phase A — backend-free
 | # | Step | Status | Evidence | Approved |
 |---|---|---|---|---|
-| 1 | Privacy docs draft | DONE | `docs/data/privacy-notice.md`, `docs/data/data-summary.md` | yes (2026-09-18) |
-| 2 | Data layer + config + local adapter | DONE | `src/lib/data/`; smoke test 10/10, lint, build OK | yes (2026-09-18) |
-| 3 | Consent screen | DONE | browser test 9/9 (EN/ET, phone), smoke OK, build OK; hidden privacy-notice link | yes (2026-09-18) |
-| 4 | Save demographics + household | DONE | browser 11/11, unit 15/15, build OK; relative name excluded; survey once; household pre-fill | yes (2026-09-18) |
-| 5 | Event logger + offline queue | DONE | unit 22/22, browser 17/17, device class phone/tablet OK, build OK | yes (2026-09-18) |
-| 6 | End summary + post rating | TODO | | |
+| 1 | Privacy docs draft | ✅ DONE | `docs/data/privacy-notice.md`, `docs/data/data-summary.md` | yes (2026-09-18) |
+| 2 | Data layer + config + local adapter | ✅ DONE | `src/lib/data/`; smoke test 10/10, lint, build OK | yes (2026-09-18) |
+| 3 | Consent screen | ✅ DONE | browser test 9/9 (EN/ET, phone), smoke OK, build OK; hidden privacy-notice link | yes (2026-09-18) |
+| 4 | Save demographics + household | ✅ DONE | browser 11/11, unit 15/15, build OK; relative name excluded; survey once; household pre-fill | yes (2026-09-18) |
+| 5 | Event logger + offline queue | ✅ DONE | unit 22/22, browser 17/17, device class phone/tablet OK, build OK | yes (2026-09-18) |
+| 6 | End summary + post rating | ✅ DONE | browser 10/10 (EN/ET, phone, skip, no-consent), regressions OK, build OK; O14 feel question; resume event | yes (2026-09-18) |
 | 7 | Portable table design | TODO | | |
 
 ## Phase B — backend
@@ -87,12 +91,14 @@ Found while building. Close before merge unless noted.
 | O5 | Resend region + transfer safeguards | 1 | team (Q9) | Region/DPA confirmed | OPEN |
 | O6 | Hosting logs (GitHub Pages, Supabase) retention | 1 | Dev + team | Checked; notice updated | OPEN |
 | O7 | `[[TBD]]` fields in privacy docs | 1 | team (Q5–Q10) | No `[[TBD]]` left in `docs/data/` | OPEN |
-| O8 | Relative's free-text name never sent | 1 | Dev | Step 4 verified; allow-list test | DONE (step 4 browser test) |
-| O9 | Event payload list (allowed types) | 2 | Dev | Step 5 fills `events` in config | DONE (`screen_view`, `choice`) |
+| O8 | Relative's free-text name never sent | 1 | Dev | Step 4 verified; allow-list test | ✅ DONE (step 4 browser test) |
+| O9 | Event payload list (allowed types) | 2 | Dev | Step 5 fills `events` in config | ✅ DONE (`screen_view`, `choice`) |
 | O10 | Pre-existing lint errors: `App.jsx:35`, `InkStory.jsx` (7), `FamilySetup.jsx:49` | 3 | Dev | Fixed or accepted (not ours) | OPEN |
 | O11 | Publish full privacy notice (EN + ET) + link it | 3 | team + Dev | Hosted (uni site or in-game page); `privacyNoticeUrl` set in config; link visible on consent screen | OPEN |
 | O12 | Privacy notice reachable anytime (not only consent) | 3 | Dev | Menu link added (with step 13/14 menu work) | OPEN |
 | O13 | Household: one per player or per playthrough? | 4 | Dev | Decided: per playthrough. Apply in step 7 tables | OPEN |
+| O14 | Start question = past behaviour; end = feeling → not a true pre/post pair | 6 | Dev | Added matching "feel" question to start survey (`feel_prepared_before`) | ✅ DONE (team to confirm wording) |
+| O15 | Unsent events lost if tab closes and player never returns (backend only) | 6 | Dev | Step 12: send last batch on page close (`keepalive` / `sendBeacon`) | OPEN |
 
 ## Questions for co-workers
 Full doc + answers: [QUESTIONS-user-data.md](QUESTIONS-user-data.md) (Q1–Q10)
@@ -102,6 +108,6 @@ Full doc + answers: [QUESTIONS-user-data.md](QUESTIONS-user-data.md) (Q1–Q10)
 |---|---|
 | Team answered Q1–Q10 | |
 | Built steps adjusted to answers | |
-| Open items O1–O13 closed or accepted | |
+| Open items O1–O15 closed or accepted | |
 | Ethics approval received | |
 | `collectionEnabled` turned on | |

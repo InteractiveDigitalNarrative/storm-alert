@@ -105,8 +105,9 @@ Each: **creates / changes / spends**. Phase A = backend-free. Phase B = Supabase
    - Changes: `src/lib/data/index.js`, `src/components/InkStory.jsx`
    - Adds: playthrough number (1, 2, 3…) so replays can be separated
 6. **End summary + post self-rating**
-   - Creates: `src/components/PostRating.jsx` + `.css`
-   - Changes: `src/components/EndingScreen.jsx`, i18n files
+   - Creates: `src/components/PostRating.jsx` (reuses `Demography.css`)
+   - Changes: `src/components/InkStory.jsx` (result saved there), i18n files
+   - Rating shown **before** the ending screen
 7. **Portable table design**
    - Creates: `db/schema.sql` (plain Postgres, no Supabase features)
 
@@ -123,6 +124,7 @@ Each: **creates / changes / spends**. Phase A = backend-free. Phase B = Supabase
     - Creates: Resend account, custom SMTP
     - Spends: free tier (€0)
 12. **Supabase adapter**
+    - Also: send last batch on page close (O15)
     - Creates: `src/lib/data/supabaseAdapter.js`, `.env.local` (git-ignored)
     - Changes: `package.json` (+ `@supabase/supabase-js`), `.github/workflows/deploy.yml`, GitHub secrets
 13. **Account screen (magic link, 18+ gate)**
