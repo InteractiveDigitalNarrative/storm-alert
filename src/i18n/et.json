@@ -14,6 +14,35 @@
     "enter": "SISENE"
   },
 
+  "consent": {
+    "title": "Kas aitad meie uuringut?",
+    "intro": "Uurime, kuidas inimesed hädaolukordadeks valmistuvad. Võid jagada oma vastuseid ja mänguvalikuid meie uurimisrühmaga.",
+    "collectLabel": "Kui nõustud, salvestame",
+    "collect": [
+      "Vanuserühma ja soo",
+      "Kui valmis end tunned, enne ja pärast mängu",
+      "Leibkonna tüübi (ainult kategooriad)",
+      "Sinu valikud, punktid ja aja mängus",
+      "Mängu keele ja seadme tüübi (telefon / tahvel / arvuti)"
+    ],
+    "neverLabel": "Me ei salvesta kunagi",
+    "never": [
+      "Nimesid — ka neid, mida mängus sisestad",
+      "Sinu aadressi ega asukohta",
+      "Sinu IP-aadressi"
+    ],
+    "moreLabel": "Rohkem infot",
+    "more": [
+      "Andmeid hoitakse ELis kuni uuringu lõpuni (kuni 2 aastat).",
+      "Neid näevad ainult mõned nimeliselt määratud uurijad.",
+      "Saad oma andmed igal ajal menüüst kustutada.",
+      "Kaebuse saad esitada Andmekaitse Inspektsioonile (aki.ee)."
+    ],
+    "fullNotice": "Loe täielikku privaatsusteadet",
+    "optional": "Jagamine on vabatahtlik. Mäng töötab mõlemal juhul samamoodi.",
+    "yes": "Jah, jagan",
+    "no": "Ei, aitäh"
+  },
   "demography": {
     "title": "Räägi meile endast",
     "subtitle": "Mõned kiired küsimused enne algust. Sinu vastused aitavad meil kogemust kohandada.",

@@ -15,6 +15,10 @@ export const DATA_CONFIG = {
   // under older versions stay valid for the data collected under them.
   consentVersion: 'consent-v0.1-draft',
 
+  // Full privacy notice (docs/data/privacy-notice.md, once published). null =
+  // link hidden on the consent screen — never point players at a dead page.
+  privacyNoticeUrl: null,
+
   login: {
     allowGuests: true,          // play + share data without an account
     accountMinAge: 18,          // under this: guest only, no email

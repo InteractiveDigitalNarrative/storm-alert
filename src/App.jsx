@@ -6,6 +6,8 @@ import InkStory, { SAVE_KEY } from './components/InkStory.jsx';
 import LoadingScreen from './components/LoadingScreen.jsx';
 import LanguageSelect from './components/LanguageSelect.jsx';
 import Demography from './components/Demography.jsx';
+import Consent from './components/Consent.jsx';
+import { getConsent } from './lib/data';
 import { AudioProvider, useAudioContext } from './context/AudioContext.jsx';
 import { LanguageProvider, useLanguage } from './context/LanguageContext.jsx';
 import { NotebookProvider, useNotebook } from './context/NotebookContext.jsx';
@@ -49,9 +51,17 @@ function AppContent() {
     }
   };
 
-  const handleLanguageSelect = (lang) => {
+  // Consent is asked once per consent version. Already answered → skip ahead:
+  // yes → survey, no → straight to the game (no data, so no survey either).
+  const handleLanguageSelect = async (lang) => {
     setLanguage(lang);
-    setCurrentScreen('demography');
+    const consent = await getConsent();
+    if (!consent) setCurrentScreen('consent');
+    else setCurrentScreen(consent.given ? 'demography' : 'loading');
+  };
+
+  const handleConsentDone = (given) => {
+    setCurrentScreen(given ? 'demography' : 'loading');
   };
 
   const handleDemographySubmit = (data) => {
@@ -99,6 +109,10 @@ function AppContent() {
     <div className="App">
       {currentScreen === 'language' && (
         <LanguageSelect onSelect={handleLanguageSelect} />
+      )}
+
+      {currentScreen === 'consent' && (
+        <Consent onDone={handleConsentDone} />
       )}
 
       {currentScreen === 'demography' && (

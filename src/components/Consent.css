@@ -1,0 +1,206 @@
+/* Consent.css — data-sharing consent, shown after language select.
+   Visual language matches Demography.css. */
+
+.consent-screen {
+  position: fixed;
+  inset: 0;
+  background-color: #000;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  z-index: 9999;
+  overflow-y: auto;
+  padding: 32px 16px;
+}
+
+.consent-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 5, 2, 0.88);
+}
+
+.consent-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.7) 100%);
+  pointer-events: none;
+}
+
+/* ── Card ────────────────────────────────────────────────── */
+
+.consent-card {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-width: 560px;
+  width: 100%;
+  padding: 36px 32px;
+  margin: auto;
+  background: rgba(20, 14, 8, 0.6);
+  border: 1px solid rgba(255, 153, 51, 0.2);
+  border-radius: 10px;
+  text-align: left;
+}
+
+.consent-title {
+  font-size: clamp(1.3rem, 3.5vw, 1.8rem);
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #fff;
+  margin: 0;
+  text-align: center;
+}
+
+.consent-intro {
+  font-size: 0.95rem;
+  color: #ccc;
+  margin: 0;
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* ── Sections ────────────────────────────────────────────── */
+
+.consent-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.consent-label {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #ff9933;
+  margin: 0;
+}
+
+.consent-list {
+  margin: 0;
+  padding-left: 20px;
+  color: #ddd;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.consent-more {
+  color: #bbb;
+  font-size: 14px;
+}
+
+.consent-more summary {
+  cursor: pointer;
+  color: #ff9933;
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 6px 0;
+}
+
+.consent-more[open] summary {
+  margin-bottom: 8px;
+}
+
+.consent-link {
+  align-self: flex-start;
+  color: #ff9933;
+  font-size: 14px;
+  text-decoration: underline;
+  padding: 6px 0;
+}
+
+.consent-link:hover,
+.consent-link:focus-visible {
+  color: #ffb866;
+}
+
+.consent-note {
+  margin: 0;
+  font-size: 13px;
+  color: #999;
+  line-height: 1.5;
+}
+
+/* ── Actions — Yes and No share one style on purpose ─────── */
+
+.consent-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.consent-btn {
+  min-height: 48px;
+  padding: 12px 16px;
+  background: rgba(255, 153, 51, 0.12);
+  border: 1px solid #ff9933;
+  border-radius: 6px;
+  color: #ff9933;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.consent-btn:hover:not(:disabled),
+.consent-btn:focus-visible {
+  background: rgba(255, 153, 51, 0.25);
+  box-shadow: 0 0 16px rgba(255, 153, 51, 0.4);
+  outline: none;
+}
+
+.consent-btn:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
+.consent-version {
+  margin: 0;
+  font-size: 11px;
+  color: #666;
+  text-align: center;
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .consent-screen {
+    padding: 20px 12px;
+  }
+
+  .consent-card {
+    padding: 28px 22px;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .consent-screen {
+    padding: 16px 10px;
+  }
+
+  .consent-card {
+    padding: 22px 18px;
+    gap: 14px;
+    border-radius: 8px;
+  }
+
+  .consent-intro,
+  .consent-list,
+  .consent-more {
+    font-size: 13px;
+  }
+
+  .consent-actions {
+    grid-template-columns: 1fr;
+  }
+}

@@ -14,6 +14,35 @@
     "enter": "ENTER"
   },
 
+  "consent": {
+    "title": "Help our research?",
+    "intro": "We're studying how people prepare for emergencies. You can share your answers and game choices with our research team.",
+    "collectLabel": "If you say yes, we save",
+    "collect": [
+      "Age group and gender",
+      "How prepared you feel, before and after",
+      "Household type (categories only)",
+      "Your choices, scores and time in the game",
+      "Game language and device type (phone / tablet / desktop)"
+    ],
+    "neverLabel": "We never save",
+    "never": [
+      "Names — including names you type in the game",
+      "Your address or location",
+      "Your IP address"
+    ],
+    "moreLabel": "More details",
+    "more": [
+      "Data is stored in the EU and kept until the study ends (max 2 years).",
+      "Only a few named researchers can see it.",
+      "You can delete your data any time from the menu.",
+      "You can complain to the Estonian Data Protection Inspectorate (aki.ee)."
+    ],
+    "fullNotice": "Read the full privacy notice",
+    "optional": "Sharing is optional. The game works the same either way.",
+    "yes": "Yes, share",
+    "no": "No, thanks"
+  },
   "demography": {
     "title": "Tell us about you",
     "subtitle": "A few quick questions before you begin. Your answers help us tailor the experience.",
