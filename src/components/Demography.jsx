@@ -18,7 +18,7 @@ function Demography({ onSubmit, onSkip }) {
 
   const handleContinue = () => {
     if (!canContinue) return;
-    onSubmit({ age, gender, prep });
+    onSubmit({ age, gender, prep_before: prep });
   };
 
   return (

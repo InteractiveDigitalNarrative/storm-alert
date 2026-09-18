@@ -51,8 +51,9 @@ export const localAdapter = {
     write('profile', profile);
   },
 
+  // Merge: family and home answers arrive in separate saves.
   async saveHousehold(household) {
-    write('household', household);
+    write('household', { ...read('household', {}), ...household });
   },
 
   async logEvents(events) {

@@ -7,7 +7,7 @@ import LoadingScreen from './components/LoadingScreen.jsx';
 import LanguageSelect from './components/LanguageSelect.jsx';
 import Demography from './components/Demography.jsx';
 import Consent from './components/Consent.jsx';
-import { getConsent } from './lib/data';
+import { getConsent, saveProfile, isSurveyDone, markSurveyDone } from './lib/data';
 import { AudioProvider, useAudioContext } from './context/AudioContext.jsx';
 import { LanguageProvider, useLanguage } from './context/LanguageContext.jsx';
 import { NotebookProvider, useNotebook } from './context/NotebookContext.jsx';
@@ -51,26 +51,29 @@ function AppContent() {
     }
   };
 
-  // Consent is asked once per consent version. Already answered → skip ahead:
-  // yes → survey, no → straight to the game (no data, so no survey either).
+  // Consent is asked once per consent version, the survey once per player.
+  // No consent → straight to the game (no data, so no survey either).
+  const afterConsent = (given) =>
+    setCurrentScreen(given && !isSurveyDone() ? 'demography' : 'loading');
+
   const handleLanguageSelect = async (lang) => {
     setLanguage(lang);
     const consent = await getConsent();
     if (!consent) setCurrentScreen('consent');
-    else setCurrentScreen(consent.given ? 'demography' : 'loading');
+    else afterConsent(consent.given);
   };
 
-  const handleConsentDone = (given) => {
-    setCurrentScreen(given ? 'demography' : 'loading');
-  };
+  const handleConsentDone = (given) => afterConsent(given);
 
+  // Saved only with consent (the data layer checks); never blocks the game.
   const handleDemographySubmit = (data) => {
-    console.log('[Demography]', data);
+    saveProfile(data).catch(() => {});
+    markSurveyDone();
     setCurrentScreen('loading');
   };
 
   const handleDemographySkip = () => {
-    console.log('[Demography] skipped');
+    markSurveyDone();
     setCurrentScreen('loading');
   };
 

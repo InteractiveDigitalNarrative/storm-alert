@@ -63,6 +63,7 @@ What a uni-server move would still need rewritten:
 | Household | Categories only | config |
 | Learning | Pre + post self-rating | screen |
 | Offline | Queue on device, retry | data layer |
+| Replays | Survey once; household asked each game, pre-filled; data per playthrough | data layer |
 | Access | Named researchers, 2FA | backend settings |
 | Retention | Study end, max 2 years | config + job |
 | Deletion | "Delete my data" button | adapter |
@@ -102,6 +103,7 @@ Each: **creates / changes / spends**. Phase A = backend-free. Phase B = Supabase
    - Changes: `src/App.jsx`, `src/components/Demography.jsx`
 5. **Event logger + offline queue**
    - Changes: `src/lib/data/index.js`, `src/components/InkStory.jsx`
+   - Adds: playthrough number (1, 2, 3…) so replays can be separated
 6. **End summary + post self-rating**
    - Creates: `src/components/PostRating.jsx` + `.css`
    - Changes: `src/components/EndingScreen.jsx`, i18n files

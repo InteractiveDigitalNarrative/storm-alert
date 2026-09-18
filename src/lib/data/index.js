@@ -16,14 +16,14 @@ function pickAdapter() {
 
 const adapter = pickAdapter();
 
-// Keep only allow-listed fields holding short primitive values, so free text
-// (names, notes) can never slip into a record.
+// Keep only allow-listed fields holding short primitive values (or null =
+// unknown), so free text (names, notes) can never slip into a record.
 function clean(kind, data) {
   const allowed = kind === 'payload' ? Object.keys(data || {}) : DATA_CONFIG.fields[kind] || [];
   const out = {};
   for (const key of allowed) {
     const value = data?.[key];
-    if (typeof value === 'number' || typeof value === 'boolean') out[key] = value;
+    if (value === null || typeof value === 'number' || typeof value === 'boolean') out[key] = value;
     else if (typeof value === 'string' && value.length <= DATA_CONFIG.maxValueLength) out[key] = value;
   }
   return out;
@@ -83,9 +83,42 @@ export async function exportMyData() {
   return adapter.exportAll();
 }
 
-// "Delete my data": removes everything, including the consent record.
+// "Delete my data": removes everything, including the consent record and the
+// device-only conveniences below (survey asked again, no pre-filled household).
 export async function deleteMyData() {
   await adapter.deleteAll();
+  for (const key of Object.values(DEVICE_KEYS)) {
+    try { localStorage.removeItem(key); } catch { /* ignore */ }
+  }
 }
+
+// ── Device-only conveniences ─────────────────────────────────────────────
+// Stored on this device only, consent or not; never sent to any backend.
+
+const DEVICE_KEYS = {
+  surveyDone: 'storm_survey_done',
+  lastHousehold: 'storm_last_household',
+};
+
+function deviceGet(key) {
+  try { return JSON.parse(localStorage.getItem(key)); } catch { return null; }
+}
+
+function deviceSet(key, value) {
+  try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* ignore */ }
+}
+
+// Survey is asked once per player (answered or skipped) — a repeat "before"
+// rating would no longer be a true baseline.
+export const isSurveyDone = () => !!deviceGet(DEVICE_KEYS.surveyDone);
+export const markSurveyDone = () => deviceSet(DEVICE_KEYS.surveyDone, true);
+
+// Last household setup, to pre-fill the next playthrough. May hold the
+// relative's typed name — which is why it lives here and not in the adapter.
+export function getLastHousehold() {
+  const extras = deviceGet(DEVICE_KEYS.lastHousehold);
+  return Array.isArray(extras) ? extras : null;
+}
+export const setLastHousehold = (extras) => deviceSet(DEVICE_KEYS.lastHousehold, extras);
 
 export const backendName = adapter.name;

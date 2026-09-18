@@ -75,6 +75,8 @@ If you create an **optional account**:
 The game saves some things in your browser, whether or not you consent:
 - Game progress (to continue later)
 - Notebook, sound + text speed settings
+- Your last household setup (to pre-fill the next game)
+- Whether you've answered the start survey (so we ask only once)
 
 These stay on your device. Clear your browser data to remove them.
 

@@ -2,9 +2,11 @@ import { useState } from 'react';
 import './FamilySetup.css';
 import { useAudioContext } from '../context/AudioContext';
 import { useTranslation } from '../hooks/useTranslation';
+import { getLastHousehold } from '../lib/data';
 
 function FamilySetup({ onClose }) {
-  const [extras, setExtras] = useState([]);
+  // Pre-filled with the last playthrough's household (device only).
+  const [extras, setExtras] = useState(() => getLastHousehold() || []);
   const [showElderlyForm, setShowElderlyForm] = useState(false);
   const [elderlyName, setElderlyName] = useState('');
   const { playSfx } = useAudioContext();

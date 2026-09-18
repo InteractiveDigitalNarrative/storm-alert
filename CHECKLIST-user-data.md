@@ -7,17 +7,17 @@ New session? Say: **"Resume user data work — read CHECKLIST-user-data.md"**
 
 | Item | Value |
 |---|---|
-| Next step | 4 — Save demographics + household (after step 3 review) |
+| Next step | 5 — Event logger + offline queue (after step 4 review) |
 | Last updated | 2026-09-18 |
 | Branch | `feature/user-data` |
 | Blockers | none |
-| Open items | 12 — see "Open items" below |
+| Open items | 13 (1 done) — see "Open items" below |
 
 **How we work (grill-me gate)**
 1. Dev says what the step creates / changes / spends.
 2. You approve.
 3. Dev does only that step.
-4. Dev shows result, updates row + "Resume here", waits.
+4. Dev shows result, updates row + "Resume here" + SUMMARY, waits.
 
 **Files**
 | File | Purpose |
@@ -25,10 +25,11 @@ New session? Say: **"Resume user data work — read CHECKLIST-user-data.md"**
 | [PLAYBOOK-user-data.md](PLAYBOOK-user-data.md) | Plan, decisions, glossary |
 | This file | Tracker + resume point |
 | [QUESTIONS-user-data.md](QUESTIONS-user-data.md) | Co-worker questions + answers |
+| [SUMMARY-user-data.md](SUMMARY-user-data.md) | What's built so far (short) |
 
 **Key facts (no need to re-derive)**
 - Game = static site, GitHub Pages; push to `main` auto-deploys.
-- Demographics currently only `console.log` → `src/App.jsx:57`.
+- Survey → `saveProfile` in `src/App.jsx`; household → `saveHousehold` in `InkStory.jsx` (`handleFamilySetupClose`, `handleHomeSetupClose`).
 - Scores: `total_prep`, `callScore`, `ending_type` → `src/components/EndingScreen.jsx:45`.
 - Ink vars (`prep_*`, household) → `public/ink/72Hours.ink`.
 - User is new to backend: explain ADHD-friendly, define terms once.
@@ -40,6 +41,8 @@ New session? Say: **"Resume user data work — read CHECKLIST-user-data.md"**
 | 2026-09-18 | Step 1: privacy notice + data summary drafts; relative-name free text flagged as never-collect | Review step 1 → step 2 |
 | 2026-09-18 | Step 1 committed (`3c80b47`). Step 2: data layer, allow-list filter, consent gate, local adapter | Review step 2 → step 3 |
 | 2026-09-18 | Step 2 committed (`4f5d9aa`). Step 3: consent screen, asked once per version; "no" skips survey. ET text needs native check | Review step 3 → step 4 |
+| 2026-09-18 | Step 3 committed (`3c89d11`). Step 4: survey + household saved via data layer; home fields reset per playthrough | Review step 4 → step 5 |
+| 2026-09-18 | Step 4 extended: survey asked once; household pre-filled on replay (device only). Summary file added | Review step 4 → step 5 |
 
 
 Status: TODO / IN PROGRESS / DONE / BLOCKED
@@ -52,7 +55,7 @@ Rules: branch `feature/user-data` · `collectionEnabled: false` · test data onl
 | 1 | Privacy docs draft | DONE | `docs/data/privacy-notice.md`, `docs/data/data-summary.md` | yes (2026-09-18) |
 | 2 | Data layer + config + local adapter | DONE | `src/lib/data/`; smoke test 10/10, lint, build OK | yes (2026-09-18) |
 | 3 | Consent screen | DONE | browser test 9/9 (EN/ET, phone), smoke OK, build OK; hidden privacy-notice link | yes (2026-09-18) |
-| 4 | Save demographics + household | TODO | | |
+| 4 | Save demographics + household | DONE | browser 11/11, unit 15/15, build OK; relative name excluded; survey once; household pre-fill | yes (2026-09-18) |
 | 5 | Event logger + offline queue | TODO | | |
 | 6 | End summary + post rating | TODO | | |
 | 7 | Portable table design | TODO | | |
@@ -83,11 +86,12 @@ Found while building. Close before merge unless noted.
 | O5 | Resend region + transfer safeguards | 1 | team (Q9) | Region/DPA confirmed | OPEN |
 | O6 | Hosting logs (GitHub Pages, Supabase) retention | 1 | Dev + team | Checked; notice updated | OPEN |
 | O7 | `[[TBD]]` fields in privacy docs | 1 | team (Q5–Q10) | No `[[TBD]]` left in `docs/data/` | OPEN |
-| O8 | Relative's free-text name never sent | 1 | Dev | Step 4 verified; allow-list test | OPEN |
+| O8 | Relative's free-text name never sent | 1 | Dev | Step 4 verified; allow-list test | DONE (step 4 browser test) |
 | O9 | Event payload list (allowed types) | 2 | Dev | Step 5 fills `events` in config | OPEN |
-| O10 | Pre-existing lint error `src/App.jsx:35` | 3 | Dev | Fixed or accepted (not ours) | OPEN |
+| O10 | Pre-existing lint errors: `App.jsx:35`, `InkStory.jsx` (7), `FamilySetup.jsx:49` | 3 | Dev | Fixed or accepted (not ours) | OPEN |
 | O11 | Publish full privacy notice (EN + ET) + link it | 3 | team + Dev | Hosted (uni site or in-game page); `privacyNoticeUrl` set in config; link visible on consent screen | OPEN |
 | O12 | Privacy notice reachable anytime (not only consent) | 3 | Dev | Menu link added (with step 13/14 menu work) | OPEN |
+| O13 | Household: one per player or per playthrough? | 4 | Dev | Decided: per playthrough. Apply in step 7 tables | OPEN |
 
 ## Questions for co-workers
 Full doc + answers: [QUESTIONS-user-data.md](QUESTIONS-user-data.md) (Q1–Q10)
@@ -97,6 +101,6 @@ Full doc + answers: [QUESTIONS-user-data.md](QUESTIONS-user-data.md) (Q1–Q10)
 |---|---|
 | Team answered Q1–Q10 | |
 | Built steps adjusted to answers | |
-| Open items O1–O12 closed or accepted | |
+| Open items O1–O13 closed or accepted | |
 | Ethics approval received | |
 | `collectionEnabled` turned on | |

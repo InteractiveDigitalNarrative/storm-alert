@@ -27,6 +27,7 @@ import CabinetCheck from './CabinetCheck';
 import { useAudioContext } from '../context/AudioContext';
 import { useTranslation } from '../hooks/useTranslation';
 import { useNotebook } from '../context/NotebookContext';
+import { saveHousehold, setLastHousehold } from '../lib/data';
 
 // localStorage key for the in-progress save (bump the suffix if the shape changes)
 export const SAVE_KEY = 'storm_save_v1';
@@ -1142,6 +1143,7 @@ function InkStory({ onReturnToMenu, resume = false }) {
     const hasChildren = childrenCount > 0;
     const h = { size, elderlyRelation, hasElderly, hasChildren };
     setHousehold(h);
+    setLastHousehold(extras);
 
     const story = storyRef.current;
     if (!story) return;
@@ -1151,6 +1153,17 @@ function InkStory({ onReturnToMenu, resume = false }) {
     story.variablesState["has_children"]     = hasChildren;
     story.variablesState["children_count"]   = childrenCount;
     story.variablesState["water_target"]     = size * 3 * 3;
+
+    // Categories only — the relative's typed name (elderlyRelation) is never sent.
+    saveHousehold({
+      family_size: size,
+      has_elderly: hasElderly,
+      has_children: hasChildren,
+      children_count: childrenCount,
+      // New playthrough → forget the previous game's home answers.
+      home_building: null,
+      home_heating: null,
+    }).catch(() => {});
 
     // Continue the story from where it paused to get the remaining text + choices
     continueStory();
@@ -1210,6 +1223,11 @@ function InkStory({ onReturnToMenu, resume = false }) {
     story.variablesState["home_has_stove"]         = !!result?.hasStove;
     story.variablesState["home_building"]          = result?.building || "";
     story.variablesState["home_heating"]           = result?.heating || "";
+
+    saveHousehold({
+      home_building: result?.building ?? null,
+      home_heating: result?.heating ?? null,
+    }).catch(() => {});
 
     continueStory();
   };
