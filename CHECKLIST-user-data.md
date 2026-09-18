@@ -27,6 +27,7 @@ New session? Say: **"Resume user data work — read CHECKLIST-user-data.md"**
 | [QUESTIONS-user-data.md](QUESTIONS-user-data.md) | Co-worker questions + answers |
 | [SUMMARY-user-data.md](SUMMARY-user-data.md) | What's built so far (short) |
 | [DEV-SHORTCUTS.md](DEV-SHORTCUTS.md) | Scene jump links + data reset snippets |
+| [LESSONS-user-data.md](LESSONS-user-data.md) | ELI5: what we built, how backends work, what's next |
 
 **Key facts (no need to re-derive)**
 - Game = static site, GitHub Pages; push to `main` auto-deploys.

@@ -1,6 +1,6 @@
 # Summary — User data system (so far)
 
-> Short "where are we" view. Details: [CHECKLIST-user-data.md](CHECKLIST-user-data.md) · Plan: [PLAYBOOK-user-data.md](PLAYBOOK-user-data.md) · Testing: [DEV-SHORTCUTS.md](DEV-SHORTCUTS.md)
+> Short "where are we" view. Details: [CHECKLIST-user-data.md](CHECKLIST-user-data.md) · Plan: [PLAYBOOK-user-data.md](PLAYBOOK-user-data.md) · Testing: [DEV-SHORTCUTS.md](DEV-SHORTCUTS.md) · Learn: [LESSONS-user-data.md](LESSONS-user-data.md)
 
 Last updated: 2026-09-18 · Branch: `feature/user-data` · Nothing live, nothing sent anywhere
 
@@ -19,7 +19,7 @@ Last updated: 2026-09-18 · Branch: `feature/user-data` · Nothing live, nothing
 | ✅ 4 | Survey + household saved; survey once; household pre-fill | `d7660b5` |
 | ✅ 5 | Events, sessions, offline queue | `6052312` |
 | ✅ 6 | Post-game rating (before results) + result saved | `bc31f20` |
-| ✅ 7 | Portable database design (7 tables, plain Postgres) | STEP7SHA |
+| ✅ 7 | Portable database design (7 tables, plain Postgres) | `778545c` |
 
 ## How it works now
 1. Player picks a language.
