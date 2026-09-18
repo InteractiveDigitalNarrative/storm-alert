@@ -27,7 +27,7 @@ import CabinetCheck from './CabinetCheck';
 import { useAudioContext } from '../context/AudioContext';
 import { useTranslation } from '../hooks/useTranslation';
 import { useNotebook } from '../context/NotebookContext';
-import { saveHousehold, setLastHousehold } from '../lib/data';
+import { saveHousehold, setLastHousehold, startSession, endSession, logEvent } from '../lib/data';
 
 // localStorage key for the in-progress save (bump the suffix if the shape changes)
 export const SAVE_KEY = 'storm_save_v1';
@@ -325,6 +325,10 @@ function InkStory({ onReturnToMenu, resume = false }) {
   // Tracks the current Ink scene (set by tags like HEAT_HUB) so widgets can show/hide
   const [currentScene, setCurrentScene] = useState(null);
 
+  // Ink knot the player is currently choosing in — a short, language-neutral
+  // id used for research events (never the displayed text).
+  const [knot, setKnot] = useState(null);
+
   // Text speed: 'slow' (fade-in) or 'instant'
   const [textSpeed, setTextSpeed] = useState(() => {
     return localStorage.getItem('textSpeed') || 'slow';
@@ -364,6 +368,10 @@ function InkStory({ onReturnToMenu, resume = false }) {
   // but doesn't cause re-renders when changed (unlike useState)
   // We use it to store the Ink story instance
   const storyRef = useRef(null);
+
+  // One research session per playthrough — guards against the story loader
+  // running twice (React StrictMode re-runs mount effects in dev).
+  const sessionStartedRef = useRef(false);
 
   // History stack for back button
   const historyRef = useRef([]);
@@ -504,6 +512,9 @@ function InkStory({ onReturnToMenu, resume = false }) {
               });
               try { story.ChoosePathString(cfg.path); }
               catch (e) { console.error('[dev scene] bad path', cfg.path, e); }
+            } else if (!sessionStartedRef.current) {
+              sessionStartedRef.current = true;
+              startSession({ language }).catch(() => {});
             }
             continueStory();
           }
@@ -558,6 +569,34 @@ function InkStory({ onReturnToMenu, resume = false }) {
       console.warn('Auto-save failed:', e);
     }
   }, [storyText, choices, storyLoaded, showEndingScreen, household, weatherStage, background, language]);
+
+  // RESEARCH — what the player is looking at right now. First open overlay
+  // wins; otherwise the Ink knot. Logged on change; time per screen = gap
+  // between consecutive screen_view events.
+  const activeScreen = [
+    ['ending', showEndingScreen],
+    ['outcome', showOutcomeScreen],
+    ['family_setup', showFamilySetup],
+    ['go_check', goCheckTask],
+    ['pantry_check', showPantryCheck],
+    ['home_setup', showHomeSetup],
+    ['light_audit', showLightAudit],
+    ['flashlight_search', showFlashlightSearch],
+    ['rumor_sort', showRumorSort],
+    ['cabinet_check', showCabinetCheck],
+    ['water_calc', showWaterCalc],
+    ['store', showStore],
+    ['keypad', showKeypad],
+    ['call_result', callResult],
+    ['radio', showRadioBroadcast],
+    ['sms', showSMS],
+    ['storm_arrival', showStormArrival],
+    ['crisis_' + crisisPhase, crisisPhase],
+  ].find(([, open]) => open)?.[0] ?? knot;
+
+  useEffect(() => {
+    if (storyLoaded && activeScreen) logEvent('screen_view', activeScreen).catch(() => {});
+  }, [storyLoaded, activeScreen]);
 
   // Clear the save once the game is over, so "Continue" only offers in-progress runs.
   useEffect(() => {
@@ -900,6 +939,7 @@ function InkStory({ onReturnToMenu, resume = false }) {
         if (tag === 'ENDING_SCREEN') {
           console.log('Showing ending screen');
           readGameVars(story);
+          endSession().catch(() => {});
           setShowEndingScreen(true);
           setStoryText(lines);
           setChoices([]);
@@ -935,6 +975,8 @@ function InkStory({ onReturnToMenu, resume = false }) {
 
     // Update choices display
     setChoices(currentChoices);
+    const choiceKnot = currentChoices[0]?.sourcePath?.split('.')[0];
+    if (choiceKnot) setKnot(choiceKnot);
 
     console.log('Story text:', lines);
     console.log('Choices:', currentChoices);
@@ -958,6 +1000,8 @@ function InkStory({ onReturnToMenu, resume = false }) {
       storyText,
     });
     setHistoryLength(historyRef.current.length);
+
+    logEvent('choice', knot, { index: choiceIndex }).catch(() => {});
 
     // Tell Ink which choice was selected
     story.ChooseChoiceIndex(choiceIndex);

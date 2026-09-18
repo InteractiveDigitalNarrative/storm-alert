@@ -7,11 +7,11 @@ New session? Say: **"Resume user data work — read CHECKLIST-user-data.md"**
 
 | Item | Value |
 |---|---|
-| Next step | 5 — Event logger + offline queue (after step 4 review) |
+| Next step | 6 — End summary + post rating (after step 5 review) |
 | Last updated | 2026-09-18 |
 | Branch | `feature/user-data` |
 | Blockers | none |
-| Open items | 13 (1 done) — see "Open items" below |
+| Open items | 13 (2 done) — see "Open items" below |
 
 **How we work (grill-me gate)**
 1. Dev says what the step creates / changes / spends.
@@ -43,6 +43,7 @@ New session? Say: **"Resume user data work — read CHECKLIST-user-data.md"**
 | 2026-09-18 | Step 2 committed (`4f5d9aa`). Step 3: consent screen, asked once per version; "no" skips survey. ET text needs native check | Review step 3 → step 4 |
 | 2026-09-18 | Step 3 committed (`3c89d11`). Step 4: survey + household saved via data layer; home fields reset per playthrough | Review step 4 → step 5 |
 | 2026-09-18 | Step 4 extended: survey asked once; household pre-filled on replay (device only). Summary file added | Review step 4 → step 5 |
+| 2026-09-18 | Step 4 committed (`d7660b5`). Step 5: queue for all writes, sessions + playthrough no., screen/choice events, device class, game version. Fixed double session (StrictMode) | Review step 5 → step 6 |
 
 
 Status: TODO / IN PROGRESS / DONE / BLOCKED
@@ -56,7 +57,7 @@ Rules: branch `feature/user-data` · `collectionEnabled: false` · test data onl
 | 2 | Data layer + config + local adapter | DONE | `src/lib/data/`; smoke test 10/10, lint, build OK | yes (2026-09-18) |
 | 3 | Consent screen | DONE | browser test 9/9 (EN/ET, phone), smoke OK, build OK; hidden privacy-notice link | yes (2026-09-18) |
 | 4 | Save demographics + household | DONE | browser 11/11, unit 15/15, build OK; relative name excluded; survey once; household pre-fill | yes (2026-09-18) |
-| 5 | Event logger + offline queue | TODO | | |
+| 5 | Event logger + offline queue | DONE | unit 22/22, browser 17/17, device class phone/tablet OK, build OK | yes (2026-09-18) |
 | 6 | End summary + post rating | TODO | | |
 | 7 | Portable table design | TODO | | |
 
@@ -87,7 +88,7 @@ Found while building. Close before merge unless noted.
 | O6 | Hosting logs (GitHub Pages, Supabase) retention | 1 | Dev + team | Checked; notice updated | OPEN |
 | O7 | `[[TBD]]` fields in privacy docs | 1 | team (Q5–Q10) | No `[[TBD]]` left in `docs/data/` | OPEN |
 | O8 | Relative's free-text name never sent | 1 | Dev | Step 4 verified; allow-list test | DONE (step 4 browser test) |
-| O9 | Event payload list (allowed types) | 2 | Dev | Step 5 fills `events` in config | OPEN |
+| O9 | Event payload list (allowed types) | 2 | Dev | Step 5 fills `events` in config | DONE (`screen_view`, `choice`) |
 | O10 | Pre-existing lint errors: `App.jsx:35`, `InkStory.jsx` (7), `FamilySetup.jsx:49` | 3 | Dev | Fixed or accepted (not ours) | OPEN |
 | O11 | Publish full privacy notice (EN + ET) + link it | 3 | team + Dev | Hosted (uni site or in-game page); `privacyNoticeUrl` set in config; link visible on consent screen | OPEN |
 | O12 | Privacy notice reachable anytime (not only consent) | 3 | Dev | Menu link added (with step 13/14 menu work) | OPEN |

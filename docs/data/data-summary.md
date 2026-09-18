@@ -26,7 +26,7 @@ Last updated: 2026-09-18
 2. Consent screen → **no**: nothing leaves device. **Yes**: continue.
 3. Anonymous guest ID created (random, no personal info).
 4. Demographics + household answers saved.
-5. Game choices + timing saved as events (queued offline, sent later).
+5. Game choices + timing saved as events (queued on device, sent when online).
 6. End: scores + post-game self-rating saved.
 7. Optional: player adds email → can log in on other devices.
 8. Researchers export data **without** emails.
@@ -57,8 +57,10 @@ Source: `src/components/Demography.jsx`
 ### Gameplay
 | Field | Values | Why |
 |---|---|---|
-| Choices | event type, screen, small payload | What players do |
-| Timing | time per screen | Where players struggle |
+| Choices | Ink knot id + choice number (no text) | What players do |
+| Screen views | overlay name or Ink knot id | Where players go |
+| Timing | ms since playthrough start | Time per screen (gap between views) |
+| Playthrough | number on this device (1, 2, 3…) | Separate first plays from replays |
 | Prep scores | water/food/heat/light/info/meds, 0–2 each | Learning outcome |
 | Call score + dialed number | number, 112/1220/1247/1343 | Emergency-number knowledge |
 | Ending | good / bad / … | Outcome |
@@ -75,7 +77,7 @@ Source: Ink vars in `public/ink/72Hours.ink`, `src/components/EndingScreen.jsx`
 |---|---|---|
 | Language | et / en | Compare versions |
 | Device class | phone / tablet / desktop | UX analysis |
-| Game version | e.g. build id | Compare versions |
+| Game version | git commit id | Compare versions |
 | Consent record | version, yes/no, date | Proof of consent |
 
 ### Accounts only

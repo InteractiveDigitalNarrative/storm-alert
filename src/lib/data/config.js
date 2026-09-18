@@ -33,6 +33,10 @@ export const DATA_CONFIG = {
   // relative's free-text name) is dropped by the data layer.
   fields: {
     profile: ['age', 'gender', 'prep_before'],
+    session: [
+      'playthrough', 'language', 'device_class', 'game_version',
+      'started_at', 'ended_at', 'completed',
+    ],
     household: [
       'family_size', 'has_elderly', 'has_children', 'children_count',
       'home_building', 'home_heating',
@@ -44,8 +48,13 @@ export const DATA_CONFIG = {
     ],
   },
 
-  // Event types the logger accepts (step 5 fills in the real list).
+  // Event types the logger accepts:
+  //   screen_view — player now sees `screen` (overlay name or Ink knot)
+  //   choice      — picked choice `index` at Ink knot `screen`
   events: ['screen_view', 'choice'],
+
+  // Build id (git commit), set in vite.config.js; 'dev' when unknown.
+  gameVersion: import.meta.env?.VITE_GAME_VERSION || 'dev',
 
   // Longest string value accepted in any saved field — categories only, never
   // free text.

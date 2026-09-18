@@ -1,10 +1,10 @@
 // Local adapter — keeps player data on this device only (localStorage).
 // Used while `collectionEnabled` is false and for building/testing the UI with
 // no backend. Every adapter exposes the same methods; ./index.js is the only
-// caller.
+// caller. Save methods throw on failure so the queue keeps the item and retries.
 
 const PREFIX = 'storm_data_v1:';
-const KEYS = ['user_id', 'consent', 'profile', 'household', 'events', 'results'];
+const KEYS = ['user_id', 'consent', 'profile', 'sessions', 'households', 'events', 'results'];
 
 function read(key, fallback) {
   try {
@@ -15,10 +15,16 @@ function read(key, fallback) {
   }
 }
 
+// Throws if storage is full or blocked — callers decide whether that matters.
 function write(key, value) {
-  try {
-    localStorage.setItem(PREFIX + key, JSON.stringify(value));
-  } catch { /* ignore — storage full or blocked */ }
+  localStorage.setItem(PREFIX + key, JSON.stringify(value));
+}
+
+// Insert-or-merge a record into an object keyed by `id` (like an SQL upsert).
+function upsert(key, id, fields) {
+  const all = read(key, {});
+  all[id] = { ...all[id], ...fields };
+  write(key, all);
 }
 
 function randomId() {
@@ -34,7 +40,7 @@ export const localAdapter = {
     let id = read('user_id', null);
     if (!id) {
       id = randomId();
-      write('user_id', id);
+      try { write('user_id', id); } catch { /* ignore */ }
     }
     return id;
   },
@@ -51,9 +57,14 @@ export const localAdapter = {
     write('profile', profile);
   },
 
-  // Merge: family and home answers arrive in separate saves.
-  async saveHousehold(household) {
-    write('household', { ...read('household', {}), ...household });
+  // One row per playthrough; start and end arrive as separate saves.
+  async saveSession({ id, ...fields }) {
+    upsert('sessions', id, fields);
+  },
+
+  // One row per playthrough; family and home answers arrive separately.
+  async saveHousehold({ session_id, ...fields }) {
+    upsert('households', session_id ?? 'none', fields);
   },
 
   async logEvents(events) {

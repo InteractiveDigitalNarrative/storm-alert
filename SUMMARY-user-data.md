@@ -5,7 +5,7 @@
 Last updated: 2026-09-18 · Branch: `feature/user-data` · Nothing live, nothing sent anywhere
 
 ## Big picture
-- Phase A (no backend): **4 of 7 steps done**
+- Phase A (no backend): **5 of 7 steps done**
 - Phase B (Supabase): not started
 - Master switch `collectionEnabled: false` → all data stays on the device
 - Not on `main` → the live game is unchanged
@@ -16,7 +16,8 @@ Last updated: 2026-09-18 · Branch: `feature/user-data` · Nothing live, nothing
 | 1 | Privacy notice + data summary drafts for ethics review | `3c80b47` |
 | 2 | Data layer: the one place screens save through | `4f5d9aa` |
 | 3 | Consent screen (EN + ET) | `3c89d11` |
-| 4 | Survey + household saved; survey once; household pre-fill | STEP4SHA |
+| 4 | Survey + household saved; survey once; household pre-fill | `d7660b5` |
+| 5 | Events, sessions, offline queue | STEP5SHA |
 
 ## How it works now
 1. Player picks a language.
@@ -25,6 +26,9 @@ Last updated: 2026-09-18 · Branch: `feature/user-data` · Nothing live, nothing
 4. **Yes** → survey (asked once only) → game.
 5. Household questions each game, **pre-filled** from last time.
 6. Saved: age, gender, prep level, household categories.
+7. Each game = one session (playthrough no., language, device type, version).
+8. Screens + choices logged as short ids with timing.
+9. Everything goes through an on-device queue; sent in order, retried if offline.
 
 ## Safety built in
 | Protection | Effect |
@@ -33,7 +37,9 @@ Last updated: 2026-09-18 · Branch: `feature/user-data` · Nothing live, nothing
 | Allow-list | Only listed fields, short values |
 | Name filter | Relative's typed name never saved to data |
 | Master switch | Device-only until ethics approval |
-| Delete | Wipes data + device conveniences |
+| Delete | Wipes data + queue + device conveniences |
+| Choice ids only | Knot + number, never displayed text |
+| Device type | phone / tablet / desktop — no user-agent |
 
 ## Decisions made along the way
 | Decision | Why |
@@ -54,6 +60,5 @@ Open items: 13 (1 done) → see checklist.
 ## Next
 | Step | What |
 |---|---|
-| 5 | Event logger + offline queue + playthrough number |
 | 6 | End summary + post-game rating |
 | 7 | Portable table design |
