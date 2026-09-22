@@ -7,7 +7,7 @@ New session? Say: **"Resume platform work — read CHECKLIST-platform.md"**
 
 | Item | Value |
 |---|---|
-| Next step | 11 — Storm Alert link (DESIGN.md done, local only) |
+| Next step | 13 — Publish (after step 12 review) |
 | Last updated | 2026-09-22 |
 | Deadline | Investor demo in 2–4 weeks |
 | Art budget | $5 total · spent $0.72 |
@@ -41,8 +41,8 @@ Status: TODO / IN PROGRESS / ✅ DONE / BLOCKED
 | 8 | Detail pop-up + Play | ✅ DONE | `StoryModal` (native dialog): Esc, backdrop, focus trap, scroll lock tested phone + desktop; Play/Continue/Coming soon; endings dots | yes (2026-09-22) |
 | 9 | Mock sign-in | ✅ DONE | `SignInModal` (email → fake link → signed in), account menu + sign-out (clears `idn.v1.*`, keeps game keys), guest hint in pop-up; flow tested phone + desktop | yes (2026-09-22) |
 | 10 | Profile page | ✅ DONE | `ProfileModal` (offered after sign-in + "Edit profile" in menu); options match game survey; saves `idn.v1.profile`, bad data cleaned on read; tested phone + desktop | yes (2026-09-22) |
-| 11 | Storm Alert link | TODO | | |
-| 12 | End-to-end test + responsive check | TODO | | |
+| 11 | Storm Alert link | ✅ DONE | Branch `feature/platform-link` (`e3535c9`, pushed): profile skips language/age/gender, progress on start/save/outcome when signed in, menu link back; guests unchanged | yes (2026-09-22) |
+| 12 | End-to-end test + responsive check | ✅ DONE | 18/18 checks: guest play, sign-in + profile, game skips questions, Continue shelf, outcome → Completed "1 of 4 outcomes", replay = run 2, sign-out clears; 360/390/768/1440 no sideways scroll. Dev proxy `/storm-alert` → 5173 in landing `vite.config.js` | yes (2026-09-22) |
 | 13 | Publish | TODO | To go live: repo → public, Pages source = GitHub Actions, enable "Deploy to GitHub Pages" workflow | |
 
 ## Session log
@@ -69,3 +69,4 @@ Status: TODO / IN PROGRESS / ✅ DONE / BLOCKED
 | 2026-09-22 | DESIGN.md + DESIGN.extensions.json written in landing repo (git-excluded) | Step 11 |
 | 2026-09-22 | Doc-consistency fixes (Demo tag + footer label sentence case, 44px shelf arrows); taglines rule relaxed in PRODUCT.md; playbook reworded to neutral art wording | Step 11 |
 | 2026-09-22 | Landing repo created (org, `main` pushed). Kept offline: repo private (org Pages can't be switched off), deploy workflow disabled | Step 11 |
+| 2026-09-22 | Steps 11 + 12 done; library and game tested together locally | Step 13 — publish |
