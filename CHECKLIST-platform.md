@@ -7,7 +7,7 @@ New session? Say: **"Resume platform work — read CHECKLIST-platform.md"**
 
 | Item | Value |
 |---|---|
-| Next step | DESIGN.md (local), then 11 — Storm Alert link |
+| Next step | 11 — Storm Alert link (DESIGN.md done, local only) |
 | Last updated | 2026-09-22 |
 | Deadline | Investor demo in 2–4 weeks |
 | Art budget | $5 total · spent $0.72 |
@@ -53,9 +53,9 @@ Status: TODO / IN PROGRESS / ✅ DONE / BLOCKED
 | 2026-09-22 | Step 1 approved; ✅ ticks. Step 2: landing repo scaffolded locally (no remote, uncommitted) | Review step 2 → step 3 |
 | 2026-09-22 | Step 3: design system + shell; PRODUCT.md in landing repo. Finish review + DESIGN.md deferred to after step 8 | Review step 3 → step 4 |
 | 2026-09-22 | Design rule added: theme text selection + scrollbars (do in step 7) | Step 4 (confirm placeholder themes) |
-| 2026-09-22 | Step 4: catalogue (5 stories, 5 themes), placeholders OK for now | Step 5 — draft art prompts, cost first |
-| 2026-09-22 | Art style set (playbook). Hero: v1, edit v2, fresh v3 → v3 kept. Rule: POC art = one shot | Draft 5 poster prompts, one approval |
-| 2026-09-22 | 5 posters (one shot each), borders cropped, web export (8–58 KB), wired into catalogue | Step 6 — teaser recording ($0) |
+| 2026-09-22 | Step 4: catalogue (5 stories, 5 themes), placeholders OK for now | Step 5 — draft art briefs, cost first |
+| 2026-09-22 | Art style set (playbook). Hero: three drafts → third kept. Rule: demo art = first usable draft | Draft 5 poster briefs, one approval |
+| 2026-09-22 | 5 posters (first draft each), borders cropped, web export (8–58 KB), wired into catalogue | Step 6 — teaser recording ($0) |
 | 2026-09-22 | Step 6 skipped: hero uses slow zoom only, teaser maybe later | Step 7 — hero + shelves |
 | 2026-09-22 | Step 7: hero + shelves built; phone hero reframed so cabin shows | Review step 7 → step 8 |
 | 2026-09-22 | Display font Bodoni Moda → Fraunces ("for now", may revisit) | Review step 7 → step 8 |
@@ -66,3 +66,5 @@ Status: TODO / IN PROGRESS / ✅ DONE / BLOCKED
 | 2026-09-22 | Not every IDN branches: slogan "Stories you step into.", footer diamond ornament, endings UI only when endingsTotal ≥ 2 (else "Completed ✓"), shelf "Your endings" → "Completed"; contract + PRODUCT.md updated | Design review + DESIGN.md → step 11 |
 | 2026-09-22 | Storm Alert shows "4 outcomes" (new `endingsLabel` field; outcomes set by final call, ink lines 2010–2033). Heading fork → diamond + hairline sized to heading text | Design review + DESIGN.md → step 11 |
 | 2026-09-22 | Design review: 8 fixes applied (no duplicate shelves, "New" hidden once played, no labels above titles, wider desktop cards, 44px targets, synopsis copy, check icon). Landing repo committed locally (no remote yet) | DESIGN.md → step 11 |
+| 2026-09-22 | DESIGN.md + DESIGN.extensions.json written in landing repo (git-excluded) | Step 11 |
+| 2026-09-22 | Doc-consistency fixes (Demo tag + footer label sentence case, 44px shelf arrows); taglines rule relaxed in PRODUCT.md; playbook reworded to neutral art wording | Step 11 |

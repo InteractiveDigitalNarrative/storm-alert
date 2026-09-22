@@ -18,7 +18,7 @@ A cinematic landing page that presents our Interactive Digital Narratives, with 
 | Hero media | Slowly zooming key art ("Ken Burns" effect). Gameplay clip deferred (step 6 skipped) |
 | Card click | Detail pop-up (modal) → Play |
 | Shelves | Continue your story · By theme · New & coming soon · Completed (endings shown only for branching stories) |
-| Art | Paid image generation, max **$5** total, each prompt approved |
+| Art | Illustrated key art, max **$5** budget, each brief approved |
 | Login | Optional. Browse freely; sign in to play/save |
 | Mock sign-in | Email field → fake "magic link" step, labelled demo |
 | Consent | Short notice: "Demo — stored on this device only" |
@@ -29,7 +29,7 @@ A cinematic landing page that presents our Interactive Digital Narratives, with 
 | Game deploy | Merge to `main` → live. No profile = game unchanged |
 | New repo | User creates on GitHub; Dev builds locally, pushes after OK |
 
-## Art style (every prompt reuses this block word for word)
+## Art style (every art brief follows this)
 | Item | Rule |
 |---|---|
 | Look | Minimalist flat vector, screen-print poster |
@@ -39,10 +39,7 @@ A cinematic landing page that presents our Interactive Digital Narratives, with 
 | Composition | One strong symbol/silhouette, big empty space for title |
 | Texture | Subtle paper grain |
 | Never | Faces, text, logos, 3D, gloss, gradients |
-| Workflow | Hero first → used as style reference for posters |
-
-Style block text:
-> Minimalist flat vector illustration in the style of a two-colour screen-print poster. Flat shapes with exactly one hard-edged shadow tone, no gradients, no 3D, no gloss. Deep ink-violet background (#17131e) with muted night-blue shapes. Subtle paper grain texture. People only as simple silhouettes, no faces. No text, no letters, no logos.
+| Workflow | Hero first → sets the look for the posters |
 
 ## Notes
 - Profile covers only age + gender from Storm Alert survey. Prep questions stay in the game.
@@ -57,7 +54,7 @@ Style block text:
 | 2 | Scaffold landing repo | Local folder `../interactivedigitalnarrative.github.io`, Vite+React, deploy workflow, `base: '/'` |
 | 3 | Design system + page shell | Colours, fonts, spacing, header/footer, placeholder brand |
 | 4 | Catalogue data | `stories.json`: Storm Alert + IDN 1–4 (title, blurb, themes, status) |
-| 5 | Key art | Generated: 1 hero (16:9) + ~5 posters (2:3). **≤ $5**, prompts approved first |
+| 5 | Key art | Illustrations: 1 hero (16:9) + ~5 posters (2:3). **≤ $5**, briefs approved first |
 | 6 | Gameplay teaser | Muted screen recording of Storm Alert, short loop (webm). $0 |
 | 7 | Hero + shelves | Hero with slow zoom; 4 shelves; mobile + desktop |
 | 8 | Detail pop-up + Play | Synopsis, duration, themes, endings badge, Play / "Coming soon" |
