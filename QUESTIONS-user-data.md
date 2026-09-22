@@ -119,18 +119,22 @@ We'll prepare a draft data summary + privacy notice for it.
 ## Q10 — What we plan to collect
 **Why it matters:** collect only what the research question needs.
 
-| Data | Example | Keep? |
-|---|---|---|
-| Age bracket | 25–34 | |
-| Gender | female / prefer not say | |
-| Prep level before + after | somewhat → fully | |
-| Household (categories) | has elderly: yes; apartment | |
-| Choices in story | chose to fill bathtub | |
-| Scores + ending | water 3/5, ending "cold" | |
-| Timing | 4 min on shop screen | |
-| Language + device type | et, phone | |
+Email to team: [EMAIL-team-questions.md](EMAIL-team-questions.md) · full field list: [PLAYBOOK-user-data.md](PLAYBOOK-user-data.md) → "Data we store"
 
-**Never collected:** names, addresses, IP addresses, exact location.
+| Group | Examples | Keep? |
+|---|---|---|
+| A. Player (once) | age group, gender, prep + feel before | |
+| B. Household (per game) | family size, elderly, children, building, heating | |
+| C. Playthrough | no. 1/2/3, language, device type, start/end | |
+| D. Actions | screens opened, choices, time since start | |
+| E. End of game | 6 supply scores (0–2), total (0–12), call, ending, feel after | |
+
+**Never collected:** names, email in research data, IP, browser details, location, typed text.
+
+**Open points:**
+- Dialled number: store only `112` / known / `other`? (could be a real phone number)
+- Age + gender + household = small-group re-identification risk → report groups ≥5 only?
+- `under_18` option depends on Q5.
 
 **Ask:** what is the research question? Anything here we don't need? Anything missing?
 

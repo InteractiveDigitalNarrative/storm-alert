@@ -13,7 +13,7 @@ New session? Say: **"Resume user data work — read CHECKLIST-user-data.md"**
 | Blockers | none |
 | Open items | 16 (4 done) — see "Open items" below |
 
-**How we work (grill-me gate)**
+**How we work (step gate)**
 1. Dev says what the step creates / changes / spends.
 2. You approve.
 3. Dev does only that step.
@@ -50,6 +50,7 @@ New session? Say: **"Resume user data work — read CHECKLIST-user-data.md"**
 | 2026-09-18 | O14 fixed: "feel prepared" question added to start survey. Dev shortcuts page. ✅ ticks | Review step 6 → step 7 |
 | 2026-09-18 | Mid-game quit: `resume` event on Continue; quit handling documented; O15 logged for step 12 | Review step 6 → step 7 |
 | 2026-09-18 | Step 6 committed (`bc31f20`). Step 7: portable schema, 7 tables, tested in real Postgres; O13 closed; O16 logged. Phase A complete | Review step 7 → Phase B |
+| 2026-09-18 | Step 8 on hold. Playbook: detailed "Data we store" section (every table + field) | Review data list → step 8 |
 
 
 Status: TODO / IN PROGRESS / ✅ DONE / BLOCKED

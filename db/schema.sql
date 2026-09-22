@@ -105,7 +105,7 @@ CREATE TABLE results (
   prep_medication      smallint    CHECK (prep_medication BETWEEN 0 AND 2),
   total_prep           smallint    CHECK (total_prep      BETWEEN 0 AND 12),
   call_score           smallint    CHECK (call_score      BETWEEN 0 AND 3),
-  dialed_number        text        CHECK (dialed_number ~ '^[0-9]{0,15}$'),
+  dialed_number        text        CHECK (dialed_number ~ '^[0-9]{0,6}$'),  -- keypad caps at 6 (PhoneKeypad.jsx) → no full real phone number
   call_outcome         text        CHECK (call_outcome IN ('help_success', 'help_partial', 'help_delayed', 'wrong_number', 'no_help', '')),
   ending_type          text        CHECK (ending_type IN ('good', 'partial', 'delayed', 'bad')),
   feel_prepared_after  text        CHECK (feel_prepared_after IN ('fully', 'somewhat', 'not_at_all')), -- NULL = skipped
