@@ -43,7 +43,7 @@ Status: TODO / IN PROGRESS / ✅ DONE / BLOCKED
 | 10 | Profile page | ✅ DONE | `ProfileModal` (offered after sign-in + "Edit profile" in menu); options match game survey; saves `idn.v1.profile`, bad data cleaned on read; tested phone + desktop | yes (2026-09-22) |
 | 11 | Storm Alert link | TODO | | |
 | 12 | End-to-end test + responsive check | TODO | | |
-| 13 | Publish | TODO | | |
+| 13 | Publish | TODO | To go live: repo → public, Pages source = GitHub Actions, enable "Deploy to GitHub Pages" workflow | |
 
 ## Session log
 | Date | Done | Next |
@@ -68,3 +68,4 @@ Status: TODO / IN PROGRESS / ✅ DONE / BLOCKED
 | 2026-09-22 | Design review: 8 fixes applied (no duplicate shelves, "New" hidden once played, no labels above titles, wider desktop cards, 44px targets, synopsis copy, check icon). Landing repo committed locally (no remote yet) | DESIGN.md → step 11 |
 | 2026-09-22 | DESIGN.md + DESIGN.extensions.json written in landing repo (git-excluded) | Step 11 |
 | 2026-09-22 | Doc-consistency fixes (Demo tag + footer label sentence case, 44px shelf arrows); taglines rule relaxed in PRODUCT.md; playbook reworded to neutral art wording | Step 11 |
+| 2026-09-22 | Landing repo created (org, `main` pushed). Kept offline: repo private (org Pages can't be switched off), deploy workflow disabled | Step 11 |
