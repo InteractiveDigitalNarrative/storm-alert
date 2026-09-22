@@ -7,7 +7,7 @@ New session? Say: **"Resume platform work — read CHECKLIST-platform.md"**
 
 | Item | Value |
 |---|---|
-| Next step | 13 — Publish (after step 12 review) |
+| Next step | ✅ All done — live. Optional polish only |
 | Last updated | 2026-09-22 |
 | Deadline | Investor demo in 2–4 weeks |
 | Art budget | $5 total · spent $0.72 |
@@ -43,7 +43,7 @@ Status: TODO / IN PROGRESS / ✅ DONE / BLOCKED
 | 10 | Profile page | ✅ DONE | `ProfileModal` (offered after sign-in + "Edit profile" in menu); options match game survey; saves `idn.v1.profile`, bad data cleaned on read; tested phone + desktop | yes (2026-09-22) |
 | 11 | Storm Alert link | ✅ DONE | Branch `feature/platform-link` (`e3535c9`, pushed): profile skips language/age/gender, progress on start/save/outcome when signed in, menu link back; guests unchanged | yes (2026-09-22) |
 | 12 | End-to-end test + responsive check | ✅ DONE | 18/18 checks: guest play, sign-in + profile, game skips questions, Continue shelf, outcome → Completed "1 of 4 outcomes", replay = run 2, sign-out clears; 360/390/768/1440 no sideways scroll. Dev proxy `/storm-alert` → 5173 in landing `vite.config.js` | yes (2026-09-22) |
-| 13 | Publish | TODO | To go live: repo → public, Pages source = GitHub Actions, enable "Deploy to GitHub Pages" workflow | |
+| 13 | Publish | ✅ DONE | Live: interactivedigitalnarrative.github.io (+ /storm-alert/). Game `main` = `e3535c9`; landing public, Pages via workflow; live e2e 16/16 (outcome checks dev-only) | yes (2026-09-22) |
 
 ## Session log
 | Date | Done | Next |
@@ -70,3 +70,4 @@ Status: TODO / IN PROGRESS / ✅ DONE / BLOCKED
 | 2026-09-22 | Doc-consistency fixes (Demo tag + footer label sentence case, 44px shelf arrows); taglines rule relaxed in PRODUCT.md; playbook reworded to neutral art wording | Step 11 |
 | 2026-09-22 | Landing repo created (org, `main` pushed). Kept offline: repo private (org Pages can't be switched off), deploy workflow disabled | Step 11 |
 | 2026-09-22 | Steps 11 + 12 done; library and game tested together locally | Step 13 — publish |
+| 2026-09-22 | "Play again" after finishing. Published: game main fast-forwarded, landing public + deployed; live test passed | Demo ready |
