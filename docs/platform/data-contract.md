@@ -68,6 +68,23 @@ How the landing page and every IDN share the player's sign-in, profile and progr
 - The total number of endings per story lives in the landing catalogue (`stories.json`), not here.
 - Storm Alert ending IDs: `good` `partial` `delayed` `bad`.
 
+## Catalogue (`stories.json`)
+- Lives in the landing repo: `src/data/stories.json`. Theme labels: `src/data/themes.json`.
+- Read-only for games. Adding a game = add one entry.
+
+| Field | Meaning |
+|---|---|
+| `id` | = `<storyId>` (URL folder, progress key) |
+| `title` / `tagline` / `synopsis` | Card, card, pop-up text |
+| `themes` | Theme ids → "By theme" shelf |
+| `status` | `playable` or `coming_soon` |
+| `url` | Play link, `null` if coming soon |
+| `durationMin` | Play time, minutes |
+| `endingsTotal` | Total endings. **2+ = branching**: shows endings ("1 of 4"). `1` or `null` = linear: no endings UI, shows "Completed" |
+| `endingsLabel` | Optional word for endings, default `endings`. Storm Alert: `outcomes` (its 4 results come from the final call) |
+| `isNew` | Show in "New & coming soon" |
+| `poster` / `hero` | Art paths, `null` until step 5 |
+
 ## Rules
 1. **One writer per key.** Games never write `session` / `profile`. The landing page never writes `progress`.
 2. **Games write progress only when signed in** (`idn.v1.session` present). Guests play exactly as today.

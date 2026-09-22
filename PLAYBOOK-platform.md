@@ -15,9 +15,9 @@ A cinematic landing page that presents our Interactive Digital Narratives, with 
 | Layout | Cinematic hero + story shelves (Netflix-like) |
 | Look | Dark cinematic + story-book accents (serif titles, branching-path motifs) |
 | Catalogue | Storm Alert (playable) + "IDN 1", "IDN 2"… placeholders |
-| Hero media | Slowly zooming key art ("Ken Burns" effect), then a muted gameplay clip on loop (screen recording, $0) |
+| Hero media | Slowly zooming key art ("Ken Burns" effect). Gameplay clip deferred (step 6 skipped) |
 | Card click | Detail pop-up (modal) → Play |
-| Shelves | Continue your story · By theme · New & coming soon · Your endings |
+| Shelves | Continue your story · By theme · New & coming soon · Completed (endings shown only for branching stories) |
 | Art | Paid image generation, max **$5** total, each prompt approved |
 | Login | Optional. Browse freely; sign in to play/save |
 | Mock sign-in | Email field → fake "magic link" step, labelled demo |
@@ -28,6 +28,21 @@ A cinematic landing page that presents our Interactive Digital Narratives, with 
 | Game branch | New branch off `main` (`feature/platform-link`) |
 | Game deploy | Merge to `main` → live. No profile = game unchanged |
 | New repo | User creates on GitHub; Dev builds locally, pushes after OK |
+
+## Art style (every prompt reuses this block word for word)
+| Item | Rule |
+|---|---|
+| Look | Minimalist flat vector, screen-print poster |
+| Shading | One hard-edged shadow tone, no gradients |
+| Base | Deep ink `#17131e` + night blue (matches site tokens) |
+| Accent | One per story. Storm Alert = amber `#f2b43c` (= `--thread-gold`) |
+| Composition | One strong symbol/silhouette, big empty space for title |
+| Texture | Subtle paper grain |
+| Never | Faces, text, logos, 3D, gloss, gradients |
+| Workflow | Hero first → used as style reference for posters |
+
+Style block text:
+> Minimalist flat vector illustration in the style of a two-colour screen-print poster. Flat shapes with exactly one hard-edged shadow tone, no gradients, no 3D, no gloss. Deep ink-violet background (#17131e) with muted night-blue shapes. Subtle paper grain texture. People only as simple silhouettes, no faces. No text, no letters, no logos.
 
 ## Notes
 - Profile covers only age + gender from Storm Alert survey. Prep questions stay in the game.
@@ -44,7 +59,7 @@ A cinematic landing page that presents our Interactive Digital Narratives, with 
 | 4 | Catalogue data | `stories.json`: Storm Alert + IDN 1–4 (title, blurb, themes, status) |
 | 5 | Key art | Generated: 1 hero (16:9) + ~5 posters (2:3). **≤ $5**, prompts approved first |
 | 6 | Gameplay teaser | Muted screen recording of Storm Alert, short loop (webm). $0 |
-| 7 | Hero + shelves | Hero with teaser; 4 shelves; mobile + desktop |
+| 7 | Hero + shelves | Hero with slow zoom; 4 shelves; mobile + desktop |
 | 8 | Detail pop-up + Play | Synopsis, duration, themes, endings badge, Play / "Coming soon" |
 | 9 | Mock sign-in | Email → fake magic link → signed in; demo notice; sign out |
 | 10 | Profile page | Nickname, age group, gender, language, country; edit anytime |
