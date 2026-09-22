@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import './Menu.css';
 import { useAudioContext } from '../context/AudioContext';
 import { useTranslation } from '../hooks/useTranslation';
+import { isSignedIn } from '../lib/platform';
 
 const BASE_URL = import.meta.env.BASE_URL;
 
@@ -45,6 +46,12 @@ function Menu({ onStartGame, onContinueGame, hasSavedGame }) {
 
       {/* MAIN MENU CONTAINER */}
       <div className="menu-container">
+        {/* Only players who came through the IDN Library (signed in) see the way back */}
+        {isSignedIn() && (
+          <a className="menu-library-link" href="/">
+            <span aria-hidden="true">←</span> {t('menu.backToLibrary')}
+          </a>
+        )}
         <div className="menu-content">
 
           {/* HEADER SECTION */}

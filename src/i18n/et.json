@@ -55,7 +55,8 @@
     "aboutTitle": "Tormihoiatusest",
     "aboutP1": "Raske talvetorm on lähenemas. Tormihoiatus on valmisoleku simulatsioon, mis asetab sind tõelise kriisi keskele — kodus, silmitsi katastroofiga.",
     "aboutP2": "Kogu varusid, tee otsuseid surve all ja mõtle välja, kellele helistada, kui asjad lähevad halvasti. Sinu valikud määravad, kuidas sina ja su leibkond järgmised 72 tundi üle elate.",
-    "gotIt": "SELGE"
+    "gotIt": "SELGE",
+    "backToLibrary": "Tagasi raamatukokku"
   },
 
   "familySetup": {

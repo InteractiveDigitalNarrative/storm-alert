@@ -8,10 +8,11 @@ const AGE_BRACKETS = ['under_18', '18_24', '25_34', '35_44', '45_54', '55_64', '
 const GENDERS = ['male', 'female', 'non_binary', 'prefer_not_say'];
 const PREP_LEVELS = ['fully', 'somewhat', 'never'];
 
-function Demography({ onSubmit, onSkip }) {
+// knownAge / knownGender come from the library profile; those questions are hidden
+function Demography({ knownAge = null, knownGender = null, onSubmit, onSkip }) {
   const { t } = useTranslation();
-  const [age, setAge] = useState('');
-  const [gender, setGender] = useState('');
+  const [age, setAge] = useState(knownAge || '');
+  const [gender, setGender] = useState(knownGender || '');
   const [prep, setPrep] = useState('');
 
   const canContinue = age && gender && prep;
@@ -34,38 +35,42 @@ function Demography({ onSubmit, onSkip }) {
         <p className="demo-subtitle">{t('demography.subtitle')}</p>
 
         {/* Age */}
-        <div className="demo-field">
-          <label className="demo-label">{t('demography.ageLabel')}</label>
-          <select
-            className="demo-select"
-            value={age}
-            onChange={(e) => setAge(e.target.value)}
-          >
-            <option value="">{t('demography.selectPlaceholder')}</option>
-            {AGE_BRACKETS.map((key) => (
-              <option key={key} value={key}>
-                {t(`demography.ageOptions.${key}`)}
-              </option>
-            ))}
-          </select>
-        </div>
+        {!knownAge && (
+          <div className="demo-field">
+            <label className="demo-label">{t('demography.ageLabel')}</label>
+            <select
+              className="demo-select"
+              value={age}
+              onChange={(e) => setAge(e.target.value)}
+            >
+              <option value="">{t('demography.selectPlaceholder')}</option>
+              {AGE_BRACKETS.map((key) => (
+                <option key={key} value={key}>
+                  {t(`demography.ageOptions.${key}`)}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
 
         {/* Gender */}
-        <div className="demo-field">
-          <label className="demo-label">{t('demography.genderLabel')}</label>
-          <div className="demo-pills">
-            {GENDERS.map((key) => (
-              <button
-                key={key}
-                type="button"
-                className={`demo-pill ${gender === key ? 'is-active' : ''}`}
-                onClick={() => setGender(key)}
-              >
-                {t(`demography.genderOptions.${key}`)}
-              </button>
-            ))}
+        {!knownGender && (
+          <div className="demo-field">
+            <label className="demo-label">{t('demography.genderLabel')}</label>
+            <div className="demo-pills">
+              {GENDERS.map((key) => (
+                <button
+                  key={key}
+                  type="button"
+                  className={`demo-pill ${gender === key ? 'is-active' : ''}`}
+                  onClick={() => setGender(key)}
+                >
+                  {t(`demography.genderOptions.${key}`)}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Prior preparedness */}
         <div className="demo-field">

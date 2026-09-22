@@ -506,3 +506,29 @@
         height: 48px;
     }
 }
+
+/* Way back to the IDN Library (signed-in players only) */
+.menu-library-link {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 0 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.35);
+    color: rgba(255, 255, 255, 0.85);
+    font-family: 'Open Sans', sans-serif;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.menu-library-link:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+    color: #fff;
+}

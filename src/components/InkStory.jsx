@@ -27,6 +27,7 @@ import CabinetCheck from './CabinetCheck';
 import { useAudioContext } from '../context/AudioContext';
 import { useTranslation } from '../hooks/useTranslation';
 import { useNotebook } from '../context/NotebookContext';
+import { recordProgress } from '../lib/platform';
 
 // localStorage key for the in-progress save (bump the suffix if the shape changes)
 export const SAVE_KEY = 'storm_save_v1';
@@ -552,6 +553,7 @@ function InkStory({ onReturnToMenu, resume = false }) {
         background,
       };
       localStorage.setItem(SAVE_KEY, JSON.stringify(save));
+      recordProgress('save');
     } catch (e) {
       // Storage full / serialisation issue — non-fatal, just skip this save.
       console.warn('Auto-save failed:', e);
@@ -898,7 +900,8 @@ function InkStory({ onReturnToMenu, resume = false }) {
         // Check for ENDING_SCREEN tag
         if (tag === 'ENDING_SCREEN') {
           console.log('Showing ending screen');
-          readGameVars(story);
+          const vars = readGameVars(story);
+          recordProgress('ending', vars.ending_type);
           setShowEndingScreen(true);
           setStoryText(lines);
           setChoices([]);

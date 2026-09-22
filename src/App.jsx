@@ -6,6 +6,7 @@ import InkStory, { SAVE_KEY } from './components/InkStory.jsx';
 import LoadingScreen from './components/LoadingScreen.jsx';
 import LanguageSelect from './components/LanguageSelect.jsx';
 import Demography from './components/Demography.jsx';
+import { readProfile, recordProgress } from './lib/platform';
 import { AudioProvider, useAudioContext } from './context/AudioContext.jsx';
 import { LanguageProvider, useLanguage } from './context/LanguageContext.jsx';
 import { NotebookProvider, useNotebook } from './context/NotebookContext.jsx';
@@ -15,7 +16,9 @@ import './App.css';
 
 function AppContent() {
   const { setLanguage } = useLanguage();
-  const [currentScreen, setCurrentScreen] = useState('language');
+  // Library profile: skip the language picker when the language is already known
+  const [profile] = useState(readProfile);
+  const [currentScreen, setCurrentScreen] = useState(profile.language ? 'demography' : 'language');
   const [hasSavedGame, setHasSavedGame] = useState(false);
   const [resume, setResume] = useState(false);
 
@@ -75,6 +78,7 @@ function AppContent() {
     // New game — discard any in-progress save so it starts clean.
     try { localStorage.removeItem(SAVE_KEY); } catch { /* ignore */ }
     clearNotebook();
+    recordProgress('start');
     setResume(false);
     setCurrentScreen('game');
   };
@@ -103,6 +107,8 @@ function AppContent() {
 
       {currentScreen === 'demography' && (
         <Demography
+          knownAge={profile.age}
+          knownGender={profile.gender}
           onSubmit={handleDemographySubmit}
           onSkip={handleDemographySkip}
         />

@@ -1,9 +1,11 @@
 import { createContext, useContext, useState } from 'react';
+import { readProfile } from '../lib/platform';
 
 const LanguageCtx = createContext(null);
 
 export function LanguageProvider({ children }) {
-  const [language, setLanguage] = useState(null);
+  // A library profile language pre-selects the game language
+  const [language, setLanguage] = useState(() => readProfile().language);
 
   return (
     <LanguageCtx.Provider value={{ language, setLanguage }}>
